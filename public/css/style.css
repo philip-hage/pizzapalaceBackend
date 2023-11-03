@@ -1,0 +1,26 @@
+.logo-image {
+  width: 100px; /* Adjust the width to your preferred size */
+  height: auto; /* Maintains the aspect ratio */
+  display: block; /* Center the image horizontally in its container */
+  margin: 0 auto; /* Center the image horizontally in its container */
+  background-color: #1F9334; /* Set the desired background color */
+  padding: 5px; /* Add padding to the image container if needed */
+  border-radius: 10px; /* Optional: Add rounded corners to the image */
+}
+
+#navbar {
+  padding: 3.2rem;
+  background-color: #1F9334;
+}
+
+.navbar-short {
+  height: 60px; /* Set the desired shorter height here */
+}
+
+.footer {
+  background-color: #1F9334;
+}
+
+.main-footer__link{
+  color: black;
+}
