@@ -217,6 +217,18 @@
                                     </a>
                                 </li>
 
+                                <li class="sidenav__item">
+                                    <a href="<?= URLROOT; ?>PizzaController/productsOverview" class="sidenav__link">
+                                        <span class="sidenav__text text-sm@md">Promotions</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidenav__item">
+                                    <a href="<?= URLROOT; ?>PizzaController/productsOverview" class="sidenav__link">
+                                        <span class="sidenav__text text-sm@md">Screens</span>
+                                    </a>
+                                </li>
+
                             </ul>
                         </li>
                     </ul>

@@ -422,6 +422,56 @@ class PizzaController extends Controller
             $this->view('backend/vehicles/vehicleCreate', $data);
         }
     }
+    
+
+    public function editVehicle($vehicleId)
+    {
+        if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+            $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $result = $this->pizzaModel->editVehicle($post);
+
+            if (!$result) {
+                echo "The update was successful";
+                header("Refresh: 1; url=" . URLROOT . "/pizzacontroller/vehiclesOverview/" . $vehicleId . "");
+            } else {
+                echo "The update was not successful";
+                header("Refresh: 1; url=" . URLROOT . "/pizzacontroller/vehiclesOverview/" . $vehicleId . "");
+            }
+        } else {
+            global $vehicleType;
+            $row = $this->pizzaModel->getVehicleById($vehicleId);
+            $store = $this->pizzaModel->getStores();
+
+            $data = [
+                'row' => $row,
+                'store' => $store,
+                'vehicleType' => $vehicleType,
+                
+            ];
+            $this->view('backend/vehicles/vehicleEdit', $data);
+        }
+    }
+
+    public function deleteVehicle($vehicleId)
+    {
+        echo '<script>';
+        echo 'if (confirm("Weet u zeker dat u dit voertuig wilt verwijderen?")) {';
+        echo '    window.location.href = "' . URLROOT . '/PizzaController/confirmDeleteVehicle/' . $vehicleId . '";';
+        echo '} else {';
+        echo '    window.location.href = "' . URLROOT . '/PizzaController/vehiclesOverview/' . $vehicleId . '";';
+        echo '}';
+        echo '</script>';
+    }
+
+    public function confirmDeleteVehicle($vehicleId)
+    {
+        if ($this->pizzaModel->deleteVehicle($vehicleId)) {
+            header('location: ' . URLROOT . '/PizzaController/vehiclesOverview');
+        } else {
+            header('location: ' . URLROOT . '/PizzaController/vehiclesOverview');
+        }
+    }
 
     // product
 

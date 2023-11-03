@@ -513,6 +513,22 @@ class PizzaModel
         return $this->db->resultSet();
     }
 
+    public function getVehicleById($vehicleId)
+    {
+        $this->db->query("SELECT v.vehicleId,
+        v.vehicleStoreId,
+        v.vehicleName,
+        v.vehicleType,
+        v.vehicleCreateDate,
+        v.vehicleMaintenanceDate,
+        s.storeName
+        FROM vehicles as v
+        INNER JOIN stores as s ON v.vehicleStoreId = s.storeId
+        WHERE vehicleIsActive = 1 AND v.vehicleId = :id");
+        $this->db->bind(":id", $vehicleId);
+        return $this->db->single();
+    }
+
     public function createVehicle($post)
     {
         global $var;
@@ -553,6 +569,26 @@ class PizzaModel
                                  WHERE vehicleIsActive = 1 AND v.vehicleStoreId = :storeId");
         $this->db->bind(':storeId', $storeId);
         return $this->db->resultSet();
+    }
+
+    public function editVehicle($post)
+    {
+        $this->db->query("UPDATE vehicles SET vehicleName = :vehicleName,
+                                                vehicleStoreId = :vehicleStoreId,
+                                                vehicleType = :vehicleType
+                    WHERE vehicleId = :id");
+        $this->db->bind(':id', $post['id']);
+        $this->db->bind(':vehicleName', $post['vehicleName']);
+        $this->db->bind(':vehicleStoreId', $post['vehicleStoreId']);
+        $this->db->bind(':vehicleType', $post['vehicleType']);
+        $this->db->execute();
+    }
+
+    public function deleteVehicle($vehicleId)
+    {
+        $this->db->query("UPDATE vehicles SET vehicleIsActive = 0 WHERE vehicleId = :id");
+        $this->db->bind(':id', $vehicleId);
+        $this->db->execute();
     }
 
     // product
