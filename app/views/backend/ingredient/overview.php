@@ -1,12 +1,11 @@
 <?php require APPROOT . '/views/includes/head.php'; ?>
 <div class="margin-bottom-md">
-    <h1 class="text-lg">Store Vehicles</h1>
-    <h1 class="text-lg">Store Name: <?= $data['store']->storeName ?> </h1>
+    <h1 class="text-lg">Ingredients</h1>
 </div>
 
 <div class="margin-bottom-md">
     <div class="flex flex-wrap gap-sm items-center justify-between">
-        <button class="btn btn--primary" aria-controls="modal-new-customer">+ New Vehicle</button>
+        <a class="btn btn--primary" href="<?= URLROOT ?>ingredientController/create">+ New Ingredient</a>
     </div>
 </div>
 
@@ -123,13 +122,41 @@
                             </ul>
                         </th>
 
+                        <th class="int-table__cell int-table__cell--th int-table__cell--sort js-int-table__cell--sort">
+                            <div class="flex items-center">
+                                <span>Name</span>
+
+                                <svg class="icon icon--xxs margin-left-xxxs int-table__sort-icon" aria-hidden="true" viewBox="0 0 12 12">
+                                    <polygon class="arrow-up" points="6 0 10 5 2 5 6 0" />
+                                    <polygon class="arrow-down" points="6 12 2 7 10 7 6 12" />
+                                </svg>
+                            </div>
+
+                            <ul class="sr-only js-int-table__sort-list">
+                                <li>
+                                    <input type="radio" name="sortingName" id="sortingNameNone" value="none" checked>
+                                    <label for="sortingNameNone">No sorting</label>
+                                </li>
+
+                                <li>
+                                    <input type="radio" name="sortingName" id="sortingNameAsc" value="asc">
+                                    <label for="sortingNameAsc">Sort in ascending order</label>
+                                </li>
+
+                                <li>
+                                    <input type="radio" name="sortingName" id="sortingNameDes" value="desc">
+                                    <label for="sortingNameDes">Sort in descending order</label>
+                                </li>
+                            </ul>
+                        </th>
+
                         <th class="int-table__cell int-table__cell--th text-left">
-                            Type
+                            Price
                         </th>
 
                         <th class="int-table__cell int-table__cell--th int-table__cell--sort js-int-table__cell--sort" data-date-format="dd-mm-yyyy">
                             <div class="flex items-center">
-                                <span>Date Added</span>
+                                <span>Date</span>
 
                                 <svg class="icon icon--xxs margin-left-xxxs int-table__sort-icon" aria-hidden="true" viewBox="0 0 12 12">
                                     <polygon class="arrow-up" points="6 0 10 5 2 5 6 0" />
@@ -155,32 +182,11 @@
                             </ul>
                         </th>
 
-                        <th class="int-table__cell int-table__cell--th int-table__cell--sort js-int-table__cell--sort" data-date-format="dd-mm-yyyy">
-                            <div class="flex items-center">
-                                <span>Maintenance Date</span>
-
-                                <svg class="icon icon--xxs margin-left-xxxs int-table__sort-icon" aria-hidden="true" viewBox="0 0 12 12">
-                                    <polygon class="arrow-up" points="6 0 10 5 2 5 6 0" />
-                                    <polygon class="arrow-down" points="6 12 2 7 10 7 6 12" />
-                                </svg>
-                            </div>
-
-                            <ul class="sr-only js-int-table__sort-list">
-                                <li>
-                                    <input type="radio" name="sortingDate" id="sortingDateNone" value="none" checked>
-                                    <label for="sortingDateNone">No sorting</label>
-                                </li>
-
-                                <li>
-                                    <input type="radio" name="sortingDate" id="sortingDateAsc" value="asc">
-                                    <label for="sortingDateAsc">Sort in ascending order</label>
-                                </li>
-
-                                <li>
-                                    <input type="radio" name="sortingDate" id="sortingDateDes" value="desc">
-                                    <label for="sortingDateDes">Sort in descending order</label>
-                                </li>
-                            </ul>
+                        <th class="int-table__cell int-table__cell--th text-left">
+                            Edit
+                        </th>
+                        <th class="int-table__cell int-table__cell--th text-left">
+                            Delete
                         </th>
 
                         <th class="int-table__cell int-table__cell--th text-right">Action</th>
@@ -188,7 +194,7 @@
                 </thead>
 
                 <tbody class="int-table__body js-int-table__body">
-                    <?php foreach ($data['vehicles'] as $vehicle) : ?>
+                    <?php foreach ($data['ingredients'] as $ingredient) : ?>
                         <tr class="int-table__row">
                             <th class="int-table__cell" scope="row">
                                 <div class="custom-checkbox int-table__checkbox">
@@ -196,10 +202,12 @@
                                     <div class="custom-checkbox__control" aria-hidden="true"></div>
                                 </div>
                             </th>
-                            <td class="int-table__cell"><?= $vehicle->vehicleId ?></td>
-                            <td class="int-table__cell text-truncate max-width-xxxxs"><?= $vehicle->vehicleType ?></td>
-                            <td class="int-table__cell"><?= date('d/m/Y', $vehicle->vehicleCreateDate) ?></td>
-                            <td class="int-table__cell"><?= date('d/m/Y', $vehicle->vehicleMaintenanceDate) ?></td>
+                            <td class="int-table__cell"><?= $ingredient->ingredientId ?></td>
+                            <td class="int-table__cell"><?= $ingredient->ingredientName ?></td>
+                            <td class="int-table__cell text-truncate max-width-xxxxs">$<?= $ingredient->ingredientPrice ?></td>
+                            <td class="int-table__cell"><?= date('d/m/Y', $ingredient->ingredientCreateDate) ?></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>ingredientController/update/<?= $ingredient->ingredientId ?>">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>ingredientController/delete/<?= $ingredient->ingredientId ?>">Delete</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">
@@ -217,7 +225,7 @@
     </div>
 
     <div class="flex items-center justify-between padding-top-sm">
-        <p class="text-sm"><?= $data['countVehicles'] ?> results</p>
+        <p class="text-sm"><?= $data['countIngredients'] ?> results</p>
 
         <nav class="pagination text-sm" aria-label="Pagination">
             <ul class="pagination__list flex flex-wrap gap-xxxs">
@@ -284,5 +292,4 @@
         </li>
     </menu>
 </div>
-
 <?php require APPROOT . '/views/includes/footer.php'; ?>

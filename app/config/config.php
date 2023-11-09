@@ -31,3 +31,17 @@ $vehicleType = [
     'car' => 'Car',
     'scooter' => 'Scooter'
 ];
+
+$orderStatus = [
+    'success' => 'Success',
+    'pending' => 'Pending',
+    'failed' => 'Failed'
+];
+
+$orderState = [
+    'progress' => 'In Progress',
+    'delivered' => 'Delivered',
+    'on the way' => 'On the way',
+    'canceled' => 'Canceled',
+    'picked up' => 'Picked Up'
+];
