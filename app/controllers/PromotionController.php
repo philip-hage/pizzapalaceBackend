@@ -26,8 +26,20 @@ class PromotionController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $this->promotionModel->create($post);
-            header('Location: ' . URLROOT . 'PromotionController/overview');
+            $promotionName = ($post['promotionName']);
+
+            if (empty($promotionName)) {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your create of the promotion has failed');
+                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $this->promotionModel->create($post);
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your create of the promotion was successful');
+                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
             $data = [
                 'title' => 'Create Promotion'
@@ -40,15 +52,19 @@ class PromotionController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
+            // Helper::dump($post);exit;
             $result = $this->promotionModel->update($post);
 
             if (!$result) {
-                echo 'The update was successful';
-                header('Refresh: 1; url=' . URLROOT . '/PromotionController/overview/' . $promotionId . '');
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your update of the promotion was successful');
+                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             } else {
-                echo 'The update was not successful';
-                header('Refresh: 1; url=' . URLROOT . '/PromotionController/overview/' . $promotionId . '');
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your update of the promotion has failed');
+                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             }
         } else {
             $row = $this->promotionModel->getPromotionById($promotionId);
@@ -62,29 +78,27 @@ class PromotionController extends Controller
 
     public function delete($promotionId)
     {
-        $promotionInfo = $this->promotionModel->getSinglePromotion($promotionId);
+        if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+            $result = $this->promotionModel->delete($promotionId);
 
-        if ($promotionInfo) {
-            $promotionName = $promotionInfo[0];
-
-            echo '<script>';
-            echo 'if (confirm("Are you sure that you want to delete: ' . $promotionName . '")) {';
-            echo '    window.location.href = "' . URLROOT . '/PromotionController/confirmDeletePromotion/' . $promotionId . '";';
-            echo '} else {';
-            echo '    window.location.href = "' . URLROOT . '/PromotionController/overview/' . $promotionId . '";';
-            echo '}';
-            echo '</script>';
+            if (!$result) {
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your delete of the promotion was successful');
+                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your delete of the promotion has failed');
+                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
-            echo 'Promotion Information not found';
-        }
-    }
 
-    public function confirmDeletePromotion($promotionId)
-    {
-        if ($this->promotionModel->delete($promotionId)) {
-            header('location: ' . URLROOT . '/PromotionController/overview');
-        } else {
-            header('location: ' . URLROOT . '/PromotionController/overview');
+            $data = [
+                'title' => 'Delete Promotion',
+                'promotionId' => $promotionId
+            ];
+            $this->view('backend/promotions/delete', $data);
         }
     }
 }

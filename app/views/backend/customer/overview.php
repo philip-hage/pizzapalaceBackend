@@ -217,10 +217,10 @@
                         <th class="int-table__cell int-table__cell--th text-left">City</th>
                         <th class="int-table__cell int-table__cell--th text-left">Type</th>
                         <th class="int-table__cell int-table__cell--th text-left">
-                            Edit
+                            Action
                         </th>
                         <th class="int-table__cell int-table__cell--th text-left">
-                            Delete
+                            Action
                         </th>
                         <th class="int-table__cell int-table__cell--th text-right">Action</th>
                     </tr>
@@ -243,7 +243,7 @@
                             <td class="int-table__cell"><?= $customer->customerCity ?></td>
                             <td class="int-table__cell"><?= $customer->customerType ?></td>
                             <td class="int-table__cell"><a href="<?= URLROOT ?>CustomerController/update/<?= $customer->customerId ?>/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>CustomerController/deleteCustomer/<?= $customer->customerId ?>/">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>CustomerController/delete/<?= $customer->customerId ?>/">Delete</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">

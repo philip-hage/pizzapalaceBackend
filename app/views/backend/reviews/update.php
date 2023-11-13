@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>/ReviewController/overview" class="color-inherit">All Reviews</a>
+                <a href="<?= URLROOT ?>ReviewController/overview" class="color-inherit">All Reviews</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>/ReviewController/update" method="post">
+    <form action="<?= URLROOT; ?>ReviewController/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -31,7 +31,7 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-3@lg">
-                            <label class="inline-block text-sm padding-top-xs@lg" for="reviewRating">FirstName</label>
+                            <label class="inline-block text-sm padding-top-xs@lg" for="reviewRating">Rating</label>
                         </div>
                         <div class="col-6@lg">
                             <input class="form-control width-100%" type="number" name="reviewRating" id="reviewRating" min="1" max="5" required value="<?= $data['row']->reviewRating; ?>">
@@ -55,6 +55,16 @@
                                     <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                                 </svg>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="margin-bottom-sm">
+                    <div class="grid gap-xxs">
+                        <div class="col-3@lg">
+                            <label class="inline-block text-sm padding-top-xs@lg" for="reviewDescription">Review message</label>
+                        </div>
+                        <div class="col-6@lg">
+                            <textarea class="form-control width-100%" name="reviewDescription" id="reviewDescription" required rows="2" cols="25" placeholder="Enter your Review message"><?= $data['row']->reviewDescription ?></textarea>
                         </div>
                     </div>
                 </div>

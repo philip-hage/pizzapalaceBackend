@@ -45,18 +45,25 @@ class VehicleModel
         global $var;
         $vehicleCreateDate = $var['timestamp']; // Original Unix timestamp for vehicleCreateDate
 
-        // Calculate the Unix timestamp for vehicleMaintenanceDate
-        $threeMonthsInSeconds = 3 * 30 * 24 * 60 * 60; // Three months in seconds
-        $vehicleMaintenanceDate = $vehicleCreateDate + $threeMonthsInSeconds;
+        // Calculate the DateTime for vehicleCreateDate
+        $dateTimeCreateDate = new DateTime("@$vehicleCreateDate");
+
+        // Add three months to the DateTime
+        $dateTimeMaintenanceDate = $dateTimeCreateDate->add(new DateInterval('P3M'));
+
+        // Get the Unix timestamp for vehicleMaintenanceDate
+        $vehicleMaintenanceDate = $dateTimeMaintenanceDate->getTimestamp();
+
         $this->db->query("INSERT INTO vehicles (
-                                                vehicleId,
-                                                vehicleStoreId,
-                                                vehicleName,
-                                                vehicleType,
-                                                vehicleCreateDate,
-                                                vehicleMaintenanceDate
-                                                ) VALUES (
-                                                    :id, :vehicleStoreId, :vehicleName, :vehicleType, :vehicleCreateDate, :vehicleMaintenanceDate)");
+                                        vehicleId,
+                                        vehicleStoreId,
+                                        vehicleName,
+                                        vehicleType,
+                                        vehicleCreateDate,
+                                        vehicleMaintenanceDate
+                                    ) VALUES (
+                                        :id, :vehicleStoreId, :vehicleName, :vehicleType, :vehicleCreateDate, :vehicleMaintenanceDate
+                                    )");
         $this->db->bind(":id", $var['rand']);
         $this->db->bind(":vehicleStoreId", $post["vehicleStoreId"]);
         $this->db->bind(":vehicleName", $post["vehicleName"]);

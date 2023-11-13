@@ -31,6 +31,7 @@
   "homepage": "https://codyhouse.co",
   "license": "ISC",
   "dependencies": {
-    "codyframe": "^4.0.1"
+    "codyframe": "^4.0.1",
+    "crypto-js": "^4.2.0"
   }
 }

@@ -14,7 +14,7 @@
         <li class="notif__item ">
             <a class="notif__link flex padding-sm" href="#0">
                 <figure class="notif__figure margin-right-xs color-primary" aria-hidden="true">
-                    <img src="assets/img/table-v2-img-1.jpg" alt="user picture">
+                    <!-- <img src="assets/img/table-v2-img-1.jpg" alt="user picture"> -->
                 </figure>
 
                 <div class="flex-grow margin-right-xs">
@@ -31,7 +31,7 @@
         <li class="notif__item ">
             <a class="notif__link flex padding-sm" href="#0">
                 <figure class="notif__figure margin-right-xs color-accent" aria-hidden="true">
-                    <img src="assets/img/table-v2-img-2.jpg" alt="user picture">
+                    <!-- <img src="assets/img/table-v2-img-2.jpg" alt="user picture"> -->
                 </figure>
 
                 <div class="flex-grow margin-right-xs">
@@ -48,7 +48,7 @@
         <li class="notif__item ">
             <a class="notif__link flex padding-sm" href="#0">
                 <figure class="notif__figure margin-right-xs color-primary" aria-hidden="true">
-                    <img src="assets/img/table-v2-img-3.jpg" alt="user picture">
+                    <!-- <img src="assets/img/table-v2-img-3.jpg" alt="user picture"> -->
                 </figure>
 
                 <div class="flex-grow margin-right-xs">

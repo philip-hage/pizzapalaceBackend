@@ -1,4 +1,5 @@
 @use '../base' as *;
+
 /* -------------------------------- 
 
 File#: _1_date-picker
@@ -9,13 +10,14 @@ Usage: codyhouse.co/license
 -------------------------------- */
 
 :root {
-  --date-picker-trigger-width: 2.5em; // calendar button width
-  --date-picker-icon-size: 20px; // calendar icon size
-  // calendar
-  --date-picker-calendar-gap: 4px; // distance between input and calendar
-  --date-picker-calendar-padding: var(--space-xxs); // calendar padding
-  --date-picker-calendar-item-size: 2em; // calendar date size
-  --date-picker-calendar-item-radius: var(--radius-md); // calendar date border radius
+  --date-picker-trigger-width: 2.5em; /* calendar button width */
+  --date-picker-icon-size: 1em; /* calendar icon size */
+  
+  /* calendar */
+  --date-picker-calendar-gap: 4px; /* distance between input and calendar */
+  --date-picker-calendar-padding: var(--space-xxs); /* calendar padding */
+  --date-picker-calendar-item-size: 2em; /* calendar date size */
+  --date-picker-calendar-item-radius: var(--radius-md); /* calendar date border radius */
 }
 
 @include breakpoint(sm) {
@@ -28,7 +30,7 @@ Usage: codyhouse.co/license
   position: relative;
 }
 
-// calendar button
+/* calendar button */
 .date-input__trigger { 
   position: absolute;
   z-index: 1;
@@ -36,7 +38,7 @@ Usage: codyhouse.co/license
   right: 0;
   height: 100%;
   width: var(--date-picker-trigger-width);
-  display: none; // hide button if JS is not enabled
+  display: none; /* hide button if JS is not enabled */
   transition: .2s;
 
   .icon {
@@ -55,17 +57,15 @@ Usage: codyhouse.co/license
   }
 }
 
-.js { // show calendar button if JS is enabled
-  .date-input__trigger {
-    display: flex;
-  }
-
-  .date-input__text {
-    padding-right: calc(var(--date-picker-trigger-width) + var(--space-xxxs));
-  }
+.date-input__trigger {
+  display: flex;
 }
 
-.date-input--hide-calendar .date-input__trigger { // hide calendar trigger when flexbox is not supported
+.date-input__text {
+  padding-right: calc(var(--date-picker-trigger-width) + var(--space-xxxs));
+}
+
+.date-input--hide-calendar .date-input__trigger { /* hide calendar trigger when flexbox is not supported */
   display: none;
 }
 
@@ -74,12 +74,15 @@ Usage: codyhouse.co/license
   position: absolute;
   left: 0;
   top: calc(var(--date-picker-calendar-gap) + 100%);
+  background-color: var(--color-bg-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--inner-glow), var(--shadow-md);
   padding: var(--date-picker-calendar-padding);
-  z-index: var(--z-index-popover);
+  z-index: var(--z-index-popover, 5); 
   user-select: none;
   overflow: hidden;
 
-  // reset spacing and text units - no longer affected by Em units
+  /* use rem units */
   @include spaceUnit(1rem);
   @include textUnit(1rem);
 
@@ -96,12 +99,12 @@ Usage: codyhouse.co/license
 
 .date-picker__header {}
 
-// month navigation
-.date-picker__month { // wrapper
+/* month navigation */
+.date-picker__month { /* wrapper */
   position: relative;
 }
 
-.date-picker__month-label { // month name
+.date-picker__month-label { /* month name */
   position: absolute;
   top: 0;
   left: 0;
@@ -136,7 +139,7 @@ Usage: codyhouse.co/license
   width: 100%;
   height: 100%;
   border-radius: var(--date-picker-calendar-item-radius);
-  color: alpha(var(--color-contrast-higher), 0.5); // icon color
+  color: var(--color-contrast-low); /* icon color */
   transition: transform .2s;
 
   .icon {
@@ -145,7 +148,7 @@ Usage: codyhouse.co/license
   }
 
   &:hover {
-    background-color: alpha(var(--color-contrast-higher), 0.1);
+    background-color: alpha(var(--color-contrast-higher), 0.075);
     color: var(--color-contrast-higher);
   }
 
@@ -154,10 +157,10 @@ Usage: codyhouse.co/license
   }
 }
 
-// list of week days
+/* list of week days */
 .date-picker__week {}
 
-// day of the week
+/* day of the week */
 .date-picker__day {
   width: 100%;
   height: 100%;
@@ -165,15 +168,15 @@ Usage: codyhouse.co/license
   justify-content: center;
   align-items: center;
   font-size: var(--text-sm);
-  color: var(--color-contrast-medium);
+  color: var(--color-contrast-low);
 }
 
-// list of dates
+/* list of dates */
 .date-picker__dates {
   width: calc(var(--date-picker-calendar-item-size)*7);
 }
 
-// date button
+/* date button */
 .date-picker__date {
   @include reset;
   position: relative;
@@ -185,7 +188,7 @@ Usage: codyhouse.co/license
 
   &:focus {
     outline: none;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-light);
     box-shadow: inset 0 0 0 2px alpha(var(--color-primary), 0.2);
     color: var(--color-contrast-higher);
   }
@@ -203,7 +206,7 @@ Usage: codyhouse.co/license
     }
 
     &:focus {
-      background-color: var(--color-bg);
+      background-color: var(--color-bg-light);
     }
   }
 
@@ -231,7 +234,7 @@ Usage: codyhouse.co/license
   }
 
   &:hover {
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-light);
     box-shadow: inset 0 0 0 2px var(--color-primary);
     color: var(--color-contrast-high);
   }
@@ -241,6 +244,6 @@ Usage: codyhouse.co/license
   color: var(--color-primary);
 }
 
-.date-picker__date::-moz-focus-inner { // remove Firefox dotted-outline focus effect
+.date-picker__date::-moz-focus-inner { /* remove Firefox dotted-outline focus effect */
   border: none;
 }

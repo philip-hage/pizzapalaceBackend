@@ -154,6 +154,14 @@
                             Rating
                         </th>
 
+                        <th class="int-table__cell int-table__cell--th text-left">
+                            Entity Id
+                        </th>
+
+                        <th class="int-table__cell int-table__cell--th text-left">
+                            Entity
+                        </th>
+
                         <th class="int-table__cell int-table__cell--th int-table__cell--sort js-int-table__cell--sort" data-date-format="dd-mm-yyyy">
                             <div class="flex items-center">
                                 <span>Date</span>
@@ -183,6 +191,10 @@
                         </th>
 
                         <th class="int-table__cell int-table__cell--th text-left">
+                            Message
+                        </th>
+
+                        <th class="int-table__cell int-table__cell--th text-left">
                             Edit
                         </th>
                         <th class="int-table__cell int-table__cell--th text-left">
@@ -205,7 +217,15 @@
                             <td class="int-table__cell"><?= $review->reviewId ?></td>
                             <td class="int-table__cell"><?= $review->customerFirstName . " " . $review->customerLastName ?></td>
                             <td class="int-table__cell text-truncate max-width-xxxxs"><?= $review->reviewRating ?></td>
+                            <td class="int-table__cell text-truncate max-width-xxxxs"><?= $review->reviewEntityId ?></td>
+                            <td class="int-table__cell text-truncate max-width-xxxxs"><?= $review->reviewEntity ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $review->reviewCreateDate) ?></td>
+                            <td class="int-table__cell">
+                                <details>
+                                    <summary>Expand to see review description</summary>
+                                    <?= $review->reviewDescription ?>
+                                </details>
+                            </td>
                             <td class="int-table__cell"><a href="<?= URLROOT ?>ReviewController/update/<?= $review->reviewId ?>">Edit</a></td>
                             <td class="int-table__cell"><a href="<?= URLROOT ?>ReviewController/delete/<?= $review->reviewId ?>">Delete</a></td>
                             <td class="int-table__cell">

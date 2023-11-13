@@ -14,6 +14,9 @@ class ReviewModel
         $this->db->query("SELECT r.reviewId,
                                  r.reviewCustomerId,
                                  r.reviewRating,
+                                 r.reviewEntityId,
+                                 r.reviewEntity,
+                                 r.reviewDescription,
                                  r.reviewCreateDate,
                                  c.customerFirstName,
                                  c.customerLastName
@@ -28,6 +31,9 @@ class ReviewModel
         $this->db->query("SELECT r.reviewId,
                                  r.reviewCustomerId,
                                  r.reviewRating,
+                                 r.reviewEntityId,
+                                 r.reviewEntity,
+                                 r.reviewDescription,
                                  r.reviewCreateDate,
                                  c.customerFirstName,
                                  c.customerLastName
@@ -41,10 +47,12 @@ class ReviewModel
     public function update($post)
     {
         $this->db->query("UPDATE reviews SET reviewRating = :reviewRating,
-                                                reviewCustomerId = :reviewCustomerId
+                                                reviewCustomerId = :reviewCustomerId,
+                                                reviewDescription = :reviewDescription
                     WHERE reviewId = :id");
         $this->db->bind(':id', $post['id']);
         $this->db->bind(':reviewRating', $post['reviewRating']);
+        $this->db->bind(':reviewDescription', $post['reviewDescription']);
         $this->db->bind(':reviewCustomerId', $post['reviewCustomerId']);
         $this->db->execute();
     }
@@ -55,12 +63,18 @@ class ReviewModel
         $this->db->query("INSERT INTO reviews (
                                                 reviewId,
                                                 reviewCustomerId,
+                                                reviewEntityId,
+                                                reviewEntity,
+                                                reviewDescription,
                                                 reviewRating,
                                                 reviewCreateDate) VALUES (
-                                                    :id, :reviewCustomerId, :reviewRating, :reviewCreateDate)");
+                                                    :id, :reviewCustomerId, :reviewEntityId, :reviewEntity, :reviewDescription, :reviewRating, :reviewCreateDate)");
         $this->db->bind(":id", $var['rand']);
         $this->db->bind(":reviewCustomerId", $post["reviewCustomerId"]);
+        $this->db->bind(":reviewEntityId", $post["reviewEntityId"]);
+        $this->db->bind(":reviewEntity", $post["reviewEntity"]);
         $this->db->bind(":reviewRating", $post["reviewRating"]);
+        $this->db->bind(":reviewDescription", $post["reviewDescription"]);
         $this->db->bind(":reviewCreateDate", $var['timestamp']);
         return $this->db->execute();
     }

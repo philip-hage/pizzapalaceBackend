@@ -34,8 +34,14 @@ class IngredientController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $this->ingredientModel->create($post);
-            header('Location: ' . URLROOT . 'IngredientController/overview');
+            $result =  $this->ingredientModel->create($post);
+
+            if ($result) {
+                header('Location: ' . URLROOT . 'IngredientController/overview');
+            } else {
+                Helper::log('error', 'The create was not succcesfull at Ingredient create');
+                header('Location: ' . URLROOT . 'IngredientController/overview');
+            }
         } else {
             $data = [
                 'title' => 'Create Ingredient'
@@ -55,7 +61,7 @@ class IngredientController extends Controller
             echo 'if (confirm("Are you sure that you want to delete: ' . $IngredientName . '")) {';
             echo '    window.location.href = "' . URLROOT . '/IngredientController/confirmDeleteIngredient/' . $ingredientId . '";';
             echo '} else {';
-            echo '    window.location.href = "' . URLROOT . '/IngredientController/overview/' . $ingredientId . '";';
+            echo '    window.location.href = "' . URLROOT . '/IngredientController/overview/' . '";';
             echo '}';
             echo '</script>';
         } else {
@@ -68,6 +74,7 @@ class IngredientController extends Controller
         if ($this->ingredientModel->delete($ingredientId)) {
             header('location: ' . URLROOT . '/IngredientController/overview/');
         } else {
+            Helper::log('error', 'The delete was not succesfull at the delete ingredient');
             header('location: ' . URLROOT . '/IngredientController/overview/');
         }
     }
@@ -81,10 +88,10 @@ class IngredientController extends Controller
 
             if (!$result) {
                 echo 'The update was successful';
-                header('Refresh: 3; url=' . URLROOT . '/IngredientController/overview/' . $ingredientId . '');
+                header('Refresh: 3; url=' . URLROOT . '/IngredientController/overview/');
             } else {
-                echo 'The update was not successful';
-                header('Refresh: 3; url=' . URLROOT . '/IngredientController/overview/' . $ingredientId . '');
+                Helper::log('error', 'The update was not succcesfull at ingredient update');
+                header('Refresh: 3; url=' . URLROOT . '/IngredientController/overview/');
             }
         } else {
             $row = $this->ingredientModel->getIngredientById($ingredientId);

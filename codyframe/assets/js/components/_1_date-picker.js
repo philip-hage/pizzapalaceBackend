@@ -2,7 +2,7 @@
 // Usage: codyhouse.co/license
 (function() {
   var DatePicker = function(opts) {
-    this.options = Util.extend(DatePicker.defaults , opts);
+    this.options = extendProps(DatePicker.defaults , opts);
     this.element = this.options.element;
     this.input = this.element.getElementsByClassName('js-date-input__text')[0];
     this.trigger = this.element.getElementsByClassName('js-date-input__trigger')[0];
@@ -31,6 +31,8 @@
     }
     initCalendarAria(this);
     initCalendarEvents(this);
+    // place picker according to available space
+    placeCalendar(this);
   };
 
   DatePicker.prototype.showCalendar = function() {
@@ -55,7 +57,7 @@
     // create a live region used to announce new month selection to SR
     var srLiveReagion = document.createElement('div');
     srLiveReagion.setAttribute('aria-live', 'polite');
-    Util.addClass(srLiveReagion, 'sr-only js-date-input__sr-live');
+    srLiveReagion.classList.add('sr-only', 'js-date-input__sr-live');
     datePicker.element.appendChild(srLiveReagion);
     datePicker.srLiveReagion = datePicker.element.getElementsByClassName('js-date-input__sr-live')[0];
   };
@@ -94,7 +96,7 @@
       event.preventDefault();
       var btn = event.target.closest('.js-date-picker__month-nav-btn');
       if(btn) {
-        Util.hasClass(btn, 'js-date-picker__month-nav-btn--prev') ? showPrev(datePicker, true) : showNext(datePicker, true);
+        btn.classList.contains('js-date-picker__month-nav-btn--prev') ? showPrev(datePicker, true) : showNext(datePicker, true);
       }
     });
 
@@ -246,10 +248,6 @@
   };
 
   function showCalendar(datePicker, bool) {
-    // reset position
-    datePicker.datePicker.style.left = '';
-    datePicker.datePicker.style.right = '';
-
     // show calendar element
     var firstDay = getDayOfWeek(datePicker.currentYear, datePicker.currentMonth, '01');
     datePicker.body.innerHTML = '';
@@ -284,7 +282,7 @@
     datePicker.body.innerHTML = calendar; // appending days into calendar body
     
     // show calendar
-    if(!datePicker.pickerVisible) Util.addClass(datePicker.datePicker, 'date-picker--is-visible');
+    if(!datePicker.pickerVisible) datePicker.datePicker.classList.add('date-picker--is-visible');
     datePicker.pickerVisible = true;
 
     //  if bool is false, move focus to calendar day
@@ -298,7 +296,7 @@
   };
 
   function hideCalendar(datePicker) {
-    Util.removeClass(datePicker.datePicker, 'date-picker--is-visible');
+    datePicker.datePicker.classList.remove('date-picker--is-visible');
     datePicker.pickerVisible = false;
 
     // reset first/last focusable
@@ -378,7 +376,7 @@
   function resetLabelCalendarTrigger(datePicker) {
     if(!datePicker.trigger) return;
     // reset accessible label of the calendar trigger
-    (datePicker.selectedYear && datePicker.selectedMonth && datePicker.selectedDay) 
+    (datePicker.selectedYear && datePicker.selectedMonth !== false && datePicker.selectedDay) 
       ? datePicker.trigger.setAttribute('aria-label', datePicker.triggerLabel+', selected date is '+ new Date(datePicker.selectedYear, datePicker.selectedMonth, datePicker.selectedDay).toDateString())
       : datePicker.trigger.setAttribute('aria-label', datePicker.triggerLabel);
   };
@@ -386,7 +384,7 @@
   function resetLabelCalendarValue(datePicker) {
     // this is used for the --custom-control variation -> there's a label that should be updated with the selected date
     if(datePicker.dateValueEl.length < 1) return;
-    (datePicker.selectedYear && datePicker.selectedMonth && datePicker.selectedDay) 
+    (datePicker.selectedYear && datePicker.selectedMonth !== false && datePicker.selectedDay) 
       ? datePicker.dateValueEl[0].textContent = getDateForInput(datePicker)
       : datePicker.dateValueEl[0].textContent = datePicker.dateValueLabelInit;
   };
@@ -399,37 +397,41 @@
 
   function getFirstFocusable(elements, datePicker) {
     for(var i = 0; i < elements.length; i++) {
-      if( (elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length) &&  elements[i].getAttribute('tabindex') != '-1') {
-        datePicker.firstFocusable = elements[i];
-        return true;
-      }
-    }
+			if( (elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length) &&  elements[i].getAttribute('tabindex') != '-1') {
+				datePicker.firstFocusable = elements[i];
+				return true;
+			}
+		}
   };
 
   function getLastFocusable(elements, datePicker) {
     //get last visible focusable element inside the modal
-    for(var i = elements.length - 1; i >= 0; i--) {
-      if( (elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length) &&  elements[i].getAttribute('tabindex') != '-1' ) {
-        datePicker.lastFocusable = elements[i];
-        return true;
-      }
-    }
+		for(var i = elements.length - 1; i >= 0; i--) {
+			if( (elements[i].offsetWidth || elements[i].offsetHeight || elements[i].getClientRects().length) &&  elements[i].getAttribute('tabindex') != '-1' ) {
+				datePicker.lastFocusable = elements[i];
+				return true;
+			}
+		}
   };
 
   function trapFocus(event, datePicker) {
     if( datePicker.firstFocusable == document.activeElement && event.shiftKey) {
-      //on Shift+Tab -> focus last focusable element when focus moves out of calendar
-      event.preventDefault();
-      datePicker.lastFocusable.focus();
-    }
-    if( datePicker.lastFocusable == document.activeElement && !event.shiftKey) {
-      //on Tab -> focus first focusable element when focus moves out of calendar
-      event.preventDefault();
-      datePicker.firstFocusable.focus();
-    }
+			//on Shift+Tab -> focus last focusable element when focus moves out of calendar
+			event.preventDefault();
+			datePicker.lastFocusable.focus();
+		}
+		if( datePicker.lastFocusable == document.activeElement && !event.shiftKey) {
+			//on Tab -> focus first focusable element when focus moves out of calendar
+			event.preventDefault();
+			datePicker.firstFocusable.focus();
+		}
   };
 
   function placeCalendar(datePicker) {
+    // reset position
+    datePicker.datePicker.style.left = '0px';
+    datePicker.datePicker.style.right = 'auto';
+    
     //check if you need to modify the calendar postion
     var pickerBoundingRect = datePicker.datePicker.getBoundingClientRect();
 
@@ -437,6 +439,38 @@
       datePicker.datePicker.style.left = 'auto';
       datePicker.datePicker.style.right = '0px';
     }
+  };
+
+  var extendProps = function () {
+    // Variables
+    var extended = {};
+    var deep = false;
+    var i = 0;
+    var length = arguments.length;
+    // Check if a deep merge
+    if ( Object.prototype.toString.call( arguments[0] ) === '[object Boolean]' ) {
+      deep = arguments[0];
+      i++;
+    }
+    // Merge the object into the extended object
+    var merge = function (obj) {
+      for ( var prop in obj ) {
+        if ( Object.prototype.hasOwnProperty.call( obj, prop ) ) {
+        // If deep merge and property is an object, merge properties
+          if ( deep && Object.prototype.toString.call(obj[prop]) === '[object Object]' ) {
+            extended[prop] = extend( true, extended[prop], obj[prop] );
+          } else {
+            extended[prop] = obj[prop];
+          }
+        }
+      }
+    };
+    // Loop through each object and conduct a merge
+    for ( ; i < length; i++ ) {
+      var obj = arguments[i];
+      merge(obj);
+    }
+    return extended;
   };
 
   DatePicker.defaults = {
@@ -449,11 +483,11 @@
   window.DatePicker = DatePicker;
 
   var datePicker = document.getElementsByClassName('js-date-input'),
-    flexSupported = Util.cssSupports('align-items', 'stretch');
+    flexSupported = CSS.supports('align-items', 'stretch');
   if( datePicker.length > 0 ) {
-    for( var i = 0; i < datePicker.length; i++) {(function(i){
+		for( var i = 0; i < datePicker.length; i++) {(function(i){
       if(!flexSupported) {
-        Util.addClass(datePicker[i], 'date-input--hide-calendar');
+        datePicker[i].classList.add('date-input--hide-calendar');
         return;
       }
       var opts = {element: datePicker[i]};
@@ -468,6 +502,6 @@
       }
       new DatePicker(opts);
     })(i);}
-  }
+	}
 }());
 

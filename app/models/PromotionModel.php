@@ -57,8 +57,8 @@ class PromotionModel
         global $var;
 
         // Convert date strings to Unix timestamps
-        $startDateTimestamp = strtotime($post["promotionStartDate"]);
-        $endDateTimestamp = strtotime($post["promotionEndDate"]);
+        $startDate = DateTime::createFromFormat('d/m/Y', $post['promotionStartDate'])->getTimestamp();
+        $endDate = DateTime::createFromFormat('d/m/Y', $post['promotionEndDate'])->getTimestamp();
 
         $this->db->query("INSERT INTO promotions (promotionId,
                                             promotionName,
@@ -69,8 +69,8 @@ class PromotionModel
 
         $this->db->bind(":id", $var['rand']);
         $this->db->bind(":promotionName", $post["promotionName"]);
-        $this->db->bind(":promotionStartDate", $startDateTimestamp); // Bind Unix timestamp
-        $this->db->bind(":promotionEndDate", $endDateTimestamp); // Bind Unix timestamp
+        $this->db->bind(":promotionStartDate", $startDate); // Bind Unix timestamp
+        $this->db->bind(":promotionEndDate", $endDate); // Bind Unix timestamp
         $this->db->bind(":promotionCreateDate", $var['timestamp']);
 
         return $this->db->execute();
@@ -78,8 +78,12 @@ class PromotionModel
 
     public function update($post)
     {
-        $startDateTimestamp = strtotime($post["promotionStartDate"]);
-        $endDateTimestamp = strtotime($post["promotionEndDate"]);
+
+        $startDate = DateTime::createFromFormat('d/m/Y', $post['promotionStartDate'])->getTimestamp();
+        $endDate = DateTime::createFromFormat('d/m/Y', $post['promotionEndDate'])->getTimestamp();
+
+
+
 
         $this->db->query("UPDATE promotions SET promotionName = :promotionName,
                                                 promotionStartDate = :promotionStartDate,
@@ -87,8 +91,8 @@ class PromotionModel
                     WHERE promotionId = :id");
         $this->db->bind(':id', $post['id']);
         $this->db->bind(':promotionName', $post['promotionName']);
-        $this->db->bind(':promotionStartDate', $startDateTimestamp);
-        $this->db->bind(':promotionEndDate',  $endDateTimestamp);
+        $this->db->bind(':promotionStartDate', $startDate);
+        $this->db->bind(':promotionEndDate',  $endDate);
         $this->db->execute();
     }
 

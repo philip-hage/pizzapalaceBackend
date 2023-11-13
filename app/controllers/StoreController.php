@@ -37,33 +37,63 @@ class StoreController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $this->storeModel->create($post);
-            header("Location: " . URLROOT . "StoreController/overview");
+            $storeName = ($post['storeName']);
+            $storeZipcode = ($post['storeZipcode']);
+            $storeStreetName = ($post['storeStreetName']);
+            $storeCity = ($post['storeCity']);
+            $storePhone = ($post['storePhone']);
+            $storeEmail = ($post['storeEmail']);
+
+            if (
+                empty($storeName) || empty($storeZipcode) ||
+                empty($storeStreetName) || empty($storeCity) ||
+                empty($storePhone) ||
+                !filter_var($storeEmail, FILTER_VALIDATE_EMAIL)
+            ) {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your create of the store has failed');
+                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                // Form data is valid; proceed with creating the store
+                $this->storeModel->create($post);
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your create of the store was successful');
+
+                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
             $data = [
                 'title' => 'Create Store'
             ];
-            $this->view('backend/store/storeCreate', $data);
+            $this->view('backend/store/create', $data);
         }
     }
 
     public function delete($storeId)
     {
-        echo '<script>';
-        echo 'if (confirm("Are you sure that you want to delete: deze store")) {';
-        echo '    window.location.href = "' . URLROOT . '/StoreController/confirmDeleteStore/' . $storeId . '";';
-        echo '} else {';
-        echo '    window.location.href = "' . URLROOT . '/StoreController/overview/' . $storeId . '";';
-        echo '}';
-        echo '</script>';
-    }
+        if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+            $result = $this->storeModel->delete($storeId);
 
-    public function confirmDeleteStore($storeId)
-    {
-        if ($this->storeModel->delete($storeId)) {
-            header('location: ' . URLROOT . '/StoreController/overview');
+            if (!$result) {
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your delete of the store was successful');
+                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your delete of the store has failed');
+                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
-            header('location: ' . URLROOT . '/StoreController/overview');
+
+            $data = [
+                'title' => 'Delete store',
+                'storeId' => $storeId
+            ];
+            $this->view('backend/store/delete', $data);
         }
     }
 
@@ -75,11 +105,15 @@ class StoreController extends Controller
             $result = $this->storeModel->update($post);
 
             if (!$result) {
-                echo 'The update was successful';
-                header('Refresh: 3; url=' . URLROOT . '/StoreController/overview/' . $storeId . '');
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your update of the store was successful');
+                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             } else {
-                echo 'The update was not successful';
-                header('Refresh: 3; url=' . URLROOT . '/StoreController/overview/' . $storeId . '');
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your update of the store has failed');
+                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             }
         } else {
             $row = $this->storeModel->getStoreById($storeId);
@@ -87,7 +121,7 @@ class StoreController extends Controller
             $data = [
                 'row' => $row
             ];
-            $this->view('backend/store/storeEdit', $data);
+            $this->view('backend/store/update', $data);
         }
     }
 
@@ -110,8 +144,14 @@ class StoreController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $this->storeModel->create($post, $storeId);
-            header('Location: ' . URLROOT . 'StoreController/storeHasEmployees/' . $storeId);
+            $result = $this->storeModel->create($post, $storeId);
+
+            if ($result) {
+                header('Location: ' . URLROOT . 'StoreController/storeHasEmployees/' . $storeId);
+            } else {
+                Helper::log('error', 'The create was not succcesfull at store has employees create');
+                header('Location: ' . URLROOT . 'StoreController/storeHasEmployees/' . $storeId);
+            }
         } else {
             $data = [
                 'title' => 'Create Store',

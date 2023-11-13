@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>/ProductController/overview" class="color-inherit">All Products</a>
+                <a href="<?= URLROOT ?>ProductController/overview" class="color-inherit">All Products</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>/ProductController/create" method="post">
+    <form action="<?= URLROOT; ?>ProductController/create" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">

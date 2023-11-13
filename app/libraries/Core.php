@@ -1,9 +1,11 @@
 <?php
 class Core
 {
-    protected $currentController = 'DashboardController';
+    protected $currentController = 'PizzaController';
     protected $currentMethod = 'index';
     protected $params = [];
+
+
 
     public function __construct()
     {
@@ -17,12 +19,15 @@ class Core
             $this->currentController = ucwords($url[0]);
             //destroy the first part of the url after the the urlroot
             // unset($url[0]);
+        } else {
+            
         }
 
 
         //if the controller doesn't exist then change the controller to $currentController
         require_once APPROOT . '/controllers/' . $this->currentController . '.php';
         //instantiate the controllerClass
+        define('CURRENTCONTROLLER', $this->currentController);
         $this->currentController = new $this->currentController();
 
         //Check if the second part of the url is set and if the method exists
@@ -30,6 +35,9 @@ class Core
             if (method_exists($this->currentController, $url[1])) {
                 $this->currentMethod = $url[1];
                 unset($urlSlug[1]);
+            } else if (!empty($url[1])) {
+                require APPROOT . '/views/includes/404.php';
+                exit;
             }
         }
 
@@ -44,7 +52,7 @@ class Core
         $incoming = $_SERVER['REQUEST_URI'];
 
         // Remove the base URL from the request
-        $incoming = str_replace("/pizzapalacebackend", "", $incoming);
+        $incoming = str_replace("/pizzapalacebackend/", "", $incoming);
 
         // Ensure a trailing slash
         if (!empty($incoming) && substr($incoming, -1) !== '/') {
@@ -68,26 +76,6 @@ class Core
         if (array_key_exists(2, $url)) {
             $urlSlug = $url[2];
         }
-
-        // $modal = array('title'=>'', 'message'=>'');
-
-        // $data = $url[2];
-
-        // // Remove curly braces "{" and "}" from the string
-        // $data = str_replace(['%7B', '%7D'], '', $data);
-        // $data = explode(";", $data);
-        
-        // foreach($data as $entry){
-        //     $entry = explode(':', $entry);
-        //     if($entry[0]=='title'){
-        //         $modal['title'] = $entry[1];
-        //     }
-        //     if($entry[0]=='message'){
-        //         $modal['message'] = $entry[1];
-        //     }
-        // }
-        // var_dump($modal);
-        // exit;
 
         $output = [$urlController, $urlAction, $urlSlug];
 

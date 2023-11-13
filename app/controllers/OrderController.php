@@ -23,6 +23,7 @@ class OrderController extends Controller
 
     public function overview()
     {
+
         $orders = $this->orderModel->getOrders();
         $countOrders = count($this->orderModel->getOrders());
 
@@ -38,8 +39,23 @@ class OrderController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
+            $orderPrice = ($post['orderPrice']);
+
+            if (empty($orderPrice)) {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your create of the order has failed');
+                header('Location:' . URLROOT . 'OrderController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $this->orderModel->create($post);
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your create of the order was successful');
+
+                header('Location:' . URLROOT . 'OrderController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
+
             $this->orderModel->create($post);
-            header('Location: ' . URLROOT . 'OrderController/overview');
         } else {
             $customer = $this->customerModel->getCustomers();
             $store = $this->storeModel->getStores();
@@ -64,18 +80,22 @@ class OrderController extends Controller
             $result = $this->orderModel->update($post);
 
             if (!$result) {
-                echo 'The update was successful';
-                header('Refresh: 1; url=' . URLROOT . '/OrderController/overview/' . $orderId . '');
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your update of the order was successful');
+                header('Location:' . URLROOT . 'OrderController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             } else {
-                echo 'The update was not successful';
-                header('Refresh: 1; url=' . URLROOT . '/OrderController/overview/' . $orderId . '');
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your update of the order has failed');
+                header('Location:' . URLROOT . 'OrderController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             }
         } else {
             global $orderState;
             global $orderStatus;
             $row = $this->orderModel->getOrderById($orderId);
             $customer = $this->customerModel->getCustomers();
-            $store = $this->orderModel->getStores();
+            $store = $this->storeModel->getStores();
 
             $data = [
                 'row' => $row,

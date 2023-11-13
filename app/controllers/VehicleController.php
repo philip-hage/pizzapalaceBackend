@@ -37,8 +37,20 @@ class VehicleController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $this->vehicleModel->create($post);
-            header('Location: ' . URLROOT . 'VehicleController/overview');
+            $vehicleName = ($post['vehicleName']);
+
+            if (empty($vehicleName)) {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your create of the vehicle has failed');
+                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $this->vehicleModel->create($post);
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your create of the vehicle was successful');
+                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
             $store = $this->storeModel->getStores();
             global $vehicleType;
@@ -50,7 +62,7 @@ class VehicleController extends Controller
             $this->view('backend/vehicles/create', $data);
         }
     }
-    
+
 
     public function update($vehicleId)
     {
@@ -60,11 +72,15 @@ class VehicleController extends Controller
             $result = $this->vehicleModel->update($post);
 
             if (!$result) {
-                echo 'The update was successful';
-                header('Refresh: 1; url=' . URLROOT . '/VehicleController/overview/' . $vehicleId . '');
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your update of the vehicle was successful');
+                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             } else {
-                echo 'The update was not successful';
-                header('Refresh: 1; url=' . URLROOT . '/VehicleController/overview/' . $vehicleId . '');
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your update of the vehicle has failed');
+                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             }
         } else {
             global $vehicleType;
@@ -75,7 +91,7 @@ class VehicleController extends Controller
                 'row' => $row,
                 'store' => $store,
                 'vehicleType' => $vehicleType,
-                
+
             ];
             $this->view('backend/vehicles/update', $data);
         }
@@ -83,21 +99,27 @@ class VehicleController extends Controller
 
     public function delete($vehicleId)
     {
-        echo '<script>';
-        echo 'if (confirm("Are you sure that you want to delete: dit voertuig")) {';
-        echo '    window.location.href = "' . URLROOT . '/VehicleController/confirmDeleteVehicle/' . $vehicleId . '";';
-        echo '} else {';
-        echo '    window.location.href = "' . URLROOT . '/VehicleController/overview/' . $vehicleId . '";';
-        echo '}';
-        echo '</script>';
-    }
+        if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+            $result = $this->vehicleModel->delete($vehicleId);
 
-    public function confirmDeleteVehicle($vehicleId)
-    {
-        if ($this->vehicleModel->delete($vehicleId)) {
-            header('location: ' . URLROOT . '/VehicleController/overview');
+            if (!$result) {
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your delete of the vehicle was successful');
+                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your delete of the vehicle has failed');
+                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
-            header('location: ' . URLROOT . '/VehicleController/overview');
+
+            $data = [
+                'title' => 'Delete Vehicle',
+                'vehicleId' => $vehicleId
+            ];
+            $this->view('backend/vehicles/delete', $data);
         }
     }
 }

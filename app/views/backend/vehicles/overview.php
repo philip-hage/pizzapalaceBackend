@@ -214,6 +214,14 @@
                             </ul>
                         </th>
 
+                        <th class="int-table__cell int-table__cell--th text-left">
+                            Action
+                        </th>
+
+                        <th class="int-table__cell int-table__cell--th text-left">
+                            Action
+                        </th>
+
                         <th class="int-table__cell int-table__cell--th text-right">Action</th>
                     </tr>
                 </thead>

@@ -34,8 +34,15 @@ class EmployeeController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $this->employeeModel->create($post);
-            header('Location: ' . URLROOT . 'EmployeeController/overview');
+            $result = $this->employeeModel->create($post);
+
+            if ($result) {
+                header('Location: ' . URLROOT . 'EmployeeController/overview');
+            } else {
+                Helper::log('error', 'The create was not succesfull at the employee create');
+                header('Location: ' . URLROOT . 'EmployeeController/overview');
+            }
+            
         } else {
             $data = [
                 'title' => 'Create Employee'
@@ -46,30 +53,27 @@ class EmployeeController extends Controller
 
     public function delete($employeeId)
     {
-        $employeeInfo = $this->employeeModel->getSingleEmployee($employeeId);
+        if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+            $result = $this->employeeModel->delete($employeeId);
 
-        if ($employeeInfo) {
-            $employeeFirstName = $employeeInfo[0];
-            $employeeLastName = $employeeInfo[1];
-
-        echo '<script>';
-        echo 'if (confirm("Are you sure that you want to delete: ' . $employeeFirstName . ' ' . $employeeLastName . '")) {';
-        echo '    window.location.href = "' . URLROOT . '/EmployeeController/confirmDeleteEmployee/' . $employeeId . '";';
-        echo '} else {';
-        echo '    window.location.href = "' . URLROOT . '/EmployeeController/overview/' . $employeeId . '";';
-        echo '}';
-        echo '</script>';
+            if (!$result) {
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your delete of the employee was successful');
+                header('Location:' . URLROOT . 'EmployeeController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your delete of the employee has failed');
+                header('Location:' . URLROOT . 'EmployeeController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
-            echo 'Employee information not found.';
-        }
-    }
 
-    public function confirmDeleteEmployee($employeeId)
-    {
-        if ($this->employeeModel->delete($employeeId)) {
-            header('location: ' . URLROOT . '/EmployeeController/overview');
-        } else {
-            header('location: ' . URLROOT . '/EmployeeController/overview');
+            $data = [
+                'title' => 'Delete employee',
+                'employeeId' => $employeeId
+            ];
+            $this->view('backend/employee/delete', $data);
         }
     }
 
@@ -81,11 +85,10 @@ class EmployeeController extends Controller
             $result = $this->employeeModel->update($post);
 
             if (!$result) {
-                echo 'The update was successful';
-                header('Refresh: 3; url=' . URLROOT . '/EmployeeController/overview/' . $employeeId . '');
+                header('Refresh: 3; url=' . URLROOT . 'EmployeeController/overview/');
             } else {
-                echo 'The update was not successful';
-                header('Refresh: 3; url=' . URLROOT . '/EmployeeController/overview/' . $employeeId . '');
+                Helper::log('error', 'The update was not succcesfull at employee update');
+                header('Refresh: 3; url=' . URLROOT . 'EmployeeController/overview/');
             }
         } else {
             $row = $this->employeeModel->getEmployeeById($employeeId);

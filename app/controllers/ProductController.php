@@ -37,8 +37,22 @@ class ProductController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $this->productModel->create($post);
-            header('Location: ' . URLROOT . 'ProductController/overview');
+            $productName = ($post['productName']);
+            $productPrice = ($post['productPrice']);
+
+            if (empty($productName) || empty($productPrice)) {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your create of the product has failed');
+                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $this->productModel->create($post);
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your create of the product was successful');
+
+                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
             $customer = $this->customerModel->getCustomers();
             global $productType;
@@ -53,30 +67,26 @@ class ProductController extends Controller
 
     public function delete($productId)
     {
-        $productInfo = $this->productModel->getSingleProduct($productId);
+        if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+            $result = $this->productModel->delete($productId);
 
-        if ($productInfo) {
-            $productName = $productInfo[0];
-
-            echo '<script>';
-            echo 'if (confirm("Are you sure that you want to delete: ' . $productName . '")) {';
-            echo '    window.location.href = "' . URLROOT . '/ProductController/confirmDeleteProduct/' . $productId . '";';
-            echo '} else {';
-            echo '    window.location.href = "' . URLROOT . '/ProductController/overview/' . $productId . '";';
-            echo '}';
-            echo '</script>';
+            if (!$result) {
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your delete of the product was successful');
+                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your delete of the product has failed');
+                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
-            echo 'Product information not found.';
-        }
-    }
-
-    public function confirmDeleteProduct($productId)
-    {
-        if ($this->productModel->delete($productId)) {
-            header('location: ' . URLROOT . '/ProductController/overview');
-        } else {
-            // Helper::log()
-            header('location: ' . URLROOT . '/ProductController/overview');
+            $data = [
+                'title' => 'Delete Product',
+                'productId' => $productId
+            ];
+            $this->view('backend/products/delete', $data);
         }
     }
 
@@ -88,12 +98,15 @@ class ProductController extends Controller
             $result = $this->productModel->editProduct($post);
 
             if (!$result) {
-                echo 'The update was successful';
-                header('Refresh: 1; url=' . URLROOT . '/ProductController/overview/' . $productId . '');
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your update of the product was successful');
+                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             } else {
-                // helper log
-                echo 'The update was not successful';
-                header('Refresh: 1; url=' . URLROOT . '/ProductController/overview/' . $productId . '');
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your update of the product has failed');
+                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
             }
         } else {
             global $productType;

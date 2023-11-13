@@ -1,24 +1,5 @@
 <?php require APPROOT . '/views/includes/head.php'; ?>
 
-<!-- Toast Notifications -->
-<div class="toast toast--hidden toast--top-left js-toast" role="alert" aria-live="assertive" aria-atomic="true" id="toast-1">
-  <div class="flex items-start justify-between">
-    <div class="toast__icon-wrapper toast__icon-wrapper--success margin-right-xs">
-      <svg class="icon" viewBox="0 0 16 16"><title>Success</title><g><path d="M6,15a1,1,0,0,1-.707-.293l-5-5A1,1,0,1,1,1.707,8.293L5.86,12.445,14.178.431a1,1,0,1,1,1.644,1.138l-9,13A1,1,0,0,1,6.09,15C6.06,15,6.03,15,6,15Z"></path></g></svg>
-    </div>
-
-    <div class="text-component text-sm">
-      <h1 class="toast__title text-md">Success</h1>
-      <p class="toast__p">You succesfully created a customer</p>
-    </div>
-  
-    <button class="reset toast__close-btn margin-left-xxxxs js-toast__close-btn js-tab-focus">
-      <svg class="icon" viewBox="0 0 12 12"><title>Close notification</title><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><line x1="1" y1="1" x2="11" y2="11" /><line x1="11" y1="1" x2="1" y2="11" /></g></svg>
-    </button>
-  </div>
-</div>
-
-
 <div class="margin-bottom-md">
     <h1 class="text-lg">Customer</h1>
 </div>
@@ -26,7 +7,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>/customerController/overview" class="color-inherit">All Customers</a>
+                <a href="<?= URLROOT ?>customerController/overview" class="color-inherit">All Customers</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -34,7 +15,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>/customerController/create" method="post">
+    <form action="<?= URLROOT; ?>customerController/create" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -54,7 +35,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerfirstname">FirstName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerfirstname" id="customerfirstname">
+                            <input class="form-control width-100%" type="text" name="customerfirstname" id="customerfirstname" required>
                         </div>
                     </div>
                 </div>
@@ -64,7 +45,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerlastname">LastName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerlastname" id="customerlastname">
+                            <input class="form-control width-100%" type="text" name="customerlastname" id="customerlastname" required>
                         </div>
                     </div>
                 </div>
@@ -74,7 +55,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerstreetname">StreetName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerstreetname" id="customerstreetname">
+                            <input class="form-control width-100%" type="text" name="customerstreetname" id="customerstreetname" required>
                         </div>
                     </div>
                 </div>
@@ -84,7 +65,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customercity">City</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customercity" id="customercity">
+                            <input class="form-control width-100%" type="text" name="customercity" id="customercity" required>
                         </div>
                     </div>
                 </div>
@@ -94,7 +75,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerzipcode">ZipCode</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerzipcode" id="customerzipcode">
+                            <input class="form-control width-100%" type="text" name="customerzipcode" id="customerzipcode" required>
                         </div>
                     </div>
                 </div>
@@ -104,7 +85,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerphone">Phone</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="number" name="customerphone" id="customerphone">
+                            <input class="form-control width-100%" type="number" name="customerphone" id="customerphone" required>
                         </div>
                     </div>
                 </div>
@@ -115,7 +96,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customeremail">Email</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="email" name="customeremail" id="customeremail">
+                            <input class="form-control width-100%" type="email" name="customeremail" id="customeremail" required>
                         </div>
                     </div>
                 </div>
