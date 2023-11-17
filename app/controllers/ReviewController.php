@@ -8,6 +8,7 @@ class ReviewController extends Controller
     private $orderModel;
     private $productModel;
     private $storeModel;
+    private $screenModel;
 
     public function __construct()
     {
@@ -16,6 +17,7 @@ class ReviewController extends Controller
         $this->orderModel = $this->model('OrderModel');
         $this->productModel = $this->model('ProductModel');
         $this->storeModel = $this->model('StoreModel');
+        $this->screenModel = $this->model('ScreenModel');
     }
 
     public function index()
@@ -75,7 +77,7 @@ class ReviewController extends Controller
             $this->view('backend/reviews/create', $data);
         }
     }
-    
+
     public function delete($reviewId)
     {
         if ($_SERVER["REQUEST_METHOD"] == 'POST') {
@@ -124,12 +126,67 @@ class ReviewController extends Controller
             $row = $this->reviewModel->getReviewById($reviewId);
             $customer = $this->customerModel->getCustomers();
 
+            $image = $this->screenModel->getScreenDataById($reviewId, 'review', 'main');
+            if ($image !== false) {
+                // Check if the necessary properties exist before accessing them
+                if (property_exists($image, 'screenCreateDate') && property_exists($image, 'screenId')) {
+                    $createDate = date('Ymd', $image->screenCreateDate);
+                    $imageSrc = URLROOT . 'public/media/' . $createDate . '/' . $image->screenId . '.jpg';
+                } else {
+                    // Handle the case where expected properties are missing
+                    $imageSrc = URLROOT . 'public/default-image.jpg';
+                }
+            } else {
+                // Handle the case where no image data is found
+                $imageSrc = URLROOT . 'public/default-image.jpg';
+            }
+
             $data = [
                 'row' => $row,
-                'customer' => $customer
+                'customer' => $customer,
+                'imageSrc' => $imageSrc,
+                'image' => $image
 
             ];
             $this->view('backend/reviews/update', $data);
+        }
+    }
+
+    public function updateImage($reviewId)
+    {
+        global $var;
+        $screenId = $var['rand'];
+        $imageUploaderResult = $this->imageUploader($screenId);
+
+        if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
+            $entity = 'review';
+            $this->screenModel->insertScreenImages($screenId, $reviewId, $entity, 'main');
+            $toast = urlencode('true');
+            $toasttitle = urlencode('Success');
+            $toastmessage = urlencode('Your create of the image was successful');
+            header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+        } else {
+            Helper::log('error', $imageUploaderResult);
+            $toast = urlencode('false');
+            $toasttitle = urlencode('Failed');
+            $toastmessage = urlencode('Your create of the image has failed');
+            header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+        }
+    }
+
+    public function deleteImage($screenId)
+    {
+        // Call the deleteScreen method from the model
+        if (!$this->screenModel->deleteScreen($screenId)) {
+            $toast = urlencode('true');
+            $toasttitle = urlencode('Success');
+            $toastmessage = urlencode('Image deleted successfully');
+            header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+        } else {
+            $toast = urlencode('false');
+            $toasttitle = urlencode('Failed');
+            $toastmessage = urlencode('Image deleted Failed');
+            header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
         }
     }
 }

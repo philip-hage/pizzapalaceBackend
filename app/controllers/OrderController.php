@@ -5,12 +5,14 @@ class OrderController extends Controller
     private $orderModel;
     private $customerModel;
     private $storeModel;
+    private $screenModel;
 
     public function __construct()
     {
         $this->orderModel = $this->model('OrderModel');
         $this->customerModel = $this->model('CustomerModel');
         $this->storeModel = $this->model('StoreModel');
+        $this->screenModel = $this->model('ScreenModel');
     }
 
     public function index()
@@ -96,6 +98,7 @@ class OrderController extends Controller
             $row = $this->orderModel->getOrderById($orderId);
             $customer = $this->customerModel->getCustomers();
             $store = $this->storeModel->getStores();
+
 
             $data = [
                 'row' => $row,

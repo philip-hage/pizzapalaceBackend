@@ -3,10 +3,12 @@
 class IngredientController extends Controller
 {
     private $ingredientModel;
+    private $screenModel;
 
     public function __construct()
     {
         $this->ingredientModel = $this->model('IngredientModel');
+        $this->screenModel = $this->model('ScreenModel');
     }
 
     public function index()
@@ -52,30 +54,27 @@ class IngredientController extends Controller
 
     public function delete($ingredientId)
     {
-        $ingredientInfo = $this->ingredientModel->getSingleIngredient($ingredientId);
+        if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+            $result = $this->ingredientModel->delete($ingredientId);
 
-        if ($ingredientInfo) {
-            $IngredientName = $ingredientInfo[0];
-
-            echo '<script>';
-            echo 'if (confirm("Are you sure that you want to delete: ' . $IngredientName . '")) {';
-            echo '    window.location.href = "' . URLROOT . '/IngredientController/confirmDeleteIngredient/' . $ingredientId . '";';
-            echo '} else {';
-            echo '    window.location.href = "' . URLROOT . '/IngredientController/overview/' . '";';
-            echo '}';
-            echo '</script>';
+            if (!$result) {
+                $toast = urlencode('true');
+                $toasttitle = urlencode('Success');
+                $toastmessage = urlencode('Your delete of the ingredient was successful');
+                header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            } else {
+                $toast = urlencode('false');
+                $toasttitle = urlencode('Failed');
+                $toastmessage = urlencode('Your delete of the ingredient has failed');
+                header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            }
         } else {
-            echo 'Ingredient information not found.';
-        }
-    }
 
-    public function confirmDeleteIngredient($ingredientId)
-    {
-        if ($this->ingredientModel->delete($ingredientId)) {
-            header('location: ' . URLROOT . '/IngredientController/overview/');
-        } else {
-            Helper::log('error', 'The delete was not succesfull at the delete ingredient');
-            header('location: ' . URLROOT . '/IngredientController/overview/');
+            $data = [
+                'title' => 'Delete ingredient',
+                'ingredientId' => $ingredientId
+            ];
+            $this->view('backend/ingredient/delete', $data);
         }
     }
 
@@ -95,11 +94,66 @@ class IngredientController extends Controller
             }
         } else {
             $row = $this->ingredientModel->getIngredientById($ingredientId);
+            $image = $this->screenModel->getScreenDataById($ingredientId, 'ingredient', 'main');
+            if ($image !== false) {
+                // Check if the necessary properties exist before accessing them
+                if (property_exists($image, 'screenCreateDate') && property_exists($image, 'screenId')) {
+                    $createDate = date('Ymd', $image->screenCreateDate);
+                    $imageSrc = URLROOT . 'public/media/' . $createDate . '/' . $image->screenId . '.jpg';
+                } else {
+                    // Handle the case where expected properties are missing
+                    $imageSrc = URLROOT . 'public/default-image.jpg';
+                }
+            } else {
+                // Handle the case where no image data is found
+                $imageSrc = URLROOT . 'public/default-image.jpg';
+            }
 
             $data = [
-                'row' => $row
+                'title' => '<h3>Update ingredient</h3>',
+                'row' => $row,
+                'imageSrc' => $imageSrc,
+                'image' => $image
             ];
             $this->view('backend/ingredient/update', $data);
+        }
+    }
+
+    public function updateImage($ingredientId)
+    {
+        global $var;
+        $screenId = $var['rand'];
+        $imageUploaderResult = $this->imageUploader($screenId);
+
+        if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
+            $entity = 'ingredient';
+            $this->screenModel->insertScreenImages($screenId, $ingredientId, $entity, 'main');
+            $toast = urlencode('true');
+            $toasttitle = urlencode('Success');
+            $toastmessage = urlencode('Your create of the image was successful');
+            header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+        } else {
+            Helper::log('error', $imageUploaderResult);
+            $toast = urlencode('false');
+            $toasttitle = urlencode('Failed');
+            $toastmessage = urlencode('Your create of the image has failed');
+            header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+        }
+    }
+
+    public function deleteImage($screenId)
+    {
+        // Call the deleteScreen method from the model
+        if (!$this->screenModel->deleteScreen($screenId)) {
+            $toast = urlencode('true');
+            $toasttitle = urlencode('Success');
+            $toastmessage = urlencode('Image deleted successfully');
+            header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+        } else {
+            $toast = urlencode('false');
+            $toasttitle = urlencode('Failed');
+            $toastmessage = urlencode('Image deleted Failed');
+            header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
         }
     }
 }

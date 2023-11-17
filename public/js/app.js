@@ -20,8 +20,6 @@ function openToastFailed(title, message) {
 
   toastTitle.textContent = title;
   message = message.replace(/\+/g, " ");
-
-  toastTitle.textContent = title;
   toastP.textContent = message;
 
   var openToastEvent = new CustomEvent("openToast");
@@ -86,3 +84,27 @@ document.getElementById("reviewEntity").addEventListener("change", function () {
     storeDropdown.style.display = "block";
   }
 });
+
+function previewImage() {
+  var fileInput = document.getElementById("file");
+  var imageContainer = document.getElementById("imageContainer");
+  var imagePreview = document.getElementById("imagePreview");
+  var noImageMessage = document.getElementById("noImageMessage");
+  var deleteImage = document.getElementById("deleteImage");
+
+  if (fileInput.files && fileInput.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      imagePreview.src = e.target.result;
+      imageContainer.style.display = "block";
+      noImageMessage.style.display = "none";
+    };
+
+    reader.readAsDataURL(fileInput.files[0]);
+  } else {
+    // Hide image preview and show the message
+    imageContainer.style.display = "none";
+    noImageMessage.style.display = "block";
+  }
+}

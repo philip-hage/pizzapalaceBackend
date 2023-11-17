@@ -25,6 +25,33 @@ class CustomerModel
         return $this->db->resultSet();
     }
 
+    public function getCustomersByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT customerId,
+                                 customerFirstName,
+                                 customerLastName,
+                                 customerStreetName,
+                                 customerZipCode,
+                                 customerCity,
+                                 customerEmail,
+                                 customerPhone,
+                                 customerType,
+                                 customerCreateDate
+                                 FROM customers
+                                 WHERE customerIsActive = 1 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalCustomersCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM customers WHERE customerIsActive = 1");
+        $result = $this->db->single();
+
+        return $result->total;
+    }
+
     public function getCustomerTypes()
     {
         $this->db->query("SELECT DISTINCT customerType FROM customers WHERE customerIsActive = 1");
@@ -123,4 +150,7 @@ class CustomerModel
         $this->db->bind(":customercreatedate", $var['timestamp']);
         return $this->db->execute();
     }
+
+    
+
 }

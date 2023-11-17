@@ -294,8 +294,8 @@
                             <td class="int-table__cell"><?= $order->orderStatus ?></td>
                             <td class="int-table__cell text-truncate max-width-xxxxs">$<?= $order->orderPrice ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $order->orderCreateDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT; ?>ordercontroller/orderHasProducts/<?= $order->orderId ?>">Read</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>ordercontroller/update/<?= $order->orderId ?>">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT; ?>orderController/orderHasProducts/<?= $order->orderId ?>">Read</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>orderController/update/<?= $order->orderId ?>">Edit</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">

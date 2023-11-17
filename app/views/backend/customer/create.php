@@ -35,7 +35,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerfirstname">FirstName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerfirstname" id="customerfirstname" required>
+                            <input class="form-control width-100%" type="text" name="customerfirstname" id="customerfirstname" >
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerlastname">LastName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerlastname" id="customerlastname" required>
+                            <input class="form-control width-100%" type="text" name="customerlastname" id="customerlastname" >
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerstreetname">StreetName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerstreetname" id="customerstreetname" required>
+                            <input class="form-control width-100%" type="text" name="customerstreetname" id="customerstreetname" >
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customercity">City</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customercity" id="customercity" required>
+                            <input class="form-control width-100%" type="text" name="customercity" id="customercity" >
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerzipcode">ZipCode</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerzipcode" id="customerzipcode" required>
+                            <input class="form-control width-100%" type="text" name="customerzipcode" id="customerzipcode" >
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerphone">Phone</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="number" name="customerphone" id="customerphone" required>
+                            <input class="form-control width-100%" type="number" name="customerphone" id="customerphone" >
                         </div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customeremail">Email</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="email" name="customeremail" id="customeremail" required>
+                            <input class="form-control width-100%" type="email" name="customeremail" id="customeremail" >
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                         </div>
                         <div class="col-6@lg">
                             <div class="select">
-                                <select class="form-control width-100%" name="customertype" id="customertype" required>
+                                <select class="form-control width-100%" name="customertype" id="customertype" >
                                     <option value="member">Member</option>
                                     <option value="guest">Guest</option>
                                     <option value="admin">Admin</option>

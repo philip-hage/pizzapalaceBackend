@@ -1,6 +1,6 @@
 <?php require APPROOT . '/views/includes/head.php'; ?>
 <div class="margin-bottom-md">
-    <h1 class="text-lg">Customer</h1>
+    <h1 class="text-lg">Employee</h1>
 </div>
 <div class="margin-bottom-md">
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
@@ -117,6 +117,47 @@
                         </div>
                     </div>
                 </div>
+            </fieldset>
+        </div>
+        <div class="border-top border-alpha padding-md">
+            <div class="flex flex-wrap gap-xs justify-between">
+                <button class="btn btn--primary">Save</button>
+            </div>
+        </div>
+    </form>
+    <form action="<?= URLROOT; ?>employeeController/updateImage/<?= $data['row']->employeeId ?>" method="post" enctype="multipart/form-data">
+        <div class="padding-md">
+            <!-- basic form controls -->
+            <fieldset class="margin-bottom-xl">
+                <div class="margin-bottom-sm">
+                    <div class="grid gap-xxs">
+                        <div class="col-3@lg">
+                            <label class="inline-block text-sm padding-top-xs@lg" for="file">Image</label>
+                        </div>
+                        <div class="col-6@lg">
+                            <input type="file" name="file" id="file" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="margin-bottom-sm">
+                        <div class="grid gap-xxs">
+                            <div class="col-3@lg">
+                                <label class="inline-block text-sm padding-top-xs@lg" for="file">file</label>
+                            </div>
+                            <div class="col-6@lg">
+                                <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
+                                    <figure class="user-menu-control__img-wrapper radius-50%">
+                                        <img class="user-menu-control__img image_picture" src="<?= $data['imageSrc'] ?>" alt="User picture">
+                                    </figure>
+                                <?php else : ?>
+                                    <p>There is no image uploaded</p>
+                                <?php endif; ?>
+                                <!-- Add delete button conditionally -->
+                                <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
+                                    <a href="<?= URLROOT; ?>employeeController/deleteImage/<?= $data['image']->screenId ?>" class="btn btn--danger">Delete Image</a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
             </fieldset>
         </div>
         <div class="border-top border-alpha padding-md">

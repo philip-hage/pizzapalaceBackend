@@ -183,10 +183,10 @@
                         </th>
 
                         <th class="int-table__cell int-table__cell--th text-left">
-                            Edit
+                            Action
                         </th>
                         <th class="int-table__cell int-table__cell--th text-left">
-                            Delete
+                            Action
                         </th>
 
                         <th class="int-table__cell int-table__cell--th text-right">Action</th>

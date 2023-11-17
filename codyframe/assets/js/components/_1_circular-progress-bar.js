@@ -16,7 +16,7 @@
     // this element is used to announce the percentage value to SR
     this.ariaLabel = this.element.getElementsByClassName('js-c-progress-bar__aria-value');
     // check if we need to update the bar color
-    this.changeColor =  Util.hasClass(this.element, 'c-progress-bar--color-update') && Util.cssSupports('color', 'var(--color-value)');
+    this.changeColor =  this.element.classList.contains('c-progress-bar--color-update') && CSS.supports('color', 'var(--color-value)');
     if(this.changeColor) {
       this.colorThresholds = getProgressBarColorThresholds(this);
     }
@@ -58,8 +58,7 @@
     if(progressBar.animate && progressBar.canAnimate) animateProgressBar(progressBar);
     else setProgressBarValue(progressBar, progressBar.value);
     // reveal fill and label -> --animate and --color-update variations only
-    setTimeout(function(){Util.addClass(progressBar.element, 'c-progress-bar--init');}, 30);
-
+    setTimeout(function(){progressBar.element.classList.add('c-progress-bar--init');}, 30);
     // dynamically update value of progress bar
     progressBar.element.addEventListener('updateProgress', function(event){
       // cancel request animation frame if it was animating
@@ -147,7 +146,7 @@
     }
     
     removeProgressBarColorClasses(progressBar);
-    Util.addClass(progressBar.element, className);
+    progressBar.element.classList.add(className);
   };
 
   function removeProgressBarColorClasses(progressBar) {
@@ -169,7 +168,7 @@
 
   //initialize the CProgressBar objects
   var circularProgressBars = document.getElementsByClassName('js-c-progress-bar');
-  var osHasReducedMotion = Util.osHasReducedMotion();
+  var osHasReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if( circularProgressBars.length > 0 ) {
     for( var i = 0; i < circularProgressBars.length; i++) {
       (function(i){new CProgressBar(circularProgressBars[i]);})(i);

@@ -1,4 +1,5 @@
 @use '../base' as *;
+
 /* -------------------------------- 
 
 File#: _1_circular-progress-bar
@@ -15,11 +16,6 @@ Usage: codyhouse.co/license
 
 .c-progress-bar { 
   width: var(--c-progress-bar-size);
-}
-
-html:not(.js) .c-progress-bar__shape { 
-  // if js is disabled, hide the svg circle -> show only the percentage value
-  display: none;
 }
 
 .c-progress-bar__shape {
@@ -54,7 +50,7 @@ html:not(.js) .c-progress-bar__shape {
   }
 }
 
-.js .c-progress-bar:not(.c-progress-bar--init){
+.c-progress-bar:not(.c-progress-bar--init){
   .c-progress-bar__fill, .c-progress-bar__value { 
     // hide fill and value until the js has been initialized
     visibility: hidden;
