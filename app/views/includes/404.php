@@ -22,7 +22,7 @@
             <div class="text-component text-center margin-bottom-lg">
                 <h1>Page not found</h1>
                 <p class="color-contrast-medium">Sorry, but the page you were looking for could not be found.</p>
-                <p class="color-contrast-medium"><a href="<?= URLROOT; ?>pizzacontroller/index">Go to homepage</a> or <a href="#0">get in touch</a>.</p>
+                <p class="color-contrast-medium"><a href="<?= URLROOT; ?>Pizza/index">Go to homepage</a> or <a href="#0">get in touch</a>.</p>
             </div>
 
             <div class="fof__animation" aria-label="404 animation">

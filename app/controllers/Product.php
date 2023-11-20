@@ -1,6 +1,6 @@
 <?php
 
-class ProductController extends Controller
+class Product extends Controller
 {
     private $customerModel;
     private $productModel;
@@ -21,15 +21,28 @@ class ProductController extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview()
+    public function overview($pageNumber = NULL)
     {
-        $products = $this->productModel->getProducts();
-        $countProducts = count($this->productModel->getProducts());
+
+        $totalRecords = count($this->productModel->getProducts());
+        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
+        $products = $this->productModel->getProductsByPagination($pagination['offset'], $pagination['recordsPerPage']);
+
+        $countProducts = $this->productModel->getTotalProductsCount();
 
 
         $data = [
             'products' => $products,
-            'countProducts' => $countProducts
+            'countProducts' => $countProducts,
+            'pageNumber' => $pagination['pageNumber'],
+            'nextPage' => $pagination['nextPage'],
+            'previousPage' => $pagination['previousPage'],
+            'totalPages' => $pagination['totalPages'],
+            'firstPage' => $pagination['firstPage'],
+            'secondPage' => $pagination['secondPage'],
+            'thirdPage' => $pagination['thirdPage'],
+            'offset' => $pagination['offset'],
+            'recordsPerPage' => $pagination['recordsPerPage']
         ];
         $this->view('backend/products/overview', $data);
     }
@@ -43,17 +56,10 @@ class ProductController extends Controller
             $productPrice = ($post['productPrice']);
 
             if (empty($productName) || empty($productPrice)) {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your create of the product has failed');
-                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+product+has+failed}');
             } else {
                 $this->productModel->create($post);
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your create of the product was successful');
-
-                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Product/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+product+was+successful}');
             }
         } else {
             $customer = $this->customerModel->getCustomers();
@@ -73,15 +79,9 @@ class ProductController extends Controller
             $result = $this->productModel->delete($productId);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your delete of the product was successful');
-                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Product/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+product+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your delete of the product has failed');
-                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+product+has+failed}');
             }
         } else {
             $data = [
@@ -100,15 +100,9 @@ class ProductController extends Controller
             $result = $this->productModel->editProduct($post);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your update of the product was successful');
-                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Product/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+product+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your update of the product has failed');
-                header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+product+has+failed}');
             }
         } else {
             global $productType;
@@ -151,16 +145,10 @@ class ProductController extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'product';
             $this->screenModel->insertScreenImages($screenId, $productId, $entity, 'main');
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Your create of the image was successful');
-            header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Product/update/' . $productId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Your create of the image has failed');
-            header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Product/update/' . $productId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
@@ -168,15 +156,9 @@ class ProductController extends Controller
     {
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Image deleted successfully');
-            header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Product/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Image deleted Failed');
-            header('Location:' . URLROOT . 'ProductController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Product/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 }

@@ -58,8 +58,8 @@
             </div>
 
             <div class="text-component text-sm">
-                <h1 class="toast__title text-md">Title Two</h1>
-                <p class="toast__p">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+                <h1 class="toast__title title2 text-md">Title Five</h1>
+                <p class="toast__p p2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Explicabo esse maiores assumenda.</p>
             </div>
 
             <button class="reset toast__close-btn margin-left-xxxxs js-toast__close-btn js-tab-focus">
@@ -80,7 +80,7 @@
         <!-- header -->
         <header class="app-ui__header shadow-xs padding-x-md padding-x-0@md">
             <div class="app-ui__logo-wrapper padding-x-sm@md">
-                <a href="<?= URLROOT; ?>/ProductController/index" class="app-ui__logo">
+                <a href="<?= URLROOT; ?>/Product/index" class="app-ui__logo">
                     <svg width="104" height="30" viewBox="0 0 104 30" fill="var(--color-contrast-higher)">
                         <title>Go to homepage</title>
                         <circle cx="15" cy="15" r="15" fill="var(--color-contrast-lower)" opacity="0.5" />
@@ -208,7 +208,7 @@
 
                         <ul class="sidenav__list">
                             <li class="sidenav__item">
-                                <a href="<?= URLROOT; ?>PizzaController/index" class="sidenav__link" <?= (CURRENTCONTROLLER == "PizzaController" || CURRENTCONTROLLER == "pizzacontroller") ? "aria-current='page'" : "" ?>>
+                                <a href="<?= URLROOT; ?>Pizza/index" class="sidenav__link" <?= (CURRENTCONTROLLER == "Pizza" || CURRENTCONTROLLER == "Pizza") ? "aria-current='page'" : "" ?>>
                                     <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                                         <g>
                                             <path d="M6,0H1C0.4,0,0,0.4,0,1v5c0,0.6,0.4,1,1,1h5c0.6,0,1-0.4,1-1V1C7,0.4,6.6,0,6,0z M5,5H2V2h3V5z"></path>
@@ -221,7 +221,7 @@
                                 </a>
                             </li>
                             <li class="sidenav__item sidenav__item--expanded">
-                                <a href="#" class="sidenav__link" <?= (CURRENTCONTROLLER != "PizzaController" || CURRENTCONTROLLER == "pizzacontroller") ? "aria-current='page'" : "" ?>>
+                                <a href="<?= URLROOT; ?>Customer/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER != "Pizza" || CURRENTCONTROLLER == "Pizza") ? "aria-current='page'" : "" ?>>
                                     <svg class="icon sidenav__icon" aria-hidden="true" viewBox="0 0 16 16">
                                         <g>
                                             <path d="M14,0H2C1.4,0,1,0.4,1,1v14c0,0.6,0.4,1,1,1h12c0.6,0,1-0.4,1-1V1C15,0.4,14.6,0,14,0z M13,14H3V2h10V14z"></path>
@@ -245,55 +245,55 @@
 
                                 <ul class="sidenav__list">
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>customercontroller/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "Customercontroller" || CURRENTCONTROLLER == "CustomerController") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Customer/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Customer" || CURRENTCONTROLLER == "Customer") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Customers</span>
                                         </a>
                                     </li>
 
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>orderController/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "OrderController" || CURRENTCONTROLLER == "ordercontroller") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Order/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Order" || CURRENTCONTROLLER == "Order") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Orders</span>
                                         </a>
                                     </li>
 
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>IngredientController/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "IngredientController") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Ingredient/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Ingredient") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Ingredients</span>
                                         </a>
                                     </li>
 
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>EmployeeController/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "EmployeeController") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Employee/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Employee") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Employees</span>
                                         </a>
                                     </li>
 
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>ReviewController/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "ReviewController") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Review/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Review") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Reviews</span>
                                         </a>
                                     </li>
 
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>StoreController/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "StoreController") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Store/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Store") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Stores</span>
                                         </a>
                                     </li>
 
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>VehicleController/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "VehicleController") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Vehicle/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Vehicle") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Vehicles</span>
                                         </a>
                                     </li>
 
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>ProductController/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "ProductController") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Product/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Product") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Products</span>
                                         </a>
                                     </li>
 
                                     <li class="sidenav__item">
-                                        <a href="<?= URLROOT; ?>PromotionController/overview/" class="sidenav__link" <?= (CURRENTCONTROLLER == "PromotionController") ? "aria-current='page'" : "" ?>>
+                                        <a href="<?= URLROOT; ?>Promotion/overview/1" class="sidenav__link" <?= (CURRENTCONTROLLER == "Promotion") ? "aria-current='page'" : "" ?>>
                                             <span class="sidenav__text text-sm@md">Promotions</span>
                                         </a>
                                     </li>

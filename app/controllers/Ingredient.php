@@ -1,6 +1,6 @@
 <?php
 
-class IngredientController extends Controller
+class Ingredient extends Controller
 {
     private $ingredientModel;
     private $screenModel;
@@ -19,14 +19,27 @@ class IngredientController extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview()
+    public function overview($pageNumber = NULL)
     {
-        $ingredients = $this->ingredientModel->getIngredients();
-        $countIngredients = count($this->ingredientModel->getIngredients());
+
+        $totalRecords = count($this->ingredientModel->getIngredients());
+        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
+        $ingredients = $this->ingredientModel->getIngredientsByPagination($pagination['offset'], $pagination['recordsPerPage']);
+
+        $countIngredients = $this->ingredientModel->getTotalIngredientsCount();
 
         $data = [
             'ingredients' => $ingredients,
-            'countIngredients' => $countIngredients
+            'countIngredients' => $countIngredients,
+            'pageNumber' => $pagination['pageNumber'],
+            'nextPage' => $pagination['nextPage'],
+            'previousPage' => $pagination['previousPage'],
+            'totalPages' => $pagination['totalPages'],
+            'firstPage' => $pagination['firstPage'],
+            'secondPage' => $pagination['secondPage'],
+            'thirdPage' => $pagination['thirdPage'],
+            'offset' => $pagination['offset'],
+            'recordsPerPage' => $pagination['recordsPerPage']
         ];
         $this->view('backend/ingredient/overview', $data);
     }
@@ -39,10 +52,10 @@ class IngredientController extends Controller
             $result =  $this->ingredientModel->create($post);
 
             if ($result) {
-                header('Location: ' . URLROOT . 'IngredientController/overview');
+                header('Location:' . URLROOT . 'Ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+ingredient+was+successful}');
             } else {
                 Helper::log('error', 'The create was not succcesfull at Ingredient create');
-                header('Location: ' . URLROOT . 'IngredientController/overview');
+                header('Location:' . URLROOT . 'Ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+ingredient+has+failed}');
             }
         } else {
             $data = [
@@ -58,15 +71,9 @@ class IngredientController extends Controller
             $result = $this->ingredientModel->delete($ingredientId);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your delete of the ingredient was successful');
-                header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+ingredient+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your delete of the ingredient has failed');
-                header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+ingredient+has+failed}');
             }
         } else {
 
@@ -87,10 +94,10 @@ class IngredientController extends Controller
 
             if (!$result) {
                 echo 'The update was successful';
-                header('Refresh: 3; url=' . URLROOT . '/IngredientController/overview/');
+                header('Location:' . URLROOT . 'Ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+ingredient+was+successful}');
             } else {
                 Helper::log('error', 'The update was not succcesfull at ingredient update');
-                header('Refresh: 3; url=' . URLROOT . '/IngredientController/overview/');
+                header('Location:' . URLROOT . 'Ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+ingredient+has+failed}');
             }
         } else {
             $row = $this->ingredientModel->getIngredientById($ingredientId);
@@ -128,16 +135,10 @@ class IngredientController extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'ingredient';
             $this->screenModel->insertScreenImages($screenId, $ingredientId, $entity, 'main');
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Your create of the image was successful');
-            header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Ingredient/update/' . $ingredientId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Your create of the image has failed');
-            header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Ingredient/update/' . $ingredientId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
@@ -145,15 +146,9 @@ class IngredientController extends Controller
     {
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Image deleted successfully');
-            header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Image deleted Failed');
-            header('Location:' . URLROOT . 'IngredientController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 }

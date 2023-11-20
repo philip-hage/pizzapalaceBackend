@@ -1,6 +1,6 @@
 <?php
 
-class CustomerController extends Controller
+class Customer extends Controller
 {
     private $customerModel;
     private $screenModel;
@@ -19,15 +19,27 @@ class CustomerController extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview()
+    public function overview($pageNumber = NULL)
     {
 
-        $customers = $this->customerModel->getCustomers();
+        $totalRecords = count($this->customerModel->getCustomers());
+        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
+        $customers = $this->customerModel->getCustomersByPagination($pagination['offset'], $pagination['recordsPerPage']);
+
         $countCustomers = $this->customerModel->getTotalCustomersCount();
 
         $data = [
             'customers' => $customers,
-            'countCustomers' => $countCustomers
+            'countCustomers' => $countCustomers,
+            'pageNumber' => $pagination['pageNumber'],
+            'nextPage' => $pagination['nextPage'],
+            'previousPage' => $pagination['previousPage'],
+            'totalPages' => $pagination['totalPages'],
+            'firstPage' => $pagination['firstPage'],
+            'secondPage' => $pagination['secondPage'],
+            'thirdPage' => $pagination['thirdPage'],
+            'offset' => $pagination['offset'],
+            'recordsPerPage' => $pagination['recordsPerPage']
         ];
 
         $this->view('backend/customer/overview', $data);
@@ -52,18 +64,11 @@ class CustomerController extends Controller
                 empty($customerzipcode) || empty($customerphone) ||
                 !filter_var($customeremail, FILTER_VALIDATE_EMAIL)
             ) {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your create of the customer has failed');
-                header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+customer+has+failed}');
             } else {
                 // Form data is valid; proceed with creating the customer
                 $this->customerModel->create($post);
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your create of the customer was successful');
-
-                header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+customer+was+successful}');
             }
         } else {
             $data = [
@@ -81,15 +86,9 @@ class CustomerController extends Controller
             $result = $this->customerModel->update($post);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your update of the customer was successful');
-                header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+customer+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your update of the customer has failed');
-                header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+customer+has+failed}');
             }
         } else {
             $row = $this->customerModel->getSingleCustomer($customerId);
@@ -127,32 +126,21 @@ class CustomerController extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'customer';
             $this->screenModel->insertScreenImages($screenId, $customerId, $entity, 'main');
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Your create of the image was successful');
-            header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Customer/update/' . $customerId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Your create of the image has failed');
-            header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Customer/update/' . $customerId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
-    public function deleteImage($screenId)
+    public function deleteImage($ids)
     {
+        $ids = explode('+', $ids);
         // Call the deleteScreen method from the model
-        if (!$this->screenModel->deleteScreen($screenId)) {
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Image deleted successfully');
-            header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+        if (!$this->screenModel->deleteScreen($ids[0])) {
+            header('Location:' . URLROOT . 'Customer/update/' . $ids[1] . '/' . '{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Image deleted Failed');
-            header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Customer/update/' . $ids[1] . '/' . '{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
 
         // Redirect to the overview page
@@ -165,15 +153,9 @@ class CustomerController extends Controller
             $result = $this->customerModel->deleteCustomer($customerId);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your delete of the customer was successful');
-                header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+customer+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your delete of the customer has failed');
-                header('Location:' . URLROOT . 'CustomerController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+customer+has+failed}');
             }
         } else {
 

@@ -8,6 +8,7 @@ class PromotionModel
     {
         $this->db = new Database();
     }
+
     public function getPromotions()
     {
         $this->db->query("SELECT promotionId,
@@ -18,6 +19,29 @@ class PromotionModel
                                  FROM promotions
                                  WHERE promotionIsActive = 1");
         return $this->db->resultSet();
+    }
+
+    public function getPromotionsByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT promotionId,
+                                 promotionName,
+                                 promotionStartDate,
+                                 promotionEndDate,
+                                 promotionCreateDate
+                                 FROM promotions
+                                 WHERE promotionIsActive = 1
+                                 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalPromotionsCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM promotions WHERE promotionIsActive = 1");
+        $result = $this->db->single();
+
+        return $result->total;
     }
 
     public function getPromotionById($promotionId)

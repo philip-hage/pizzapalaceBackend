@@ -5,7 +5,7 @@
 
 <div class="margin-bottom-md">
     <div class="flex flex-wrap gap-sm items-center justify-between">
-        <a class="btn btn--primary" href="<?= URLROOT ?>employeeController/create">+ New Employee</a>
+        <a class="btn btn--primary" href="<?= URLROOT ?>Employee/create">+ New Employee</a>
     </div>
 </div>
 
@@ -265,8 +265,8 @@
                             <td class="int-table__cell text-truncate max-width-xxxxs"><?= $employee->employeePhone ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $employee->employeeCreateDate) ?></td>
                             <td class="int-table__cell"><?= $employee->employeeCity ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>employeeController/update/<?= $employee->employeeId ?>/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>employeeController/delete/<?= $employee->employeeId ?>/">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Employee/update/<?= $employee->employeeId ?>/">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Employee/delete/<?= $employee->employeeId ?>/">Delete</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">
@@ -289,32 +289,54 @@
         <nav class="pagination text-sm" aria-label="Pagination">
             <ul class="pagination__list flex flex-wrap gap-xxxs">
                 <li>
-                    <a href="#0" class="pagination__item">
-                        <svg class="icon" viewBox="0 0 16 16">
-                            <title>Go to previous page</title>
-                            <g stroke-width="1.5" stroke="currentColor">
-                                <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="9.5,3.5 5,8 9.5,12.5 "></polyline>
-                            </g>
-                        </svg>
-                    </a>
+                    <?php if ($data['previousPage'] !== null) : ?>
+                        <a href="<?php echo ($data['previousPage']); ?>" class="pagination__item">
+                            <svg class="icon" viewBox="0 0 16 16">
+                                <title>Go to previous page</title>
+                                <g stroke-width="1.5" stroke="currentColor">
+                                    <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="9.5,3.5 5,8 9.5,12.5 "></polyline>
+                                </g>
+                            </svg>
+                        </a>
+                    <?php else : ?>
+                        <span class="pagination__item pagination__item--disabled">
+                            <svg class="icon" viewBox="0 0 16 16">
+                                <title>Go to previous page</title>
+                                <g stroke-width="1.5" stroke="currentColor">
+                                    <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="9.5,3.5 5,8 9.5,12.5 "></polyline>
+                                </g>
+                            </svg>
+                        </span>
+                    <?php endif; ?>
                 </li>
 
                 <li>
                     <span class="pagination__jumper flex items-center">
-                        <input aria-label="Page number" class="form-control" type="text" id="pageNumber" name="pageNumber" value="1">
-                        <em>of 50</em>
+                        <input aria-label="Page number" class="form-control" type="text" id="pageNumber" name="pageNumber" value="<?php echo ($data['pageNumber']); ?>">
+                        <em>of <?php echo ($data['totalPages']); ?></em>
                     </span>
                 </li>
 
                 <li>
-                    <a href="#0" class="pagination__item">
-                        <svg class="icon" viewBox="0 0 16 16">
-                            <title>Go to next page</title>
-                            <g stroke-width="1.5" stroke="currentColor">
-                                <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline>
-                            </g>
-                        </svg>
-                    </a>
+                    <?php if ($data['nextPage'] !== null) : ?>
+                        <a href="<?php echo ($data['nextPage']); ?>" class="pagination__item">
+                            <svg class="icon" viewBox="0 0 16 16">
+                                <title>Go to next page</title>
+                                <g stroke-width="1.5" stroke="currentColor">
+                                    <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline>
+                                </g>
+                            </svg>
+                        </a>
+                    <?php else : ?>
+                        <span class="pagination__item pagination__item--disabled">
+                            <svg class="icon" viewBox="0 0 16 16">
+                                <title>Go to next page</title>
+                                <g stroke-width="1.5" stroke="currentColor">
+                                    <polyline fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="6.5,3.5 11,8 6.5,12.5 "></polyline>
+                                </g>
+                            </svg>
+                        </span>
+                    <?php endif; ?>
                 </li>
             </ul>
         </nav>

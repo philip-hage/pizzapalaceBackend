@@ -1,5 +1,5 @@
 <?php require APPROOT . '/views/includes/head.php'; ?>
-<a class="btn btn-primary" href="<?= URLROOT; ?>pizzacontroller/productOverview">Pizza Overview</a>
+<a class="btn btn-primary" href="<?= URLROOT; ?>Pizza/productOverview">Pizza Overview</a>
 
 
 

@@ -24,6 +24,32 @@ class ProductModel
         return $this->db->resultSet();
     }
 
+    public function getProductsByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT p.productId,
+                                 p.productOwner,
+                                 p.productName,
+                                 p.productPrice,
+                                 p.productType,
+                                 p.productCreatedate,
+                                 c.customerFirstname
+                                 FROM products as p
+                                 INNER JOIN customers as c ON p.productOwner = c.customerId
+                                 WHERE productIsActive = 1
+                                 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalProductsCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM products WHERE productIsActive = 1");
+        $result = $this->db->single();
+
+        return $result->total;
+    }
+
     public function getProductById($productId)
     {
         $this->db->query("SELECT p.productId,

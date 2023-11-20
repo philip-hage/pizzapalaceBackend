@@ -24,6 +24,23 @@ class EmployeeModel
         return $this->db->resultSet();
     }
 
+    public function getEmployeesByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT employeeId,
+                                 employeeFirstName,
+                                 employeeLastName,
+                                 employeeRole,
+                                 employeeCreateDate,
+                                 employeeCity,
+                                 employeePhone,
+                                 employeeEmail
+                                 FROM employees
+                                 WHERE employeeIsActive = 1 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
     public function getEmployeeById($employeeId)
     {
         $this->db->query("SELECT employeeId,
@@ -40,8 +57,6 @@ class EmployeeModel
                                  WHERE employeeIsActive = 1 AND employeeId = :id");
         $this->db->bind(":id", $employeeId);
         return $this->db->single();
-
-        
     }
 
     public function getSingleEmployee($employeeId)
@@ -66,6 +81,14 @@ class EmployeeModel
         } else {
             return null;
         }
+    }
+
+    public function getTotalEmployeesCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM employees WHERE employeeIsActive = 1");
+        $result = $this->db->single();
+
+        return $result->total;
     }
 
     public function update($post)

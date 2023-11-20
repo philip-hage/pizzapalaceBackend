@@ -1,7 +1,7 @@
 <?php
 
 
-class ReviewController extends Controller
+class Review extends Controller
 {
     private $reviewModel;
     private $customerModel;
@@ -28,14 +28,27 @@ class ReviewController extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview()
+    public function overview($pageNumber = NULL)
     {
-        $reviews = $this->reviewModel->getReviews();
-        $countReviews = count($this->reviewModel->getReviews());
+
+        $totalRecords = count($this->reviewModel->getReviews());
+        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
+        $reviews = $this->reviewModel->getReviewsByPagination($pagination['offset'], $pagination['recordsPerPage']);
+
+        $countReviews = $this->reviewModel->getTotalReviewsCount();
 
         $data = [
             'reviews' => $reviews,
-            'countReviews' => $countReviews
+            'countReviews' => $countReviews,
+            'pageNumber' => $pagination['pageNumber'],
+            'nextPage' => $pagination['nextPage'],
+            'previousPage' => $pagination['previousPage'],
+            'totalPages' => $pagination['totalPages'],
+            'firstPage' => $pagination['firstPage'],
+            'secondPage' => $pagination['secondPage'],
+            'thirdPage' => $pagination['thirdPage'],
+            'offset' => $pagination['offset'],
+            'recordsPerPage' => $pagination['recordsPerPage']
         ];
         $this->view('backend/reviews/overview', $data);
     }
@@ -50,17 +63,10 @@ class ReviewController extends Controller
             $reviewDescription = ($post['reviewDescription']);
 
             if (empty($reviewRating) || empty($reviewDescription)) {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your create of the review has failed');
-                header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+review+has+failed}');
             } else {
                 $this->reviewModel->create($post);
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your create of the review was successful');
-
-                header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Review/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+review+was+successful}');
             }
         } else {
             $customer = $this->customerModel->getCustomers();
@@ -84,15 +90,9 @@ class ReviewController extends Controller
             $result = $this->reviewModel->delete($reviewId);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your delete of the review was successful');
-                header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Review/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+review+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your delete of the review has failed');
-                header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+review+has+failed}');
             }
         } else {
 
@@ -112,19 +112,16 @@ class ReviewController extends Controller
             $result = $this->reviewModel->update($post);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your update of the review was successful');
-                header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Review/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Review+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your update of the review has failed');
-                header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Review+has+failed}');
             }
         } else {
             $row = $this->reviewModel->getReviewById($reviewId);
             $customer = $this->customerModel->getCustomers();
+            $orders = $this->orderModel->getOrders();
+            $prodcuts = $this->productModel->getProducts();
+            $stores = $this->storeModel->getStores();
 
             $image = $this->screenModel->getScreenDataById($reviewId, 'review', 'main');
             if ($image !== false) {
@@ -145,7 +142,10 @@ class ReviewController extends Controller
                 'row' => $row,
                 'customer' => $customer,
                 'imageSrc' => $imageSrc,
-                'image' => $image
+                'image' => $image,
+                'orders' => $orders,
+                'products' => $prodcuts,
+                'stores' => $stores
 
             ];
             $this->view('backend/reviews/update', $data);
@@ -161,16 +161,10 @@ class ReviewController extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'review';
             $this->screenModel->insertScreenImages($screenId, $reviewId, $entity, 'main');
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Your create of the image was successful');
-            header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Review/update/' . $reviewId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Your create of the image has failed');
-            header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Review/update/' . $reviewId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
@@ -178,15 +172,9 @@ class ReviewController extends Controller
     {
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Image deleted successfully');
-            header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Review/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Image deleted Failed');
-            header('Location:' . URLROOT . 'ReviewController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Review/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 }

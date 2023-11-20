@@ -1,6 +1,6 @@
 <?php
 
-class OrderController extends Controller
+class Order extends Controller
 {
     private $orderModel;
     private $customerModel;
@@ -23,15 +23,28 @@ class OrderController extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview()
+    public function overview($pageNumber = NULL)
     {
 
-        $orders = $this->orderModel->getOrders();
-        $countOrders = count($this->orderModel->getOrders());
+        $totalRecords = count($this->orderModel->getOrders());
+        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
+        $orders = $this->orderModel->getOrdersByPagination($pagination['offset'], $pagination['recordsPerPage']);
+
+        $countOrders = $this->orderModel->getTotalOrdersCount();
+
 
         $data = [
             'orders' => $orders,
-            'countOrders' => $countOrders
+            'countOrders' => $countOrders,
+            'pageNumber' => $pagination['pageNumber'],
+            'nextPage' => $pagination['nextPage'],
+            'previousPage' => $pagination['previousPage'],
+            'totalPages' => $pagination['totalPages'],
+            'firstPage' => $pagination['firstPage'],
+            'secondPage' => $pagination['secondPage'],
+            'thirdPage' => $pagination['thirdPage'],
+            'offset' => $pagination['offset'],
+            'recordsPerPage' => $pagination['recordsPerPage']
         ];
         $this->view('backend/order/overview', $data);
     }
@@ -44,20 +57,11 @@ class OrderController extends Controller
             $orderPrice = ($post['orderPrice']);
 
             if (empty($orderPrice)) {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your create of the order has failed');
-                header('Location:' . URLROOT . 'OrderController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Order/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+order+has+failed}');
             } else {
                 $this->orderModel->create($post);
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your create of the order was successful');
-
-                header('Location:' . URLROOT . 'OrderController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Order/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+order+was+successful}');
             }
-
-            $this->orderModel->create($post);
         } else {
             $customer = $this->customerModel->getCustomers();
             $store = $this->storeModel->getStores();
@@ -82,15 +86,9 @@ class OrderController extends Controller
             $result = $this->orderModel->update($post);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your update of the order was successful');
-                header('Location:' . URLROOT . 'OrderController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Order/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+order+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your update of the order has failed');
-                header('Location:' . URLROOT . 'OrderController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Order/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+order+has+failed}');
             }
         } else {
             global $orderState;

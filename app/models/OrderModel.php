@@ -28,6 +28,35 @@ class OrderModel
         return $this->db->resultSet();
     }
 
+    public function getOrdersByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT o.orderId,
+                                 o.orderStoreId,
+                                 o.orderCustomerId,
+                                 o.orderPrice,
+                                 o.orderState,
+                                 o.orderStatus,
+                                 o.orderCreateDate,
+                                 c.customerFirstName,
+                                 c.customerLastName,
+                                 s.storeName
+                                 FROM orders as o 
+                                 INNER JOIN customers as c ON o.orderCustomerId = c.customerId
+                                 INNER JOIN stores as s ON o.orderStoreId = s.storeId
+                                 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalOrdersCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM orders");
+        $result = $this->db->single();
+
+        return $result->total;
+    }
+
     public function getOrderById($orderId)
     {
         $this->db->query("SELECT o.orderId,

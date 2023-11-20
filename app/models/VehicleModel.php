@@ -24,6 +24,32 @@ class VehicleModel
         return $this->db->resultSet();
     }
 
+    public function getVehiclesByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT v.vehicleId,
+                                 v.vehicleStoreId,
+                                 v.vehicleName,
+                                 v.vehicleType,
+                                 v.vehicleCreateDate,
+                                 v.vehicleMaintenanceDate,
+                                 s.storeName
+                                 FROM vehicles as v
+                                 INNER JOIN stores as s ON v.vehicleStoreId = s.storeId
+                                 WHERE vehicleIsActive = 1
+                                 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalVehiclesCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM vehicles WHERE vehicleIsActive = 1");
+        $result = $this->db->single();
+
+        return $result->total;
+    }
+
     public function getVehicleById($vehicleId)
     {
         $this->db->query("SELECT v.vehicleId,

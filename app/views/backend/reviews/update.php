@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>ReviewController/overview" class="color-inherit">All Reviews</a>
+                <a href="<?= URLROOT ?>Review/overview" class="color-inherit">All Reviews</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>ReviewController/update" method="post">
+    <form action="<?= URLROOT; ?>Review/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -76,7 +76,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>ReviewController/updateImage/<?= $data['row']->reviewId ?>" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>Review/updateImage/<?= $data['row']->reviewId ?>" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -104,7 +104,7 @@
                                 <?php endif; ?>
                                 <!-- Add delete button conditionally -->
                                 <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
-                                    <a href="<?= URLROOT; ?>ReviewController/deleteImage/<?= $data['image']->screenId ?>" class="btn btn--danger">Delete Image</a>
+                                    <a href="<?= URLROOT; ?>Review/deleteImage/<?= $data['image']->screenId ?>" class="btn btn--danger">Delete Image</a>
                                 <?php endif; ?>
                             </div>
                         </div>

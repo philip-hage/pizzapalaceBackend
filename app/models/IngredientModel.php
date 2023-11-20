@@ -20,6 +20,27 @@ class IngredientModel
         return $this->db->resultSet();
     }
 
+    public function getIngredientsByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT ingredientId,
+                                 ingredientName,
+                                 ingredientPrice,
+                                 ingredientCreateDate
+                                 FROM ingredients
+                                 WHERE ingredientIsActive = 1 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalIngredientsCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM ingredients WHERE ingredientIsActive = 1");
+        $result = $this->db->single();
+
+        return $result->total;
+    }
+
     public function getIngredientById($ingredientId)
     {
         $this->db->query("SELECT ingredientId,

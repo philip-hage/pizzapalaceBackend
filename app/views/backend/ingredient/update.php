@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>ingredientController/ingredientsOverview" class="color-inherit">All Ingredients</a>
+                <a href="<?= URLROOT ?>Ingredient/ingredientsOverview" class="color-inherit">All Ingredients</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>ingredientController/update" method="post">
+    <form action="<?= URLROOT; ?>Ingredient/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -56,7 +56,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>ingredientController/updateImage/<?= $data['row']->ingredientId ?>" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>Ingredient/updateImage/<?= $data['row']->ingredientId ?>" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -84,7 +84,7 @@
                                 <?php endif; ?>
                                 <!-- Add delete button conditionally -->
                                 <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
-                                    <a href="<?= URLROOT; ?>ingredientController/deleteImage/<?= $data['image']->screenId ?>" class="btn btn--danger">Delete Image</a>
+                                    <a href="<?= URLROOT; ?>Ingredient/deleteImage/<?= $data['image']->screenId ?>" class="btn btn--danger">Delete Image</a>
                                 <?php endif; ?>
                             </div>
                         </div>

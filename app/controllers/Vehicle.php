@@ -1,6 +1,6 @@
 <?php
 
-class VehicleController extends Controller
+class Vehicle extends Controller
 {
     private $vehicleModel;
     private $storeModel;
@@ -21,15 +21,27 @@ class VehicleController extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview()
+    public function overview($pageNumber = NULL)
     {
-        $vehicles = $this->vehicleModel->getVehicles();
-        $countVehicles = count($this->vehicleModel->getVehicles());
+        $totalRecords = count($this->vehicleModel->getVehicles());
+        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
+        $vehicles = $this->vehicleModel->getVehiclesByPagination($pagination['offset'], $pagination['recordsPerPage']);
+
+        $countVehicles = $this->vehicleModel->getTotalVehiclesCount();
 
 
         $data = [
             'vehicles' => $vehicles,
-            'countVehicles' => $countVehicles
+            'countVehicles' => $countVehicles,
+            'pageNumber' => $pagination['pageNumber'],
+            'nextPage' => $pagination['nextPage'],
+            'previousPage' => $pagination['previousPage'],
+            'totalPages' => $pagination['totalPages'],
+            'firstPage' => $pagination['firstPage'],
+            'secondPage' => $pagination['secondPage'],
+            'thirdPage' => $pagination['thirdPage'],
+            'offset' => $pagination['offset'],
+            'recordsPerPage' => $pagination['recordsPerPage']
         ];
         $this->view('backend/vehicles/overview', $data);
     }
@@ -42,16 +54,10 @@ class VehicleController extends Controller
             $vehicleName = ($post['vehicleName']);
 
             if (empty($vehicleName)) {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your create of the vehicle has failed');
-                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Vehicle/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+Vehicle+has+failed}');
             } else {
                 $this->vehicleModel->create($post);
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your create of the vehicle was successful');
-                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Vehicle/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+Vehicle+was+successful}');
             }
         } else {
             $store = $this->storeModel->getStores();
@@ -74,15 +80,9 @@ class VehicleController extends Controller
             $result = $this->vehicleModel->update($post);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your update of the vehicle was successful');
-                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Vehicle/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Vehicle+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your update of the vehicle has failed');
-                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Vehicle/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Vehicle+has+failed}');
             }
         } else {
             global $vehicleType;
@@ -125,16 +125,10 @@ class VehicleController extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'vehicle';
             $this->screenModel->insertScreenImages($screenId, $vehicleId, $entity, 'main');
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Your create of the image was successful');
-            header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Vehicle/update/' . $vehicleId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Your create of the image has failed');
-            header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Vehicle/update/' . $vehicleId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
@@ -142,15 +136,9 @@ class VehicleController extends Controller
     {
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Image deleted successfully');
-            header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Vehicle/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Image deleted Failed');
-            header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Vehicle/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 
@@ -160,15 +148,9 @@ class VehicleController extends Controller
             $result = $this->vehicleModel->delete($vehicleId);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your delete of the vehicle was successful');
-                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+customer+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your delete of the vehicle has failed');
-                header('Location:' . URLROOT . 'VehicleController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+customer+has+failed}');
             }
         } else {
 

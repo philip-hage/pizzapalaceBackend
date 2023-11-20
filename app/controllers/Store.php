@@ -1,7 +1,7 @@
 <?php
 
 
-class StoreController extends Controller
+class Store extends Controller
 {
     private $storeModel;
     private $vehicleModel;
@@ -22,14 +22,26 @@ class StoreController extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview()
+    public function overview($pageNumber = NULL)
     {
-        $stores = $this->storeModel->getStores();
-        $countStores = count($this->storeModel->getStores());
+        $totalRecords = count($this->storeModel->getStores());
+        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
+        $stores = $this->storeModel->getStoresByPagination($pagination['offset'], $pagination['recordsPerPage']);
+
+        $countStores = $this->storeModel->getTotalStoresCount();
 
         $data = [
             'stores' => $stores,
-            'countStores' => $countStores
+            'countStores' => $countStores,
+            'pageNumber' => $pagination['pageNumber'],
+            'nextPage' => $pagination['nextPage'],
+            'previousPage' => $pagination['previousPage'],
+            'totalPages' => $pagination['totalPages'],
+            'firstPage' => $pagination['firstPage'],
+            'secondPage' => $pagination['secondPage'],
+            'thirdPage' => $pagination['thirdPage'],
+            'offset' => $pagination['offset'],
+            'recordsPerPage' => $pagination['recordsPerPage']
         ];
         $this->view('backend/store/overview', $data);
     }
@@ -52,18 +64,11 @@ class StoreController extends Controller
                 empty($storePhone) ||
                 !filter_var($storeEmail, FILTER_VALIDATE_EMAIL)
             ) {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your create of the store has failed');
-                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+Store+has+failed}');
             } else {
                 // Form data is valid; proceed with creating the store
                 $this->storeModel->create($post);
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your create of the store was successful');
-
-                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Store/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+Store+was+successful}');
             }
         } else {
             $data = [
@@ -79,15 +84,9 @@ class StoreController extends Controller
             $result = $this->storeModel->delete($storeId);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your delete of the store was successful');
-                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Store/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+Store+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your delete of the store has failed');
-                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+Store+has+failed}');
             }
         } else {
 
@@ -107,15 +106,10 @@ class StoreController extends Controller
             $result = $this->storeModel->update($post);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your update of the store was successful');
-                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Store/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Store+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your update of the store has failed');
-                header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                Helper::log('error', 'The update was not succcesfull at Store update');
+                header('Location:' . URLROOT . 'Store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Store+has+failed}');
             }
         } else {
             $row = $this->storeModel->getStoreById($storeId);
@@ -152,16 +146,10 @@ class StoreController extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'store';
             $this->screenModel->insertScreenImages($screenId, $storeId, $entity, 'main');
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Your create of the image was successful');
-            header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Store/update/' . $storeId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Your create of the image has failed');
-            header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Store/update/' . $storeId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
@@ -169,15 +157,9 @@ class StoreController extends Controller
     {
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Image deleted successfully');
-            header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Store/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Image deleted Failed');
-            header('Location:' . URLROOT . 'StoreController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Store/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 
@@ -203,10 +185,10 @@ class StoreController extends Controller
             $result = $this->storeModel->create($post, $storeId);
 
             if ($result) {
-                header('Location: ' . URLROOT . 'StoreController/storeHasEmployees/' . $storeId);
+                header('Location: ' . URLROOT . 'Store/storeHasEmployees/' . $storeId);
             } else {
                 Helper::log('error', 'The create was not succcesfull at store has employees create');
-                header('Location: ' . URLROOT . 'StoreController/storeHasEmployees/' . $storeId);
+                header('Location: ' . URLROOT . 'Store/storeHasEmployees/' . $storeId);
             }
         } else {
             $data = [

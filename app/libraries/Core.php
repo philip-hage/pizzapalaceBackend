@@ -1,7 +1,7 @@
 <?php
 class Core
 {
-    protected $currentController = 'PizzaController';
+    protected $currentController = 'Pizza';
     protected $currentMethod = 'index';
     protected $params = [];
 

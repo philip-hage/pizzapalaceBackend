@@ -31,62 +31,16 @@ class Controller
     public function pagination($pageNumber, $recordsPerPage, $totalRecords)
     {
         $totalPages = ceil($totalRecords / $recordsPerPage);
-        $offset = ($pageNumber * $recordsPerPage) - $recordsPerPage;
-        $nextPage = $pageNumber + 1;
-        $previousPage = $pageNumber - 1;
-        $firstPage = 1;
-        $secondPage = 2;
-        $thirdPage = 3;
+        $offset = ($pageNumber - 1) * $recordsPerPage;
+        $nextPage = ($pageNumber < $totalPages) ? $pageNumber + 1 : null;
+        $previousPage = ($pageNumber > 1) ? $pageNumber - 1 : null;
 
-        // Page number 1
-        if ($pageNumber == 1) {
-            $firstPage = $pageNumber;
-        } else {
-            if ($pageNumber == $totalPages) {
-                $firstPage = $pageNumber - 2;
-            } else {
-                $firstPage = $pageNumber - 1;
-            }
-        }
+        // Determine first, second, and third pages
+        $firstPage = max(1, $pageNumber - 1);
+        $secondPage = $pageNumber;
+        $thirdPage = min($totalPages, $pageNumber + 1);
 
-        if ($pageNumber == 2) {
-            if ($pageNumber == $totalPages) {
-                $firstPage = $pageNumber - 1;
-            } else {
-                $firstPage = $pageNumber - 1;
-            }
-        }
-
-        //Page number 2
-        if ($pageNumber != 1) {
-            $secondPage = $pageNumber;
-            if ($pageNumber == $totalPages) {
-                $secondPage = $pageNumber - 1;
-            } else {
-                $secondPage = $pageNumber;
-            }
-        } else {
-            $secondPage = $pageNumber + 1;
-        }
-
-        if ($pageNumber == 2) {
-            if ($pageNumber == $totalPages) {
-                $secondPage = $pageNumber;
-            } else {
-                $secondPage = $pageNumber;
-            }
-        }
-
-        //Page number 3
-        if ($pageNumber == 1 || $pageNumber == 2) {
-            $thirdPage = 3;
-        } elseif ($pageNumber == $totalPages) {
-            $thirdPage = $pageNumber;
-        } else {
-            $thirdPage = $pageNumber + 1;
-        }
-
-        return $data = [
+        return [
             'pageNumber' => $pageNumber,
             'recordsPerPage' => $recordsPerPage,
             'offset' => $offset,
@@ -135,7 +89,7 @@ class Controller
                     return array(
                         'status' => 500,
                         'message' => 'Error uploading image. Please try again.'
-                     );
+                    );
                 }
             } else {
                 return 'Invalid file type. Allowed types are: ' . implode(', ', $allowedExtensions);

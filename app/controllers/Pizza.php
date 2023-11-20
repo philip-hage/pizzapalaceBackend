@@ -1,7 +1,7 @@
 <?php
 
 
-class PizzaController extends Controller
+class Pizza extends Controller
 {
     private $pizzaModel;
 

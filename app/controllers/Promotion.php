@@ -1,6 +1,6 @@
 <?php
 
-class PromotionController extends Controller
+class Promotion extends Controller
 {
     private $promotionModel;
     private $screenModel;
@@ -11,14 +11,26 @@ class PromotionController extends Controller
         $this->screenModel = $this->model('ScreenModel');
     }
 
-    public function overview()
+    public function overview($pageNumber = NULL)
     {
-        $promotions = $this->promotionModel->getPromotions();
-        $countPromotions = count($this->promotionModel->getPromotions());
+        $totalRecords = count($this->promotionModel->getPromotions());
+        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
+        $promotions = $this->promotionModel->getPromotionsByPagination($pagination['offset'], $pagination['recordsPerPage']);
+
+        $countPromotions = $this->promotionModel->getTotalPromotionsCount();
 
         $data = [
             'promotions' => $promotions,
-            'countPromotions' => $countPromotions
+            'countPromotions' => $countPromotions,
+            'pageNumber' => $pagination['pageNumber'],
+            'nextPage' => $pagination['nextPage'],
+            'previousPage' => $pagination['previousPage'],
+            'totalPages' => $pagination['totalPages'],
+            'firstPage' => $pagination['firstPage'],
+            'secondPage' => $pagination['secondPage'],
+            'thirdPage' => $pagination['thirdPage'],
+            'offset' => $pagination['offset'],
+            'recordsPerPage' => $pagination['recordsPerPage']
         ];
         $this->view('backend/promotions/overview', $data);
     }
@@ -31,16 +43,10 @@ class PromotionController extends Controller
             $promotionName = ($post['promotionName']);
 
             if (empty($promotionName)) {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your create of the promotion has failed');
-                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+promotion+has+failed}');
             } else {
                 $this->promotionModel->create($post);
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your create of the promotion was successful');
-                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+promotion+was+successful}');
             }
         } else {
             $data = [
@@ -58,15 +64,9 @@ class PromotionController extends Controller
             $result = $this->promotionModel->update($post);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your update of the promotion was successful');
-                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+promotion+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your update of the promotion has failed');
-                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+promotion+has+failed}');
             }
         } else {
             $row = $this->promotionModel->getPromotionById($promotionId);
@@ -104,16 +104,10 @@ class PromotionController extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'promotion';
             $this->screenModel->insertScreenImages($screenId, $promotionId, $entity, 'main');
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Your create of the image was successful');
-            header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Promotion/update/' . $promotionId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Your create of the image has failed');
-            header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Promotion/update/' . $promotionId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
@@ -121,15 +115,9 @@ class PromotionController extends Controller
     {
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            $toast = urlencode('true');
-            $toasttitle = urlencode('Success');
-            $toastmessage = urlencode('Image deleted successfully');
-            header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            $toast = urlencode('false');
-            $toasttitle = urlencode('Failed');
-            $toastmessage = urlencode('Image deleted Failed');
-            header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+            header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 
@@ -139,15 +127,9 @@ class PromotionController extends Controller
             $result = $this->promotionModel->delete($promotionId);
 
             if (!$result) {
-                $toast = urlencode('true');
-                $toasttitle = urlencode('Success');
-                $toastmessage = urlencode('Your delete of the promotion was successful');
-                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+promotion+was+successful}');
             } else {
-                $toast = urlencode('false');
-                $toasttitle = urlencode('Failed');
-                $toastmessage = urlencode('Your delete of the promotion has failed');
-                header('Location:' . URLROOT . 'PromotionController/overview/' . $toast . '/' . $toasttitle . '/' . $toastmessage);
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+promotion+has+failed}');
             }
         } else {
 

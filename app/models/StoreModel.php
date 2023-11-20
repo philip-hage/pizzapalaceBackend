@@ -24,6 +24,32 @@ class StoreModel
         return $this->db->resultSet();
     }
 
+    public function getStoresByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT storeId,
+                                 storeName,
+                                 storeZipcode,
+                                 storeStreetName,
+                                 storeCity,
+                                 storePhone,
+                                 storeEmail,
+                                 storeCreateDate
+                                 FROM stores
+                                 WHERE storeIsActive = 1
+                                 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalStoresCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM stores WHERE storeIsActive = 1");
+        $result = $this->db->single();
+
+        return $result->total;
+    }
+
     public function getStoreById($storeId)
     {
         $this->db->query("SELECT storeId,

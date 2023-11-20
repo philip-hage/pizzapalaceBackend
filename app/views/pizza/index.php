@@ -254,7 +254,7 @@
 
         <footer class="padding-x-sm padding-y-xs border-top border-contrast-lower flex-shrink-0">
             <p class="text-sm flex justify-between" id="totalPrice"><span>Subtotal:</span> <span></span></p>
-            <a href="<?= URLROOT; ?>pizzacontroller/pizzaCheckout" class="btn btn--primary btn--md width-100% margin-top-xs">Checkout &rarr;</a>
+            <a href="<?= URLROOT; ?>Pizza/pizzaCheckout" class="btn btn--primary btn--md width-100% margin-top-xs">Checkout &rarr;</a>
         </footer>
     </div>
 </div>

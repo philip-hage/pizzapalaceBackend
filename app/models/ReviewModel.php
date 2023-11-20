@@ -26,6 +26,34 @@ class ReviewModel
         return $this->db->resultSet();
     }
 
+    public function getReviewsByPagination($offset, $limit)
+    {
+        $this->db->query("SELECT r.reviewId,
+                                 r.reviewCustomerId,
+                                 r.reviewRating,
+                                 r.reviewEntityId,
+                                 r.reviewEntity,
+                                 r.reviewDescription,
+                                 r.reviewCreateDate,
+                                 c.customerFirstName,
+                                 c.customerLastName
+                                 FROM reviews as r
+                                 INNER JOIN customers as c ON r.reviewCustomerId = c.customerId
+                                 WHERE reviewIsActive = 1
+                                 LIMIT :offset, :limit");
+        $this->db->bind(':offset', $offset);
+        $this->db->bind('limit', $limit);
+        return $this->db->resultSet();
+    }
+
+    public function getTotalReviewsCount()
+    {
+        $this->db->query("SELECT COUNT(*) as total FROM reviews WHERE reviewIsActive = 1");
+        $result = $this->db->single();
+
+        return $result->total;
+    }
+
     public function getReviewById($reviewId)
     {
         $this->db->query("SELECT r.reviewId,

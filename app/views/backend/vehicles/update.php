@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>VehicleController/overview" class="color-inherit">All Products</a>
+                <a href="<?= URLROOT ?>Vehicle/overview" class="color-inherit">All Products</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>VehicleController/update" method="post">
+    <form action="<?= URLROOT; ?>Vehicle/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -85,7 +85,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>VehicleController/updateImage/<?= $data['row']->vehicleId ?>" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>Vehicle/updateImage/<?= $data['row']->vehicleId ?>" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -113,7 +113,7 @@
                                 <?php endif; ?>
                                 <!-- Add delete button conditionally -->
                                 <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
-                                    <a href="<?= URLROOT; ?>VehicleController/deleteImage/<?= $data['image']->screenId ?>" class="btn btn--danger">Delete Image</a>
+                                    <a href="<?= URLROOT; ?>Vehicle/deleteImage/<?= $data['image']->screenId ?>" class="btn btn--danger">Delete Image</a>
                                 <?php endif; ?>
                             </div>
                         </div>

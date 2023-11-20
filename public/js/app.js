@@ -1,5 +1,3 @@
-// let isValidationChecked = false; // Flag to track if validation has been checked
-
 function openToastSuccess(title, message) {
   var toast = document.querySelector(".toast1");
   var toastTitle = document.querySelector(".toast__title");
@@ -14,48 +12,61 @@ function openToastSuccess(title, message) {
 }
 
 function openToastFailed(title, message) {
-  var toast = document.querySelector(".toast2");
-  var toastTitle = document.querySelector(".toast__title");
-  var toastP = document.querySelector(".toast__p");
+  var toast2 = document.querySelector(".toast2");
+  var toastTitle2 = document.querySelector(".title2");
+  var toastP2 = document.querySelector(".p2");
 
-  toastTitle.textContent = title;
+  toastTitle2.textContent = title;
   message = message.replace(/\+/g, " ");
-  toastP.textContent = message;
+  toastP2.textContent = message;
 
   var openToastEvent = new CustomEvent("openToast");
-  toast.dispatchEvent(openToastEvent);
+  toast2.dispatchEvent(openToastEvent);
 }
 
 // Extract toast parameters from the URL path
 const urlPath = window.location.pathname;
 
-// Use a regular expression to extract content inside slashes
-const match = urlPath.match(/\/([^\/]+)\/([^\/]+)\/([^\/]+)$/);
+// Decode the URL path
+const decodedUrlPath = decodeURIComponent(urlPath);
 
-console.log("URL Path:", urlPath); // Log URL path for debugging
+// Use a regular expression to extract content inside curly braces, handling URL-encoded semicolons
+const match = decodedUrlPath.match(/\{([^{}]+)\}/);
+
+console.log("Decoded URL Path:", decodedUrlPath); // Log decoded URL path for debugging
 
 if (match) {
-  // Extract the content inside slashes and decode each component
-  const toastValue = decodeURIComponent(match[1]);
-  const toasttitleValue = decodeURIComponent(match[2]);
-  const toastmessageValue = decodeURIComponent(match[3]);
+  // Extract the content inside curly braces and decode each component
+  const toastContent = decodeURIComponent(match[1]);
 
-  console.log(
-    "Decoded Parameters:",
-    toastValue,
-    toasttitleValue,
-    toastmessageValue
-  ); // Log decoded parameters for debugging
+  // Split the content into individual parameters
+  const params = toastContent.split(";").map((param) => param.trim());
+
+  // Create an object to hold the parameters
+  const toastParams = {};
+  params.forEach((param) => {
+    const [key, value] = param.split(":");
+    toastParams[key] = value;
+  });
+
+  console.log("Decoded Parameters:", toastParams);
 
   // Check if 'toast' parameter is present and has a value of 'true'
-  if (toastValue === "true" && toasttitleValue && toastmessageValue) {
-    console.log("Triggering openToast function");
-    console.log(toastmessageValue);
-    openToastSuccess(toasttitleValue, toastmessageValue);
-  } else if (toastValue == "false" && toasttitleValue && toastmessageValue) {
-    openToastFailed(toasttitleValue, toastmessageValue);
+  if (
+    toastParams.toast === "true" &&
+    toastParams.toasttitle &&
+    toastParams.toastmessage
+  ) {
+    console.log("Triggering openToastSuccess function");
+    openToastSuccess(toastParams.toasttitle, toastParams.toastmessage);
+  } else if (
+    toastParams.toast === "false" &&
+    toastParams.toasttitle &&
+    toastParams.toastmessage
+  ) {
+    console.log("Triggering openToastFailed function");
+    openToastFailed(toastParams.toasttitle, toastParams.toastmessage);
   } else {
-    console.log(toastValue);
     console.log("Invalid or missing parameters for toast.");
   }
 } else {
@@ -84,27 +95,3 @@ document.getElementById("reviewEntity").addEventListener("change", function () {
     storeDropdown.style.display = "block";
   }
 });
-
-function previewImage() {
-  var fileInput = document.getElementById("file");
-  var imageContainer = document.getElementById("imageContainer");
-  var imagePreview = document.getElementById("imagePreview");
-  var noImageMessage = document.getElementById("noImageMessage");
-  var deleteImage = document.getElementById("deleteImage");
-
-  if (fileInput.files && fileInput.files[0]) {
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-      imagePreview.src = e.target.result;
-      imageContainer.style.display = "block";
-      noImageMessage.style.display = "none";
-    };
-
-    reader.readAsDataURL(fileInput.files[0]);
-  } else {
-    // Hide image preview and show the message
-    imageContainer.style.display = "none";
-    noImageMessage.style.display = "block";
-  }
-}
