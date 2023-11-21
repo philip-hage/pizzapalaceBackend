@@ -11,26 +11,34 @@ class Promotion extends Controller
         $this->screenModel = $this->model('ScreenModel');
     }
 
-    public function overview($pageNumber = NULL)
+    public function overview($params)
     {
-        $totalRecords = count($this->promotionModel->getPromotions());
-        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
-        $promotions = $this->promotionModel->getPromotionsByPagination($pagination['offset'], $pagination['recordsPerPage']);
 
+        // Extract page number from $params
+        $pageNumber = isset($params['page']) ? intval($params['page']) : 1;
+
+        // Define records per page and calculate offset
+        $recordsPerPage = 2; // You can adjust this based on your needs
+        $offset = ($pageNumber - 1) * $recordsPerPage;
+
+        // Get customers for the current page
+        $promotions = $this->promotionModel->getPromotionsByPagination($offset, $recordsPerPage);
+
+        // Get total number of customers
         $countPromotions = $this->promotionModel->getTotalPromotionsCount();
+
+        // Calculate total number of pages
+        $totalPages = ceil($countPromotions / $recordsPerPage);
+
+        // Ensure $pageNumber is within valid range
+        $pageNumber = max(1, min($pageNumber, $totalPages));
 
         $data = [
             'promotions' => $promotions,
             'countPromotions' => $countPromotions,
-            'pageNumber' => $pagination['pageNumber'],
-            'nextPage' => $pagination['nextPage'],
-            'previousPage' => $pagination['previousPage'],
-            'totalPages' => $pagination['totalPages'],
-            'firstPage' => $pagination['firstPage'],
-            'secondPage' => $pagination['secondPage'],
-            'thirdPage' => $pagination['thirdPage'],
-            'offset' => $pagination['offset'],
-            'recordsPerPage' => $pagination['recordsPerPage']
+            'currentPage' => $pageNumber,
+            'recordsPerPage' => $recordsPerPage,
+            'totalPages' => $totalPages,
         ];
         $this->view('backend/promotions/overview', $data);
     }
@@ -56,8 +64,9 @@ class Promotion extends Controller
         }
     }
 
-    public function update($promotionId)
+    public function update($params = NULL)
     {
+        $promotionId = $params['promotionId'];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             // Helper::dump($post);exit;
@@ -95,8 +104,9 @@ class Promotion extends Controller
         }
     }
 
-    public function updateImage($promotionId)
+    public function updateImage($params = NULL)
     {
+        $promotionId = $params['promotionId'];
         global $var;
         $screenId = $var['rand'];
         $imageUploaderResult = $this->imageUploader($screenId);
@@ -104,25 +114,28 @@ class Promotion extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'promotion';
             $this->screenModel->insertScreenImages($screenId, $promotionId, $entity, 'main');
-            header('Location:' . URLROOT . 'Promotion/update/' . $promotionId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
+            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Promotion/update/' . $promotionId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
+            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
-    public function deleteImage($screenId)
+    public function deleteImage($params = NULL)
     {
+        $screenId = $params['screenId'];
+        $promotionId = $params['promotionId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
+            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
+            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 
-    public function delete($promotionId)
+    public function delete($params)
     {
+        $promotionId = $params['promotionId'];
         if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $result = $this->promotionModel->delete($promotionId);
 

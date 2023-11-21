@@ -19,27 +19,34 @@ class Ingredient extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview($pageNumber = NULL)
+    public function overview($params)
     {
 
-        $totalRecords = count($this->ingredientModel->getIngredients());
-        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
-        $ingredients = $this->ingredientModel->getIngredientsByPagination($pagination['offset'], $pagination['recordsPerPage']);
+        // Extract page number from $params
+        $pageNumber = isset($params['page']) ? intval($params['page']) : 1;
 
+        // Define records per page and calculate offset
+        $recordsPerPage = 2; // You can adjust this based on your needs
+        $offset = ($pageNumber - 1) * $recordsPerPage;
+
+        // Get customers for the current page
+        $ingredients = $this->ingredientModel->getIngredientsByPagination($offset, $recordsPerPage);
+
+        // Get total number of customers
         $countIngredients = $this->ingredientModel->getTotalIngredientsCount();
+
+        // Calculate total number of pages
+        $totalPages = ceil($countIngredients / $recordsPerPage);
+
+        // Ensure $pageNumber is within valid range
+        $pageNumber = max(1, min($pageNumber, $totalPages));
 
         $data = [
             'ingredients' => $ingredients,
             'countIngredients' => $countIngredients,
-            'pageNumber' => $pagination['pageNumber'],
-            'nextPage' => $pagination['nextPage'],
-            'previousPage' => $pagination['previousPage'],
-            'totalPages' => $pagination['totalPages'],
-            'firstPage' => $pagination['firstPage'],
-            'secondPage' => $pagination['secondPage'],
-            'thirdPage' => $pagination['thirdPage'],
-            'offset' => $pagination['offset'],
-            'recordsPerPage' => $pagination['recordsPerPage']
+            'currentPage' => $pageNumber,
+            'recordsPerPage' => $recordsPerPage,
+            'totalPages' => $totalPages,
         ];
         $this->view('backend/ingredient/overview', $data);
     }
@@ -85,8 +92,9 @@ class Ingredient extends Controller
         }
     }
 
-    public function update($ingredientId)
+    public function update($params = NULL)
     {
+        $ingredientId = $params['ingredientId'];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -126,8 +134,9 @@ class Ingredient extends Controller
         }
     }
 
-    public function updateImage($ingredientId)
+    public function updateImage($params = NULL)
     {
+        $ingredientId = $params['ingredientId'];
         global $var;
         $screenId = $var['rand'];
         $imageUploaderResult = $this->imageUploader($screenId);
@@ -135,20 +144,22 @@ class Ingredient extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'ingredient';
             $this->screenModel->insertScreenImages($screenId, $ingredientId, $entity, 'main');
-            header('Location:' . URLROOT . 'Ingredient/update/' . $ingredientId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
+            header('Location:' . URLROOT . 'Ingredient/update/{ingredientId:' . $ingredientId . ';' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Ingredient/update/' . $ingredientId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
+            header('Location:' . URLROOT . 'Ingredient/update/{ingredientId:' . $ingredientId . ';' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
-    public function deleteImage($screenId)
+    public function deleteImage($params = NULL)
     {
+        $screenId = $params['screenId'];
+        $ingredientId = $params['ingredientId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
+            header('Location:' . URLROOT . 'Ingredient/update/{ingredientId:' . $ingredientId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            header('Location:' . URLROOT . 'Ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
+            header('Location:' . URLROOT . 'Ingredient/update/{ingredientId:' . $ingredientId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 }

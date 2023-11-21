@@ -1,6 +1,6 @@
 <?php require APPROOT . '/views/includes/head.php'; ?>
 <div class="bg-dark min-height-100vh flex flex-center padding-md">
-    <form class="bg radius-md shadow-sm padding-lg max-width-xx" action="<?= URLROOT ?>Review/delete/<?= $data["reviewId"] ?>" method="post">
+    <form class="bg radius-md shadow-sm padding-lg max-width-xx" action="<?= URLROOT ?>Review/delete/{reviewId:<?= $data["reviewId"] ?>}" method="post">
         <div class="text-center margin-bottom-md">
             <h1><?= $data['title'] ?></h1>
         </div>

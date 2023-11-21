@@ -1,4 +1,4 @@
-<?php 
+<?php
 class CustomerModel
 {
     private $db;
@@ -28,19 +28,19 @@ class CustomerModel
     public function getCustomersByPagination($offset, $limit)
     {
         $this->db->query("SELECT customerId,
-                                 customerFirstName,
-                                 customerLastName,
-                                 customerStreetName,
-                                 customerZipCode,
-                                 customerCity,
-                                 customerEmail,
-                                 customerPhone,
-                                 customerType,
-                                 customerCreateDate
-                                 FROM customers
-                                 WHERE customerIsActive = 1 LIMIT :offset, :limit");
+                             customerFirstName,
+                             customerLastName,
+                             customerStreetName,
+                             customerZipCode,
+                             customerCity,
+                             customerEmail,
+                             customerPhone,
+                             customerType,
+                             customerCreateDate
+                             FROM customers
+                             WHERE customerIsActive = 1 LIMIT :offset, :limit");
         $this->db->bind(':offset', $offset);
-        $this->db->bind('limit', $limit);
+        $this->db->bind(':limit', $limit);
         return $this->db->resultSet();
     }
 
@@ -150,7 +150,4 @@ class CustomerModel
         $this->db->bind(":customercreatedate", $var['timestamp']);
         return $this->db->execute();
     }
-
-    
-
 }

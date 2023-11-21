@@ -96,7 +96,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>Store/updateImage/<?= $data['row']->storeId ?>" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>Store/updateImage/{storeId:<?= $data['row']->storeId ?>}" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -124,7 +124,7 @@
                                 <?php endif; ?>
                                 <!-- Add delete button conditionally -->
                                 <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
-                                    <a href="<?= URLROOT; ?>Store/deleteImage/<?= $data['image']->screenId ?>" class="btn btn--danger">Delete Image</a>
+                                    <a href="<?= URLROOT; ?>Store/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'storeId:' . $data['row']->storeId ?>}" class="btn btn--danger">Delete Image</a>
                                 <?php endif; ?>
                             </div>
                         </div>

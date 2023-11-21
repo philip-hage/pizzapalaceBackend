@@ -21,28 +21,34 @@ class Product extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview($pageNumber = NULL)
+    public function overview($params)
     {
 
-        $totalRecords = count($this->productModel->getProducts());
-        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
-        $products = $this->productModel->getProductsByPagination($pagination['offset'], $pagination['recordsPerPage']);
+        // Extract page number from $params
+        $pageNumber = isset($params['page']) ? intval($params['page']) : 1;
 
+        // Define records per page and calculate offset
+        $recordsPerPage = 2; // You can adjust this based on your needs
+        $offset = ($pageNumber - 1) * $recordsPerPage;
+
+        // Get customers for the current page
+        $products = $this->productModel->getProductsByPagination($offset, $recordsPerPage);
+
+        // Get total number of customers
         $countProducts = $this->productModel->getTotalProductsCount();
 
+        // Calculate total number of pages
+        $totalPages = ceil($countProducts / $recordsPerPage);
+
+        // Ensure $pageNumber is within valid range
+        $pageNumber = max(1, min($pageNumber, $totalPages));
 
         $data = [
             'products' => $products,
             'countProducts' => $countProducts,
-            'pageNumber' => $pagination['pageNumber'],
-            'nextPage' => $pagination['nextPage'],
-            'previousPage' => $pagination['previousPage'],
-            'totalPages' => $pagination['totalPages'],
-            'firstPage' => $pagination['firstPage'],
-            'secondPage' => $pagination['secondPage'],
-            'thirdPage' => $pagination['thirdPage'],
-            'offset' => $pagination['offset'],
-            'recordsPerPage' => $pagination['recordsPerPage']
+            'currentPage' => $pageNumber,
+            'recordsPerPage' => $recordsPerPage,
+            'totalPages' => $totalPages,
         ];
         $this->view('backend/products/overview', $data);
     }
@@ -73,8 +79,9 @@ class Product extends Controller
         }
     }
 
-    public function delete($productId)
+    public function delete($params = NULL)
     {
+        $productId = $params['productId'];
         if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $result = $this->productModel->delete($productId);
 
@@ -92,8 +99,9 @@ class Product extends Controller
         }
     }
 
-    public function update($productId)
+    public function update($params = NULL)
     {
+        $productId = $params['productId'];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -136,8 +144,9 @@ class Product extends Controller
         }
     }
 
-    public function updateImage($productId)
+    public function updateImage($params = NULL)
     {
+        $productId = $params['productId'];
         global $var;
         $screenId = $var['rand'];
         $imageUploaderResult = $this->imageUploader($screenId);
@@ -145,20 +154,22 @@ class Product extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'product';
             $this->screenModel->insertScreenImages($screenId, $productId, $entity, 'main');
-            header('Location:' . URLROOT . 'Product/update/' . $productId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
+            header('Location:' . URLROOT . 'Product/update/{productId:' . $productId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Product/update/' . $productId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
+            header('Location:' . URLROOT . 'Product/update/{productId:' . $productId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
-    public function deleteImage($screenId)
+    public function deleteImage($params = NULL)
     {
+        $screenId = $params['screenId'];
+        $productId = $params['productId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Product/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
+            header('Location:' . URLROOT . 'Product/update/{productId:' . $productId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            header('Location:' . URLROOT . 'Product/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
+            header('Location:' . URLROOT . 'Product/update/{productId:' . $productId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 }

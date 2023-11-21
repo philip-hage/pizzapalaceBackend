@@ -19,27 +19,33 @@ class Customer extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview($pageNumber = NULL)
+    public function overview($params)
     {
+        // Extract page number from $params
+        $pageNumber = isset($params['page']) ? intval($params['page']) : 1;
 
-        $totalRecords = count($this->customerModel->getCustomers());
-        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
-        $customers = $this->customerModel->getCustomersByPagination($pagination['offset'], $pagination['recordsPerPage']);
+        // Define records per page and calculate offset
+        $recordsPerPage = 2; // You can adjust this based on your needs
+        $offset = ($pageNumber - 1) * $recordsPerPage;
 
+        // Get customers for the current page
+        $customers = $this->customerModel->getCustomersByPagination($offset, $recordsPerPage);
+
+        // Get total number of customers
         $countCustomers = $this->customerModel->getTotalCustomersCount();
+
+        // Calculate total number of pages
+        $totalPages = ceil($countCustomers / $recordsPerPage);
+
+        // Ensure $pageNumber is within valid range
+        $pageNumber = max(1, min($pageNumber, $totalPages));
 
         $data = [
             'customers' => $customers,
             'countCustomers' => $countCustomers,
-            'pageNumber' => $pagination['pageNumber'],
-            'nextPage' => $pagination['nextPage'],
-            'previousPage' => $pagination['previousPage'],
-            'totalPages' => $pagination['totalPages'],
-            'firstPage' => $pagination['firstPage'],
-            'secondPage' => $pagination['secondPage'],
-            'thirdPage' => $pagination['thirdPage'],
-            'offset' => $pagination['offset'],
-            'recordsPerPage' => $pagination['recordsPerPage']
+            'currentPage' => $pageNumber,
+            'recordsPerPage' => $recordsPerPage,
+            'totalPages' => $totalPages,
         ];
 
         $this->view('backend/customer/overview', $data);
@@ -79,8 +85,9 @@ class Customer extends Controller
     }
 
 
-    public function update($customerId = null)
+    public function update($params = null)
     {
+        $customerId = $params['customerId'];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $result = $this->customerModel->update($post);
@@ -117,8 +124,9 @@ class Customer extends Controller
             $this->view('backend/customer/update', $data);
         }
     }
-    public function updateImage($customerId)
+    public function updateImage($params = NULL)
     {
+        $customerId = $params['customerId'];
         global $var;
         $screenId = $var['rand'];
         $imageUploaderResult = $this->imageUploader($screenId);
@@ -126,31 +134,34 @@ class Customer extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'customer';
             $this->screenModel->insertScreenImages($screenId, $customerId, $entity, 'main');
-            header('Location:' . URLROOT . 'Customer/update/' . $customerId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
+            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Customer/update/' . $customerId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
+            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
-    public function deleteImage($ids)
+    public function deleteImage($params)
     {
-        $ids = explode('+', $ids);
+        $screenId = $params['screenId'];
+        $customerId = $params['customerId'];
         // Call the deleteScreen method from the model
-        if (!$this->screenModel->deleteScreen($ids[0])) {
-            header('Location:' . URLROOT . 'Customer/update/' . $ids[1] . '/' . '{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
+        if (!$this->screenModel->deleteScreen($screenId)) {
+            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            header('Location:' . URLROOT . 'Customer/update/' . $ids[1] . '/' . '{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
+            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
 
         // Redirect to the overview page
 
     }
 
-    public function delete($customerId)
+    public function delete($params)
     {
+        $customerId = $params['customerId'];
         if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $result = $this->customerModel->deleteCustomer($customerId);
+
 
             if (!$result) {
                 header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+customer+was+successful}');

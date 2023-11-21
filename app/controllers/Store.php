@@ -22,26 +22,34 @@ class Store extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview($pageNumber = NULL)
+    public function overview($params)
     {
-        $totalRecords = count($this->storeModel->getStores());
-        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
-        $stores = $this->storeModel->getStoresByPagination($pagination['offset'], $pagination['recordsPerPage']);
 
+        // Extract page number from $params
+        $pageNumber = isset($params['page']) ? intval($params['page']) : 1;
+
+        // Define records per page and calculate offset
+        $recordsPerPage = 2; // You can adjust this based on your needs
+        $offset = ($pageNumber - 1) * $recordsPerPage;
+
+        // Get customers for the current page
+        $stores = $this->storeModel->getStoresByPagination($offset, $recordsPerPage);
+
+        // Get total number of customers
         $countStores = $this->storeModel->getTotalStoresCount();
+
+        // Calculate total number of pages
+        $totalPages = ceil($countStores / $recordsPerPage);
+
+        // Ensure $pageNumber is within valid range
+        $pageNumber = max(1, min($pageNumber, $totalPages));
 
         $data = [
             'stores' => $stores,
             'countStores' => $countStores,
-            'pageNumber' => $pagination['pageNumber'],
-            'nextPage' => $pagination['nextPage'],
-            'previousPage' => $pagination['previousPage'],
-            'totalPages' => $pagination['totalPages'],
-            'firstPage' => $pagination['firstPage'],
-            'secondPage' => $pagination['secondPage'],
-            'thirdPage' => $pagination['thirdPage'],
-            'offset' => $pagination['offset'],
-            'recordsPerPage' => $pagination['recordsPerPage']
+            'currentPage' => $pageNumber,
+            'recordsPerPage' => $recordsPerPage,
+            'totalPages' => $totalPages,
         ];
         $this->view('backend/store/overview', $data);
     }
@@ -78,8 +86,9 @@ class Store extends Controller
         }
     }
 
-    public function delete($storeId)
+    public function delete($params = NULL)
     {
+        $storeId = $params['storeId'];
         if ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $result = $this->storeModel->delete($storeId);
 
@@ -98,8 +107,9 @@ class Store extends Controller
         }
     }
 
-    public function update($storeId)
+    public function update($params = NULL)
     {
+        $storeId = $params['storeId'];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -137,8 +147,9 @@ class Store extends Controller
         }
     }
 
-    public function updateImage($storeId)
+    public function updateImage($params = NULL)
     {
+        $storeId = $params['storeId'];
         global $var;
         $screenId = $var['rand'];
         $imageUploaderResult = $this->imageUploader($screenId);
@@ -146,25 +157,28 @@ class Store extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'store';
             $this->screenModel->insertScreenImages($screenId, $storeId, $entity, 'main');
-            header('Location:' . URLROOT . 'Store/update/' . $storeId . '/' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
+            header('Location:' . URLROOT . 'Store/update/{storeId:' . $storeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Store/update/' . $storeId . '/' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
+            header('Location:' . URLROOT . 'Store/update/{storeId:' . $storeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
         }
     }
 
-    public function deleteImage($screenId)
+    public function deleteImage($params = NULL)
     {
+        $screenId = $params['screenId'];
+        $storeId = $params['storeId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Store/overview/{toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
+            header('Location:' . URLROOT . 'Store/update/{storeId:' . $storeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
         } else {
-            header('Location:' . URLROOT . 'Store/overview/{toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
+            header('Location:' . URLROOT . 'Store/update/{storeId:' . $storeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
         }
     }
 
-    public function storeHasEmployees($storeId)
+    public function storeHasEmployees($params = NULL)
     {
+        $storeId = $params['storeId'];
         $store = $this->storeModel->getStoreById($storeId);
         $employees = $this->storeModel->getEmployeeByStore($storeId);
         $countEmployees = count($this->storeModel->getEmployeeByStore($storeId));
@@ -177,15 +191,16 @@ class Store extends Controller
         $this->view('backend/store/storehasemployees', $data);
     }
 
-    public function createStoreEmployee($storeId)
+    public function createStoreEmployee($params = NULL)
     {
+        $storeId = $params['storeId'];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
             $result = $this->storeModel->create($post, $storeId);
 
             if ($result) {
-                header('Location: ' . URLROOT . 'Store/storeHasEmployees/' . $storeId);
+                header('Location: ' . URLROOT . 'Store/storeHasEmployees/{storeId:' . $storeId . '}');
             } else {
                 Helper::log('error', 'The create was not succcesfull at store has employees create');
                 header('Location: ' . URLROOT . 'Store/storeHasEmployees/' . $storeId);
@@ -199,8 +214,9 @@ class Store extends Controller
         }
     }
 
-    public function storeHasVehicles($storeId)
+    public function storeHasVehicles($params = NULL)
     {
+        $storeId = $params['storeId'];
         $store = $this->storeModel->getStoreById($storeId);
         $vehicles = $this->vehicleModel->getVehicleByStore($storeId);
         $countVehicles = count($this->vehicleModel->getVehicleByStore($storeId));

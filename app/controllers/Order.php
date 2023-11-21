@@ -23,28 +23,34 @@ class Order extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview($pageNumber = NULL)
+    public function overview($params)
     {
+        // Extract page number from $params
+        $pageNumber = isset($params['page']) ? intval($params['page']) : 1;
 
-        $totalRecords = count($this->orderModel->getOrders());
-        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
-        $orders = $this->orderModel->getOrdersByPagination($pagination['offset'], $pagination['recordsPerPage']);
+        // Define records per page and calculate offset
+        $recordsPerPage = 2; // You can adjust this based on your needs
+        $offset = ($pageNumber - 1) * $recordsPerPage;
 
+        // Get customers for the current page
+        $orders = $this->orderModel->getOrdersByPagination($offset, $recordsPerPage);
+
+        // Get total number of customers
         $countOrders = $this->orderModel->getTotalOrdersCount();
+
+        // Calculate total number of pages
+        $totalPages = ceil($countOrders / $recordsPerPage);
+
+        // Ensure $pageNumber is within valid range
+        $pageNumber = max(1, min($pageNumber, $totalPages));
 
 
         $data = [
             'orders' => $orders,
             'countOrders' => $countOrders,
-            'pageNumber' => $pagination['pageNumber'],
-            'nextPage' => $pagination['nextPage'],
-            'previousPage' => $pagination['previousPage'],
-            'totalPages' => $pagination['totalPages'],
-            'firstPage' => $pagination['firstPage'],
-            'secondPage' => $pagination['secondPage'],
-            'thirdPage' => $pagination['thirdPage'],
-            'offset' => $pagination['offset'],
-            'recordsPerPage' => $pagination['recordsPerPage']
+            'currentPage' => $pageNumber,
+            'recordsPerPage' => $recordsPerPage,
+            'totalPages' => $totalPages,
         ];
         $this->view('backend/order/overview', $data);
     }
@@ -78,8 +84,9 @@ class Order extends Controller
         }
     }
 
-    public function update($orderId)
+    public function update($params)
     {
+        $orderId = $params['orderId'];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 

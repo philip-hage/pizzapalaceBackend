@@ -21,27 +21,33 @@ class Vehicle extends Controller
         $this->view('backend/index', $data);
     }
 
-    public function overview($pageNumber = NULL)
+    public function overview($params)
     {
-        $totalRecords = count($this->vehicleModel->getVehicles());
-        $pagination = $this->pagination($pageNumber, 3, $totalRecords);
-        $vehicles = $this->vehicleModel->getVehiclesByPagination($pagination['offset'], $pagination['recordsPerPage']);
+        // Extract page number from $params
+        $pageNumber = isset($params['page']) ? intval($params['page']) : 1;
 
+        // Define records per page and calculate offset
+        $recordsPerPage = 2; // You can adjust this based on your needs
+        $offset = ($pageNumber - 1) * $recordsPerPage;
+
+        // Get customers for the current page
+        $vehicles = $this->vehicleModel->getVehiclesByPagination($offset, $recordsPerPage);
+
+        // Get total number of customers
         $countVehicles = $this->vehicleModel->getTotalVehiclesCount();
 
+        // Calculate total number of pages
+        $totalPages = ceil($countVehicles / $recordsPerPage);
+
+        // Ensure $pageNumber is within valid range
+        $pageNumber = max(1, min($pageNumber, $totalPages));
 
         $data = [
             'vehicles' => $vehicles,
             'countVehicles' => $countVehicles,
-            'pageNumber' => $pagination['pageNumber'],
-            'nextPage' => $pagination['nextPage'],
-            'previousPage' => $pagination['previousPage'],
-            'totalPages' => $pagination['totalPages'],
-            'firstPage' => $pagination['firstPage'],
-            'secondPage' => $pagination['secondPage'],
-            'thirdPage' => $pagination['thirdPage'],
-            'offset' => $pagination['offset'],
-            'recordsPerPage' => $pagination['recordsPerPage']
+            'currentPage' => $pageNumber,
+            'recordsPerPage' => $recordsPerPage,
+            'totalPages' => $totalPages,
         ];
         $this->view('backend/vehicles/overview', $data);
     }
