@@ -246,8 +246,8 @@
                             <td class="int-table__cell"><?= $store->storeZipcode ?></td>
                             <td class="int-table__cell"><?= $store->storeCity ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $store->storeCreateDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT; ?>Store/storeHasEmployees/{storeId:<?= $store->storeId ?>}">Employees</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT; ?>Store/storeHasVehicles/{storeId:<?= $store->storeId ?>}">Vehicles</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT; ?>Store/storeHasEmployees/{storeId:<?= $store->storeId ?>}/">Employees</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT; ?>Store/storeHasVehicles/{storeId:<?= $store->storeId ?>}/">Vehicles</a></td>
                             <td class="int-table__cell"><a href="<?= URLROOT ?>Store/update/{storeId:<?= $store->storeId ?>}">Edit</a></td>
                             <td class="int-table__cell"><a href="<?= URLROOT ?>Store/delete/{storeId:<?= $store->storeId ?>}">Delete</a></td>
                             <td class="int-table__cell">

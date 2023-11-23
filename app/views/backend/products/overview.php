@@ -260,8 +260,8 @@
                             <td class="int-table__cell text-truncate max-width-xxxxs"><?= $product->productType ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $product->productCreatedate) ?></td>
                             <td class="int-table__cell"><?= $product->productPrice ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Product/update/{productId:<?= $product->productId ?>}">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Product/delete/{productId:<?= $product->productId ?>}">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Product/update/{productId:<?= $product->productId ?>}/">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Product/delete/{productId:<?= $product->productId ?>}/">Delete</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">

@@ -226,8 +226,8 @@
                                     <?= $review->reviewDescription ?>
                                 </details>
                             </td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Review/update/{reviewId:<?= $review->reviewId ?>}">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Review/delete/{reviewId:<?= $review->reviewId ?>}">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Review/update/{reviewId:<?= $review->reviewId ?>}/">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Review/delete/{reviewId:<?= $review->reviewId ?>}/">Delete</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">

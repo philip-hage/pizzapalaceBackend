@@ -51,10 +51,10 @@ class Promotion extends Controller
             $promotionName = ($post['promotionName']);
 
             if (empty($promotionName)) {
-                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+promotion+has+failed}');
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+promotion+has+failed}/');
             } else {
                 $this->promotionModel->create($post);
-                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+promotion+was+successful}');
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+promotion+was+successful}/');
             }
         } else {
             $data = [
@@ -73,32 +73,31 @@ class Promotion extends Controller
             $result = $this->promotionModel->update($post);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+promotion+was+successful}');
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+promotion+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+promotion+has+failed}');
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+promotion+has+failed}/');
             }
         } else {
             $row = $this->promotionModel->getPromotionById($promotionId);
 
-            $image = $this->screenModel->getScreenDataById($promotionId, 'promotion', 'main');
-            if ($image !== false) {
+            $images = $this->screenModel->getScreensDataById($promotionId, 'promotion');
+            if ($images !== false) {
                 // Check if the necessary properties exist before accessing them
-                if (property_exists($image, 'screenCreateDate') && property_exists($image, 'screenId')) {
-                    $createDate = date('Ymd', $image->screenCreateDate);
-                    $imageSrc = URLROOT . 'public/media/' . $createDate . '/' . $image->screenId . '.jpg';
-                } else {
-                    // Handle the case where expected properties are missing
-                    $imageSrc = URLROOT . 'public/default-image.jpg';
-                }
-            } else {
-                // Handle the case where no image data is found
-                $imageSrc = URLROOT . 'public/default-image.jpg';
+                foreach ($images as $image) :
+                    if (property_exists($image, 'screenCreateDate') && property_exists($image, 'screenId')) {
+                        $createDate = date('Ymd', $image->screenCreateDate);
+                        $image->imagePath = URLROOT . 'public/media/' . $createDate . '/' . $image->screenId . '.jpg';
+                    } else {
+                        // Handle the case where expected properties are missing
+                        $image->imagePath = URLROOT . 'public/default-image.jpg';
+                    }
+                endforeach;
             }
+            // Helper::dump($images);exit;
 
             $data = [
                 'row' => $row,
-                'imageSrc' => $imageSrc,
-                'image' => $image
+                'images' => $images
             ];
             $this->view('backend/promotions/update', $data);
         }
@@ -110,14 +109,15 @@ class Promotion extends Controller
         global $var;
         $screenId = $var['rand'];
         $imageUploaderResult = $this->imageUploader($screenId);
+        $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'promotion';
-            $this->screenModel->insertScreenImages($screenId, $promotionId, $entity, 'main');
-            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}');
+            $this->screenModel->insertScreensImages($screenId, $promotionId, $entity, $post);
+            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}');
+            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
         }
     }
 
@@ -127,9 +127,9 @@ class Promotion extends Controller
         $promotionId = $params['promotionId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}');
+            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
         } else {
-            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}');
+            header('Location:' . URLROOT . 'Promotion/update/{promotionId:' . $promotionId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
     }
 
@@ -140,9 +140,9 @@ class Promotion extends Controller
             $result = $this->promotionModel->delete($promotionId);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+promotion+was+successful}');
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+promotion+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+promotion+has+failed}');
+                header('Location:' . URLROOT . 'Promotion/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+promotion+has+failed}/');
             }
         } else {
 

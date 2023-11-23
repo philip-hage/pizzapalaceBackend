@@ -206,8 +206,8 @@
                             <td class="int-table__cell"><?= $ingredient->ingredientName ?></td>
                             <td class="int-table__cell text-truncate max-width-xxxxs">$<?= $ingredient->ingredientPrice ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $ingredient->ingredientCreateDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Ingredient/update/{ingredientId:<?= $ingredient->ingredientId ?>}">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Ingredient/delete/{ingredientId:<?= $ingredient->ingredientId ?>}">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Ingredient/update/{ingredientId:<?= $ingredient->ingredientId ?>}/">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Ingredient/delete/{ingredientId:<?= $ingredient->ingredientId ?>}/">Delete</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">

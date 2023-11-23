@@ -230,8 +230,8 @@
                             <td class="int-table__cell"><?= $promotion->promotionName ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $promotion->promotionStartDate) ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $promotion->promotionEndDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Promotion/update/{promotionId:<?= $promotion->promotionId ?>}">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Promotion/delete/{promotionId:<?= $promotion->promotionId ?>}">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Promotion/update/{promotionId:<?= $promotion->promotionId ?>}/">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Promotion/delete/{promotionId:<?= $promotion->promotionId ?>}/">Delete</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">

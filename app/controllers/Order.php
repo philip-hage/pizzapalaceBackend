@@ -63,10 +63,10 @@ class Order extends Controller
             $orderPrice = ($post['orderPrice']);
 
             if (empty($orderPrice)) {
-                header('Location:' . URLROOT . 'Order/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+order+has+failed}');
+                header('Location:' . URLROOT . 'Order/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+order+has+failed}/');
             } else {
                 $this->orderModel->create($post);
-                header('Location:' . URLROOT . 'Order/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+order+was+successful}');
+                header('Location:' . URLROOT . 'Order/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+order+was+successful}/');
             }
         } else {
             $customer = $this->customerModel->getCustomers();
@@ -93,9 +93,9 @@ class Order extends Controller
             $result = $this->orderModel->update($post);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Order/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+order+was+successful}');
+                header('Location:' . URLROOT . 'Order/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+order+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Order/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+order+has+failed}');
+                header('Location:' . URLROOT . 'Order/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+order+has+failed}/');
             }
         } else {
             global $orderState;
@@ -116,8 +116,9 @@ class Order extends Controller
         }
     }
 
-    public function orderHasProducts($orderId)
+    public function orderHasProducts($params = NULL)
     {
+        $orderId = $params['orderId'];
         $products = $this->orderModel->getProductByOrder($orderId);
         $countProducts = count($this->orderModel->getProductByOrder($orderId));
 

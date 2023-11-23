@@ -225,33 +225,38 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-3@lg">
-                            <label class="inline-block text-sm padding-top-xs@lg" for="file">Image</label>
+                            <label class="inline-block text-sm padding-top-xs@lg" for="file">Add screen</label>
                         </div>
                         <div class="col-6@lg">
                             <input type="file" name="file" id="file" accept="image/*">
                         </div>
-                    </div>
-                    <div class="margin-bottom-sm">
-                        <div class="grid gap-xxs">
-                            <div class="col-3@lg">
-                                <label class="inline-block text-sm padding-top-xs@lg" for="file">file</label>
-                            </div>
+                        <div class="col-3@lg">
+                            <label class="inline-block text-sm padding-top-xs@lg" for="scope">Scope</label> <br>
+                            <br>
                             <div class="col-6@lg">
-                                <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
-                                    <figure class="user-menu-control__img-wrapper radius-50%">
-                                        <img class="user-menu-control__img image_picture" src="<?= $data['imageSrc'] ?>" alt="User picture">
-                                    </figure>
-                                <?php else : ?>
-                                    <p>There is no image uploaded</p>
-                                <?php endif; ?>
-                                <!-- Add delete button conditionally -->
-                                <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
-                                    <a href="<?= URLROOT; ?>Promotion/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'promotionId:' . $data['row']->promotionId ?>}" class="btn btn--danger">Delete Image</a>
-                                <?php endif; ?>
+                                <input type="text" name="scope" id="scope" value="" placeholder="Enter scope">
                             </div>
+                            <br>
                         </div>
+                        <br>
+                        <?php if ($data['images'] && $data['images'] !== URLROOT . 'public/default-image.jpg') : ?>
+                            <?php foreach ($data['images'] as $image) : ?>
+                                <div class="stats-card bg radius-md padding-md inner-glow shadow-xs col-6@sm col-2@xl">
+                                    <div class="flex flex-wrap gap-xxs items-center">
+                                        <div>
+                                            <h3 class="color-contrast-low"><?= !empty($image->screenScope) ? $image->screenScope : "No Scope" ?></h3>
+                                        </div>
+                                    </div>
+                                    <img class="text-xxl font-semibold color-contrast-higher" src="<?= $image->imagePath ?>" height="200px" width="100%">
+                                    <?php if ($image && $image !== URLROOT . 'public/default-image.jpg') : ?>
+                                        <a href="<?= URLROOT; ?>Promotion/deleteImage/{screenId:<?= $image->screenId . ';' . 'promotionId:' . $data['row']->promotionId ?>}" class="btn btn--danger">Delete Image</a>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <p>There is no image uploaded</p>
+                        <?php endif; ?>
                     </div>
-                </div>
             </fieldset>
         </div>
         <div class="border-top border-alpha padding-md">

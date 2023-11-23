@@ -241,8 +241,8 @@
                             <td class="int-table__cell text-truncate max-width-xxxxs"><?= $vehicle->vehicleType ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $vehicle->vehicleCreateDate) ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $vehicle->vehicleMaintenanceDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Vehicle/update/<?= $vehicle->vehicleId ?>">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Vehicle/delete/<?= $vehicle->vehicleId ?>">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Vehicle/update/{vehicleId:<?= $vehicle->vehicleId ?>}/">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>Vehicle/delete/{vehicleId:<?= $vehicle->vehicleId ?>}/">Delete</a></td>
                             <td class="int-table__cell">
                                 <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
                                     <svg class="icon" viewBox="0 0 16 16">
