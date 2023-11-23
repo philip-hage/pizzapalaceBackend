@@ -222,7 +222,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-right">Action</th>
                     </tr>
                 </thead>
 
@@ -244,15 +243,6 @@
                             <td class="int-table__cell"><?= $customer->customerType ?></td>
                             <td class="int-table__cell"><a href="<?= URLROOT ?>Customer/update/{customerId:<?= $customer->customerId ?>}/">Edit</a></td>
                             <td class="int-table__cell"><a href="<?= URLROOT ?>Customer/delete/{customerId:<?= $customer->customerId ?>}/">Delete</a></td>
-                            <td class="int-table__cell">
-                                <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
-                                    <svg class="icon" viewBox="0 0 16 16">
-                                        <circle cx="8" cy="7.5" r="1.5" />
-                                        <circle cx="1.5" cy="7.5" r="1.5" />
-                                        <circle cx="14.5" cy="7.5" r="1.5" />
-                                    </svg>
-                                </button>
-                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

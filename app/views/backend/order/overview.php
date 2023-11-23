@@ -268,13 +268,11 @@
                         </th>
 
                         <th class="int-table__cell int-table__cell--th text-left">
-                            Read
+                            Action
                         </th>
                         <th class="int-table__cell int-table__cell--th text-left">
-                            Edit
+                            Action
                         </th>
-
-                        <th class="int-table__cell int-table__cell--th text-right">Action</th>
                     </tr>
                 </thead>
 
@@ -296,15 +294,6 @@
                             <td class="int-table__cell"><?= date('d/m/Y', $order->orderCreateDate) ?></td>
                             <td class="int-table__cell"><a href="<?= URLROOT; ?>Order/orderHasProducts/{orderId:<?= $order->orderId ?>}/">Read</a></td>
                             <td class="int-table__cell"><a href="<?= URLROOT ?>Order/update/{orderId:<?= $order->orderId ?>}/">Edit</a></td>
-                            <td class="int-table__cell">
-                                <button class="reset int-table__menu-btn margin-left-auto js-tab-focus" data-label="Edit row" aria-controls="menu-example">
-                                    <svg class="icon" viewBox="0 0 16 16">
-                                        <circle cx="8" cy="7.5" r="1.5" />
-                                        <circle cx="1.5" cy="7.5" r="1.5" />
-                                        <circle cx="14.5" cy="7.5" r="1.5" />
-                                    </svg>
-                                </button>
-                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
