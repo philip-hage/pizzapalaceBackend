@@ -72,11 +72,11 @@ class Store extends Controller
                 empty($storePhone) ||
                 !filter_var($storeEmail, FILTER_VALIDATE_EMAIL)
             ) {
-                header('Location:' . URLROOT . 'Store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+Store+has+failed}/');
+                header('Location:' . URLROOT . 'store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+Store+has+failed}/');
             } else {
                 // Form data is valid; proceed with creating the store
                 $this->storeModel->create($post);
-                header('Location:' . URLROOT . 'Store/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+Store+was+successful}/');
+                header('Location:' . URLROOT . 'store/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+Store+was+successful}/');
             }
         } else {
             $data = [
@@ -93,9 +93,9 @@ class Store extends Controller
             $result = $this->storeModel->delete($storeId);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Store/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+Store+was+successful}/');
+                header('Location:' . URLROOT . 'store/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+Store+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+Store+has+failed}/');
+                header('Location:' . URLROOT . 'store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+Store+has+failed}/');
             }
         } else {
 
@@ -116,13 +116,13 @@ class Store extends Controller
             $result = $this->storeModel->update($post);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Store/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Store+was+successful}/');
+                header('Location:' . URLROOT . 'store/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Store+was+successful}/');
             } else {
                 Helper::log('error', 'The update was not succcesfull at Store update');
-                header('Location:' . URLROOT . 'Store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Store+has+failed}/');
+                header('Location:' . URLROOT . 'store/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Store+has+failed}/');
             }
         } else {
-            $row = $this->storeModel->getStoreById($storeId);
+            $stores = $this->storeModel->getStoreById($storeId);
             $image = $this->screenModel->getScreenDataById($storeId, 'store', 'main');
             if ($image !== false) {
                 // Check if the necessary properties exist before accessing them
@@ -139,7 +139,7 @@ class Store extends Controller
             }
 
             $data = [
-                'row' => $row,
+                'stores' => $stores,
                 'imageSrc' => $imageSrc,
                 'image' => $image
             ];
@@ -157,10 +157,10 @@ class Store extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'store';
             $this->screenModel->insertScreenImages($screenId, $storeId, $entity, 'main');
-            header('Location:' . URLROOT . 'Store/update/{storeId:' . $storeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+            header('Location:' . URLROOT . 'store/update/{storeId:' . $storeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Store/update/{storeId:' . $storeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+            header('Location:' . URLROOT . 'store/update/{storeId:' . $storeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
         }
     }
 
@@ -170,9 +170,9 @@ class Store extends Controller
         $storeId = $params['storeId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Store/update/{storeId:' . $storeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
+            header('Location:' . URLROOT . 'store/update/{storeId:' . $storeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
         } else {
-            header('Location:' . URLROOT . 'Store/update/{storeId:' . $storeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
+            header('Location:' . URLROOT . 'store/update/{storeId:' . $storeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
     }
 
@@ -200,10 +200,10 @@ class Store extends Controller
             $result = $this->storeModel->create($post, $storeId);
 
             if ($result) {
-                header('Location: ' . URLROOT . 'Store/storeHasEmployees/{storeId:' . $storeId . '}/');
+                header('Location: ' . URLROOT . 'store/storeHasEmployees/{storeId:' . $storeId . '}/');
             } else {
                 Helper::log('error', 'The create was not succcesfull at store has employees create');
-                header('Location: ' . URLROOT . 'Store/storeHasEmployees/' . $storeId);
+                header('Location: ' . URLROOT . 'store/storeHasEmployees/' . $storeId);
             }
         } else {
             $data = [

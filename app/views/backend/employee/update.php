@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>Employee/overview" class="color-inherit">All Employees</a>
+                <a href="<?= URLROOT ?>employee/overview" class="color-inherit">All Employees</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>Employee/update" method="post">
+    <form action="<?= URLROOT; ?>employee/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -23,7 +23,7 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['row']->employeeId; ?>">
+                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['employees']->employeeId; ?>">
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="employeeFirstName">FirstName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="employeeFirstName" id="employeeFirstName" value="<?= $data['row']->employeeFirstName; ?>">
+                            <input class="form-control width-100%" type="text" name="employeeFirstName" id="employeeFirstName" value="<?= $data['employees']->employeeFirstName; ?>">
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="employeeLastName">LastName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="employeeLastName" id="employeeLastName" value="<?= $data['row']->employeeLastName; ?>">
+                            <input class="form-control width-100%" type="text" name="employeeLastName" id="employeeLastName" value="<?= $data['employees']->employeeLastName; ?>">
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="employeeStreetName">StreetName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="employeeStreetName" id="employeeStreetName" value="<?= $data['row']->employeeStreetName; ?>">
+                            <input class="form-control width-100%" type="text" name="employeeStreetName" id="employeeStreetName" value="<?= $data['employees']->employeeStreetName; ?>">
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="employeeCity">City</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="employeeCity" id="employeeCity" value="<?= $data['row']->employeeCity; ?>">
+                            <input class="form-control width-100%" type="text" name="employeeCity" id="employeeCity" value="<?= $data['employees']->employeeCity; ?>">
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="employeeZipCode">ZipCode</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="employeeZipCode" id="employeeZipCode" value="<?= $data['row']->employeeZipCode; ?>">
+                            <input class="form-control width-100%" type="text" name="employeeZipCode" id="employeeZipCode" value="<?= $data['employees']->employeeZipCode; ?>">
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="employeePhone">Phone</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="number" name="employeePhone" id="employeePhone" value="<?= $data['row']->employeePhone; ?>">
+                            <input class="form-control width-100%" type="number" name="employeePhone" id="employeePhone" value="<?= $data['employees']->employeePhone; ?>">
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="employeeEmail">Email</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="email" name="employeeEmail" id="employeeEmail" value="<?= $data['row']->employeeEmail; ?>">
+                            <input class="form-control width-100%" type="email" name="employeeEmail" id="employeeEmail" value="<?= $data['employees']->employeeEmail; ?>">
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                         <div class="col-6@lg">
                             <div class="select">
                                 <select class="select__input form-control" name="employeeRole" id="employeeRole">
-                                    <option><?php echo $data['row']->employeeRole; ?></option>
+                                    <option><?php echo $data['employees']->employeeRole; ?></option>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
                                     <polyline points="1 5 8 12 15 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
@@ -125,7 +125,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>Employee/updateImage/{employeeId:<?= $data['row']->employeeId ?>}" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>employee/updateImage/{employeeId:<?= $data['employees']->employeeId ?>}" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -180,7 +180,7 @@
         <footer class="margin-top-md">
             <div class="flex justify-end gap-xs flex-wrap">
                 <button class="btn btn--subtle js-dialog__close">Cancel</button>
-                <a class="btn btn--accent" href="<?= URLROOT; ?>Employee/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'employeeId:' . $data['row']->employeeId ?>}">Delete</a>
+                <a class="btn btn--accent" href="<?= URLROOT; ?>employee/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'employeeId:' . $data['employees']->employeeId ?>}">Delete</a>
             </div>
         </footer>
     </div>

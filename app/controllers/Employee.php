@@ -59,10 +59,10 @@ class Employee extends Controller
             $result = $this->employeeModel->create($post);
 
             if ($result) {
-                header('Location:' . URLROOT . 'Employee/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+employee+was+successful}/');
+                header('Location:' . URLROOT . 'employee/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+employee+was+successful}/');
             } else {
                 Helper::log('error', 'The create was not succesfull at the employee create');
-                header('Location:' . URLROOT . 'Employee/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+employee+has+failed}/');
+                header('Location:' . URLROOT . 'employee/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+employee+has+failed}/');
             }
         } else {
             $data = [
@@ -79,9 +79,9 @@ class Employee extends Controller
             $result = $this->employeeModel->delete($employeeId);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Employee/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+employee+was+successful}/');
+                header('Location:' . URLROOT . 'employee/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+employee+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Employee/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+employee+has+failed}/');
+                header('Location:' . URLROOT . 'employee/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+employee+has+failed}/');
             }
         } else {
 
@@ -102,13 +102,13 @@ class Employee extends Controller
             $result = $this->employeeModel->update($post);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Employee/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+employee+was+successful}/');
+                header('Location:' . URLROOT . 'employee/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+employee+was+successful}/');
             } else {
                 Helper::log('error', 'The update was not succcesfull at employee update');
-                header('Location:' . URLROOT . 'Employee/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+employee+has+failed}/');
+                header('Location:' . URLROOT . 'employee/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+employee+has+failed}/');
             }
         } else {
-            $row = $this->employeeModel->getEmployeeById($employeeId);
+            $employees = $this->employeeModel->getEmployeeById($employeeId);
 
             // Retrieve the image associated with the employee
             $image = $this->screenModel->getScreenDataById($employeeId, 'employee', 'main');
@@ -128,7 +128,7 @@ class Employee extends Controller
             }
 
             $data = [
-                'row' => $row,
+                'employees' => $employees,
                 'imageSrc' => $imageSrc,
                 'image' => $image
             ];
@@ -147,10 +147,10 @@ class Employee extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'employee';
             $this->screenModel->insertScreenImages($screenId, $employeeId, $entity, 'main');
-            header('Location:' . URLROOT . 'Employee/update/{employeeId:' . $employeeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+            header('Location:' . URLROOT . 'employee/update/{employeeId:' . $employeeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Employee/update/{employeeId:' . $employeeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+            header('Location:' . URLROOT . 'employee/update/{employeeId:' . $employeeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
         }
     }
 
@@ -160,9 +160,9 @@ class Employee extends Controller
         $employeeId = $params['employeeId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Employee/update/{employeeId:' . $employeeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
+            header('Location:' . URLROOT . 'employee/update/{employeeId:' . $employeeId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
         } else {
-            header('Location:' . URLROOT . 'Employee/update/{employeeId:' . $employeeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
+            header('Location:' . URLROOT . 'employee/update/{employeeId:' . $employeeId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
     }
 }

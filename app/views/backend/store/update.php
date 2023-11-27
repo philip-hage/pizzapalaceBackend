@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>Store/overview" class="color-inherit">All Stores</a>
+                <a href="<?= URLROOT ?>store/overview" class="color-inherit">All Stores</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>Store/update" method="post">
+    <form action="<?= URLROOT; ?>store/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -23,7 +23,7 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['row']->storeId; ?>">
+                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['stores']->storeId; ?>">
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="storeName">Name</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="storeName" id="storeName" value="<?= $data['row']->storeName; ?>">
+                            <input class="form-control width-100%" type="text" name="storeName" id="storeName" value="<?= $data['stores']->storeName; ?>">
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="storeZipcode">ZipCode</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="storeZipcode" id="storeZipcode" value="<?= $data['row']->storeZipcode; ?>">
+                            <input class="form-control width-100%" type="text" name="storeZipcode" id="storeZipcode" value="<?= $data['stores']->storeZipcode; ?>">
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="storeStreetName">StreetName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="storeStreetName" id="storeStreetName" value="<?= $data['row']->storeStreetName; ?>">
+                            <input class="form-control width-100%" type="text" name="storeStreetName" id="storeStreetName" value="<?= $data['stores']->storeStreetName; ?>">
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="storeCity">City</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="storeCity" id="storeCity" value="<?= $data['row']->storeCity; ?>">
+                            <input class="form-control width-100%" type="text" name="storeCity" id="storeCity" value="<?= $data['stores']->storeCity; ?>">
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="storePhone">Phone Number</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="number" name="storePhone" id="storePhone" value="<?= $data['row']->storePhone; ?>">
+                            <input class="form-control width-100%" type="number" name="storePhone" id="storePhone" value="<?= $data['stores']->storePhone; ?>">
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="storeEmail">Email</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="email" name="storeEmail" id="storeEmail" value="<?= $data['row']->storeEmail; ?>">
+                            <input class="form-control width-100%" type="email" name="storeEmail" id="storeEmail" value="<?= $data['stores']->storeEmail; ?>">
                         </div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>Store/updateImage/{storeId:<?= $data['row']->storeId ?>}" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>store/updateImage/{storeId:<?= $data['stores']->storeId ?>}" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -152,7 +152,7 @@
         <footer class="margin-top-md">
             <div class="flex justify-end gap-xs flex-wrap">
                 <button class="btn btn--subtle js-dialog__close">Cancel</button>
-                <a class="btn btn--accent" href="<?= URLROOT; ?>Store/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'storeId:' . $data['row']->storeId ?>}">Delete</a>
+                <a class="btn btn--accent" href="<?= URLROOT; ?>store/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'storeId:' . $data['stores']->storeId ?>}">Delete</a>
             </div>
         </footer>
     </div>

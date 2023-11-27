@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>Customer/overview" class="color-inherit">All Customers</a>
+                <a href="<?= URLROOT ?>customer/overview" class="color-inherit">All Customers</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -16,7 +16,7 @@
 
 
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>Customer/update" method="post">
+    <form action="<?= URLROOT; ?>customer/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -25,7 +25,7 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['row']->customerId; ?>">
+                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['customers']->customerId; ?>">
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerFirstName">FirstName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerFirstName" id="customerFirstName" value="<?= $data['row']->customerFirstName; ?>">
+                            <input class="form-control width-100%" type="text" name="customerFirstName" id="customerFirstName" value="<?= $data['customers']->customerFirstName; ?>">
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerLastName">LastName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerLastName" id="customerLastName" value="<?= $data['row']->customerLastName; ?>">
+                            <input class="form-control width-100%" type="text" name="customerLastName" id="customerLastName" value="<?= $data['customers']->customerLastName; ?>">
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerStreetName">StreetName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerStreetName" id="customerStreetName" value="<?= $data['row']->customerStreetName; ?>">
+                            <input class="form-control width-100%" type="text" name="customerStreetName" id="customerStreetName" value="<?= $data['customers']->customerStreetName; ?>">
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerCity">City</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerCity" id="customerCity" value="<?= $data['row']->customerCity; ?>">
+                            <input class="form-control width-100%" type="text" name="customerCity" id="customerCity" value="<?= $data['customers']->customerCity; ?>">
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerZipCode">ZipCode</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="customerZipCode" id="customerZipCode" value="<?= $data['row']->customerZipCode; ?>">
+                            <input class="form-control width-100%" type="text" name="customerZipCode" id="customerZipCode" value="<?= $data['customers']->customerZipCode; ?>">
                         </div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerPhone">Phone</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="number" name="customerPhone" id="customerPhone" value="<?= $data['row']->customerPhone; ?>">
+                            <input class="form-control width-100%" type="number" name="customerPhone" id="customerPhone" value="<?= $data['customers']->customerPhone; ?>">
                         </div>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="customerEmail">Email</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="email" name="customerEmail" id="customerEmail" value="<?= $data['row']->customerEmail; ?>">
+                            <input class="form-control width-100%" type="email" name="customerEmail" id="customerEmail" value="<?= $data['customers']->customerEmail; ?>">
                         </div>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>Customer/updateImage/{customerId:<?= $data['row']->customerId ?>}" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>customer/updateImage/{customerId:<?= $data['customers']->customerId ?>}" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -185,7 +185,7 @@
         <footer class="margin-top-md">
             <div class="flex justify-end gap-xs flex-wrap">
                 <button class="btn btn--subtle js-dialog__close">Cancel</button>
-                <a class="btn btn--accent" href="<?= URLROOT; ?>Customer/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'customerId:' . $data['row']->customerId ?>}">Delete</a>
+                <a class="btn btn--accent" href="<?= URLROOT; ?>customer/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'customerId:' . $data['customers']->customerId ?>}">Delete</a>
             </div>
         </footer>
     </div>

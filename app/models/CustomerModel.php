@@ -92,8 +92,8 @@ class CustomerModel
                                     FROM customers
                                     WHERE customerId = :id");
         $this->db->bind(':id', $customerId);
-        $row = $this->db->single();
-        return $row;
+        return $this->db->single();
+        
     }
 
     public function update($post)

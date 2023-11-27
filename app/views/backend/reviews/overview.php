@@ -5,7 +5,7 @@
 
 <div class="margin-bottom-md">
     <div class="flex flex-wrap gap-sm items-center justify-between">
-        <a class="btn btn--primary" href="<?= URLROOT ?>Review/create">+ New Review</a>
+        <a class="btn btn--primary" href="<?= URLROOT ?>review/create">+ New Review</a>
     </div>
 </div>
 
@@ -224,8 +224,8 @@
                                     <?= $review->reviewDescription ?>
                                 </details>
                             </td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Review/update/{reviewId:<?= $review->reviewId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Review/delete/{reviewId:<?= $review->reviewId ?>}/">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>review/update/{reviewId:<?= $review->reviewId ?>}/">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>review/delete/{reviewId:<?= $review->reviewId ?>}/">Delete</a></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
@@ -241,7 +241,7 @@
                 <li>
                     <?php
                     $prevPage = max(1, $data['currentPage'] - 1);
-                    $prevPageLink = URLROOT . "Review/overview/?page=$prevPage";
+                    $prevPageLink = URLROOT . "review/overview/?page=$prevPage";
                     $prevDisabled = ($data['currentPage'] == 1) ? 'disabled' : '';
                     ?>
                     <a href="<?= $prevPageLink; ?>/" class="pagination__item <?= $prevDisabled; ?>">
@@ -263,7 +263,7 @@
                 <li>
                     <?php
                     $nextPage = min($data['totalPages'], $data['currentPage'] + 1);
-                    $nextPageLink = URLROOT . "Review/overview/?page=$nextPage";
+                    $nextPageLink = URLROOT . "review/overview/?page=$nextPage";
                     $nextDisabled = ($data['currentPage'] == $data['totalPages']) ? 'disabled' : '';
                     ?>
                     <a href="<?= $nextPageLink; ?>/" class="pagination__item <?= $nextDisabled; ?>">

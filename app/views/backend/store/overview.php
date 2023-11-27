@@ -5,7 +5,7 @@
 
 <div class="margin-bottom-md">
     <div class="flex flex-wrap gap-sm items-center justify-between">
-        <a class="btn btn--primary" href="<?= URLROOT ?>Store/create">+ New Store</a>
+        <a class="btn btn--primary" href="<?= URLROOT ?>store/create">+ New Store</a>
 
     </div>
 </div>
@@ -245,10 +245,10 @@
                             <td class="int-table__cell"><?= $store->storeZipcode ?></td>
                             <td class="int-table__cell"><?= $store->storeCity ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $store->storeCreateDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT; ?>Store/storeHasEmployees/{storeId:<?= $store->storeId ?>}/">Employees</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT; ?>Store/storeHasVehicles/{storeId:<?= $store->storeId ?>}/">Vehicles</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Store/update/{storeId:<?= $store->storeId ?>}">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Store/delete/{storeId:<?= $store->storeId ?>}">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT; ?>store/storeHasEmployees/{storeId:<?= $store->storeId ?>}/">Employees</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT; ?>store/storeHasVehicles/{storeId:<?= $store->storeId ?>}/">Vehicles</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>store/update/{storeId:<?= $store->storeId ?>}">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>store/delete/{storeId:<?= $store->storeId ?>}">Delete</a></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
@@ -264,7 +264,7 @@
                 <li>
                     <?php
                     $prevPage = max(1, $data['currentPage'] - 1);
-                    $prevPageLink = URLROOT . "Store/overview/?page=$prevPage";
+                    $prevPageLink = URLROOT . "store/overview/?page=$prevPage";
                     $prevDisabled = ($data['currentPage'] == 1) ? 'disabled' : '';
                     ?>
                     <a href="<?= $prevPageLink; ?>/" class="pagination__item <?= $prevDisabled; ?>">
@@ -286,7 +286,7 @@
                 <li>
                     <?php
                     $nextPage = min($data['totalPages'], $data['currentPage'] + 1);
-                    $nextPageLink = URLROOT . "Store/overview/?page=$nextPage";
+                    $nextPageLink = URLROOT . "store/overview/?page=$nextPage";
                     $nextDisabled = ($data['currentPage'] == $data['totalPages']) ? 'disabled' : '';
                     ?>
                     <a href="<?= $nextPageLink; ?>/" class="pagination__item <?= $nextDisabled; ?>">

@@ -70,10 +70,10 @@ class Review extends Controller
             $reviewDescription = ($post['reviewDescription']);
 
             if (empty($reviewRating) || empty($reviewDescription)) {
-                header('Location:' . URLROOT . 'Review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+review+has+failed}/');
+                header('Location:' . URLROOT . 'review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+review+has+failed}/');
             } else {
                 $this->reviewModel->create($post);
-                header('Location:' . URLROOT . 'Review/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+review+was+successful}/');
+                header('Location:' . URLROOT . 'review/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+review+was+successful}/');
             }
         } else {
             $customer = $this->customerModel->getCustomers();
@@ -98,9 +98,9 @@ class Review extends Controller
             $result = $this->reviewModel->delete($reviewId);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Review/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+review+was+successful}/');
+                header('Location:' . URLROOT . 'review/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+review+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+review+has+failed}/');
+                header('Location:' . URLROOT . 'review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+review+has+failed}/');
             }
         } else {
 
@@ -121,12 +121,12 @@ class Review extends Controller
             $result = $this->reviewModel->update($post);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Review/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Review+was+successful}/');
+                header('Location:' . URLROOT . 'review/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Review+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Review+has+failed}/');
+                header('Location:' . URLROOT . 'review/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Review+has+failed}/');
             }
         } else {
-            $row = $this->reviewModel->getReviewById($reviewId);
+            $reviews = $this->reviewModel->getReviewById($reviewId);
             $customer = $this->customerModel->getCustomers();
             $orders = $this->orderModel->getOrders();
             $prodcuts = $this->productModel->getProducts();
@@ -147,7 +147,7 @@ class Review extends Controller
             }
 
             $data = [
-                'row' => $row,
+                'reviews' => $reviews,
                 'customer' => $customer,
                 'images' => $images,
                 'orders' => $orders,
@@ -170,10 +170,10 @@ class Review extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'review';
             $this->screenModel->insertScreensImages($screenId, $reviewId, $entity, $post);
-            header('Location:' . URLROOT . 'Review/update/{reviewId:' . $reviewId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+            header('Location:' . URLROOT . 'review/update/{reviewId:' . $reviewId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Review/update/{reviewId:' . $reviewId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+            header('Location:' . URLROOT . 'review/update/{reviewId:' . $reviewId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
         }
     }
 
@@ -183,9 +183,9 @@ class Review extends Controller
         $reviewId = $params['reviewId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Review/update/{reviewId:' . $reviewId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
+            header('Location:' . URLROOT . 'review/update/{reviewId:' . $reviewId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
         } else {
-            header('Location:' . URLROOT . 'Review/update/{reviewId:' . $reviewId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
+            header('Location:' . URLROOT . 'review/update/{reviewId:' . $reviewId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
     }
 }

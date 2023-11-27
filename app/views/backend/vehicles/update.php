@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>Vehicle/overview" class="color-inherit">All Products</a>
+                <a href="<?= URLROOT ?>vehicle/overview" class="color-inherit">All Products</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>Vehicle/update" method="post">
+    <form action="<?= URLROOT; ?>vehicle/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -23,7 +23,7 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['row']->vehicleId; ?>">
+                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['vehicles']->vehicleId; ?>">
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="vehicleName">FirstName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="vehicleName" id="vehicleName" value="<?= $data['row']->vehicleName; ?>">
+                            <input class="form-control width-100%" type="text" name="vehicleName" id="vehicleName" value="<?= $data['vehicles']->vehicleName; ?>">
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                             <div class="select">
                                 <select class="select__input form-control" name="vehicleType" id="vehicleType">
                                     <?php foreach ($data['vehicleType'] as $value => $name) : ?>
-                                        <option <?= ($data['row']->vehicleType == $value) ? "selected" : "" ?> value="<?= $value ?>"><?= $name ?></option>
+                                        <option <?= ($data['vehicles']->vehicleType == $value) ? "selected" : "" ?> value="<?= $value ?>"><?= $name ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -67,7 +67,7 @@
                             <div class="select">
                                 <select class="form-control width-100%" name="vehicleStoreId" id="vehicleStoreId" required>
                                     <?php foreach ($data['store'] as $store) : ?>
-                                        <option <?= ($data['row']->vehicleStoreId == $store->storeId) ? "selected" : "" ?> value="<?= $store->storeId ?>"><?= $store->storeName ?></option>
+                                        <option <?= ($data['vehicles']->vehicleStoreId == $store->storeId) ? "selected" : "" ?> value="<?= $store->storeId ?>"><?= $store->storeName ?></option>
                                     <?php endforeach ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -85,7 +85,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>Vehicle/updateImage/{vehicleId:<?= $data['row']->vehicleId ?>}" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>vehicle/updateImage/{vehicleId:<?= $data['vehicles']->vehicleId ?>}" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -141,7 +141,7 @@
         <footer class="margin-top-md">
             <div class="flex justify-end gap-xs flex-wrap">
                 <button class="btn btn--subtle js-dialog__close">Cancel</button>
-                <a class="btn btn--accent" href="<?= URLROOT; ?>Vehicle/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'vehicleId:' . $data['row']->vehicleId ?>}">Delete</a>
+                <a class="btn btn--accent" href="<?= URLROOT; ?>vehicle/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'vehicleId:' . $data['vehicles']->vehicleId ?>}">Delete</a>
             </div>
         </footer>
     </div>

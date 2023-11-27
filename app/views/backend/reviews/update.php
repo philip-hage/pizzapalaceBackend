@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>Review/overview" class="color-inherit">All Reviews</a>
+                <a href="<?= URLROOT ?>review/overview" class="color-inherit">All Reviews</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>Review/update" method="post">
+    <form action="<?= URLROOT; ?>review/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -23,7 +23,7 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['row']->reviewId; ?>">
+                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['reviews']->reviewId; ?>">
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="reviewRating">Rating</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="number" name="reviewRating" id="reviewRating" min="1" max="5" required value="<?= $data['row']->reviewRating; ?>">
+                            <input class="form-control width-100%" type="number" name="reviewRating" id="reviewRating" min="1" max="5" required value="<?= $data['reviews']->reviewRating; ?>">
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                             <div class="select">
                                 <select class="form-control width-100%" name="reviewCustomerId" id="reviewCustomerId" required>
                                     <?php foreach ($data['customer'] as $customer) : ?>
-                                        <option <?= ($data['row']->reviewCustomerId == $customer->customerId) ? "selected" : "" ?> value="<?= $customer->customerId ?>"><?= $customer->customerFirstName ?></option>
+                                        <option <?= ($data['reviews']->reviewCustomerId == $customer->customerId) ? "selected" : "" ?> value="<?= $customer->customerId ?>"><?= $customer->customerFirstName ?></option>
                                     <?php endforeach ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -64,7 +64,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="reviewDescription">Review message</label>
                         </div>
                         <div class="col-6@lg">
-                            <textarea class="form-control width-100%" name="reviewDescription" id="reviewDescription" required rows="2" cols="25" placeholder="Enter your Review message"><?= $data['row']->reviewDescription ?></textarea>
+                            <textarea class="form-control width-100%" name="reviewDescription" id="reviewDescription" required reviewss="2" cols="25" placeholder="Enter your Review message"><?= $data['reviews']->reviewDescription ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>Review/updateImage/{reviewId:<?= $data['row']->reviewId ?>}" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>review/updateImage/{reviewId:<?= $data['reviews']->reviewId ?>}" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -137,7 +137,7 @@
             <footer class="margin-top-md">
                 <div class="flex justify-end gap-xs flex-wrap">
                     <button class="btn btn--subtle js-dialog__close">Cancel</button>
-                    <a class="btn btn--accent" href="<?= URLROOT; ?>Review/deleteImage/{screenId:<?= $image->screenId . ';' . 'reviewId:' . $data['row']->reviewId ?>}">Delete</a>
+                    <a class="btn btn--accent" href="<?= URLROOT; ?>review/deleteImage/{screenId:<?= $image->screenId . ';' . 'reviewId:' . $data['reviews']->reviewId ?>}">Delete</a>
                 </div>
             </footer>
         </div>

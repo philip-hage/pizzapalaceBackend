@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>Product/overview" class="color-inherit">All Products</a>
+                <a href="<?= URLROOT ?>product/overview" class="color-inherit">All Products</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>Product/update" method="post">
+    <form action="<?= URLROOT; ?>product/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -23,7 +23,7 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['row']->productId; ?>">
+                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['products']->productId; ?>">
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="productName">FirstName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="productName" id="productName" value="<?= $data['row']->productName; ?>">
+                            <input class="form-control width-100%" type="text" name="productName" id="productName" value="<?= $data['products']->productName; ?>">
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="productPrice">LastName</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="productPrice" id="productPrice" value="<?= $data['row']->productPrice; ?>">
+                            <input class="form-control width-100%" type="text" name="productPrice" id="productPrice" value="<?= $data['products']->productPrice; ?>">
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                             <div class="select">
                                 <select class="select__input form-control" name="productType" id="productType">
                                     <?php foreach ($data['productType'] as $value => $name) : ?>
-                                        <option <?= ($data['row']->productType == $value) ? "selected" : "" ?> value="<?= $value ?>"><?= $name ?></option>
+                                        <option <?= ($data['products']->productType == $value) ? "selected" : "" ?> value="<?= $value ?>"><?= $name ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -77,7 +77,7 @@
                             <div class="select">
                                 <select class="form-control width-100%" name="productOwner" id="productOwner" required>
                                     <?php foreach ($data['customer'] as $customer) : ?>
-                                        <option <?= ($data['row']->productOwner == $customer->customerId) ? "selected" : "" ?> value="<?= $customer->customerId ?>"><?= $customer->customerFirstName ?></option>
+                                        <option <?= ($data['products']->productOwner == $customer->customerId) ? "selected" : "" ?> value="<?= $customer->customerId ?>"><?= $customer->customerFirstName ?></option>
                                     <?php endforeach ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -95,7 +95,7 @@
             </div>
         </div>
     </form>
-    <form action="<?= URLROOT; ?>Product/updateImage/{productId:<?= $data['row']->productId ?>}" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>product/updateImage/{productId:<?= $data['products']->productId ?>}" method="post" enctype="multipart/form-data">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -151,7 +151,7 @@
         <footer class="margin-top-md">
             <div class="flex justify-end gap-xs flex-wrap">
                 <button class="btn btn--subtle js-dialog__close">Cancel</button>
-                <a class="btn btn--accent" href="<?= URLROOT; ?>Product/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'productId:' . $data['row']->productId ?>}">Delete</a>
+                <a class="btn btn--accent" href="<?= URLROOT; ?>product/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'productId:' . $data['products']->productId ?>}">Delete</a>
             </div>
         </footer>
     </div>

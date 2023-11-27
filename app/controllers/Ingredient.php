@@ -59,10 +59,10 @@ class Ingredient extends Controller
             $result =  $this->ingredientModel->create($post);
 
             if ($result) {
-                header('Location:' . URLROOT . 'Ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+ingredient+was+successful}/');
+                header('Location:' . URLROOT . 'ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+ingredient+was+successful}/');
             } else {
                 Helper::log('error', 'The create was not succcesfull at Ingredient create');
-                header('Location:' . URLROOT . 'Ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+ingredient+has+failed}/');
+                header('Location:' . URLROOT . 'ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+ingredient+has+failed}/');
             }
         } else {
             $data = [
@@ -78,9 +78,9 @@ class Ingredient extends Controller
             $result = $this->ingredientModel->delete($ingredientId);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+ingredient+was+successful}/');
+                header('Location:' . URLROOT . 'ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+ingredient+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+ingredient+has+failed}/');
+                header('Location:' . URLROOT . 'ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+ingredient+has+failed}/');
             }
         } else {
 
@@ -102,13 +102,13 @@ class Ingredient extends Controller
 
             if (!$result) {
                 echo 'The update was successful';
-                header('Location:' . URLROOT . 'Ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+ingredient+was+successful}/');
+                header('Location:' . URLROOT . 'ingredient/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+ingredient+was+successful}/');
             } else {
                 Helper::log('error', 'The update was not succcesfull at ingredient update');
-                header('Location:' . URLROOT . 'Ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+ingredient+has+failed}/');
+                header('Location:' . URLROOT . 'ingredient/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+ingredient+has+failed}/');
             }
         } else {
-            $row = $this->ingredientModel->getIngredientById($ingredientId);
+            $ingredients = $this->ingredientModel->getIngredientById($ingredientId);
             $image = $this->screenModel->getScreenDataById($ingredientId, 'ingredient', 'main');
             if ($image !== false) {
                 // Check if the necessary properties exist before accessing them
@@ -126,7 +126,7 @@ class Ingredient extends Controller
 
             $data = [
                 'title' => '<h3>Update ingredient</h3>',
-                'row' => $row,
+                'ingredients' => $ingredients,
                 'imageSrc' => $imageSrc,
                 'image' => $image
             ];
@@ -144,10 +144,10 @@ class Ingredient extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'ingredient';
             $this->screenModel->insertScreenImages($screenId, $ingredientId, $entity, 'main');
-            header('Location:' . URLROOT . 'Ingredient/update/{ingredientId:' . $ingredientId . ';' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+            header('Location:' . URLROOT . 'ingredient/update/{ingredientId:' . $ingredientId . ';' . '{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Ingredient/update/{ingredientId:' . $ingredientId . ';' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+            header('Location:' . URLROOT . 'ingredient/update/{ingredientId:' . $ingredientId . ';' . '{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
         }
     }
 
@@ -157,9 +157,9 @@ class Ingredient extends Controller
         $ingredientId = $params['ingredientId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Ingredient/update/{ingredientId:' . $ingredientId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
+            header('Location:' . URLROOT . 'ingredient/update/{ingredientId:' . $ingredientId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
         } else {
-            header('Location:' . URLROOT . 'Ingredient/update/{ingredientId:' . $ingredientId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
+            header('Location:' . URLROOT . 'ingredient/update/{ingredientId:' . $ingredientId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
     }
 }

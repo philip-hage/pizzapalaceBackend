@@ -62,10 +62,10 @@ class Product extends Controller
             $productPrice = ($post['productPrice']);
 
             if (empty($productName) || empty($productPrice)) {
-                header('Location:' . URLROOT . 'Product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+product+has+failed}/');
+                header('Location:' . URLROOT . 'product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+product+has+failed}/');
             } else {
                 $this->productModel->create($post);
-                header('Location:' . URLROOT . 'Product/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+product+was+successful}/');
+                header('Location:' . URLROOT . 'product/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+product+was+successful}/');
             }
         } else {
             $customer = $this->customerModel->getCustomers();
@@ -86,9 +86,9 @@ class Product extends Controller
             $result = $this->productModel->delete($productId);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Product/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+product+was+successful}/');
+                header('Location:' . URLROOT . 'product/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+product+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+product+has+failed}/');
+                header('Location:' . URLROOT . 'product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+product+has+failed}/');
             }
         } else {
             $data = [
@@ -108,13 +108,13 @@ class Product extends Controller
             $result = $this->productModel->editProduct($post);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Product/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+product+was+successful}/');
+                header('Location:' . URLROOT . 'product/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+product+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+product+has+failed}/');
+                header('Location:' . URLROOT . 'product/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+product+has+failed}/');
             }
         } else {
             global $productType;
-            $row = $this->productModel->getProductById($productId);
+            $products = $this->productModel->getProductById($productId);
             $customer = $this->customerModel->getCustomers();
 
             $image = $this->screenModel->getScreenDataById($productId, 'product', 'main');
@@ -133,7 +133,7 @@ class Product extends Controller
             }
 
             $data = [
-                'row' => $row,
+                'products' => $products,
                 'customer' => $customer,
                 'productType' => $productType,
                 'imageSrc' => $imageSrc,
@@ -154,10 +154,10 @@ class Product extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'product';
             $this->screenModel->insertScreenImages($screenId, $productId, $entity, 'main');
-            header('Location:' . URLROOT . 'Product/update/{productId:' . $productId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+            header('Location:' . URLROOT . 'product/update/{productId:' . $productId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Product/update/{productId:' . $productId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+            header('Location:' . URLROOT . 'product/update/{productId:' . $productId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
         }
     }
 
@@ -167,9 +167,9 @@ class Product extends Controller
         $productId = $params['productId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Product/update/{productId:' . $productId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
+            header('Location:' . URLROOT . 'product/update/{productId:' . $productId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
         } else {
-            header('Location:' . URLROOT . 'Product/update/{productId:' . $productId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
+            header('Location:' . URLROOT . 'product/update/{productId:' . $productId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
     }
 }

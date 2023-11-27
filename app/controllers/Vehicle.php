@@ -60,10 +60,10 @@ class Vehicle extends Controller
             $vehicleName = ($post['vehicleName']);
 
             if (empty($vehicleName)) {
-                header('Location:' . URLROOT . 'Vehicle/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+Vehicle+has+failed}/');
+                header('Location:' . URLROOT . 'vehicle/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+Vehicle+has+failed}/');
             } else {
                 $this->vehicleModel->create($post);
-                header('Location:' . URLROOT . 'Vehicle/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+Vehicle+was+successful}/');
+                header('Location:' . URLROOT . 'vehicle/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+Vehicle+was+successful}/');
             }
         } else {
             $store = $this->storeModel->getStores();
@@ -87,13 +87,13 @@ class Vehicle extends Controller
             $result = $this->vehicleModel->update($post);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Vehicle/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Vehicle+was+successful}/');
+                header('Location:' . URLROOT . 'vehicle/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+Vehicle+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Vehicle/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Vehicle+has+failed}/');
+                header('Location:' . URLROOT . 'vehicle/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+Vehicle+has+failed}/');
             }
         } else {
             global $vehicleType;
-            $row = $this->vehicleModel->getVehicleById($vehicleId);
+            $vehicles = $this->vehicleModel->getVehicleById($vehicleId);
             $store = $this->storeModel->getStores();
 
             $image = $this->screenModel->getScreenDataById($vehicleId, 'vehicle', 'main');
@@ -112,7 +112,7 @@ class Vehicle extends Controller
             }
 
             $data = [
-                'row' => $row,
+                'vehicles' => $vehicles,
                 'store' => $store,
                 'vehicleType' => $vehicleType,
                 'imageSrc' => $imageSrc,
@@ -133,10 +133,10 @@ class Vehicle extends Controller
         if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
             $entity = 'vehicle';
             $this->screenModel->insertScreenImages($screenId, $vehicleId, $entity, 'main');
-            header('Location:' . URLROOT . 'Vehicle/update/{vehicleId:' . $vehicleId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+            header('Location:' . URLROOT . 'vehicle/update/{vehicleId:' . $vehicleId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
         } else {
             Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Vehicle/update/{vehicleId:' . $vehicleId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+            header('Location:' . URLROOT . 'vehicle/update/{vehicleId:' . $vehicleId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
         }
     }
 
@@ -146,9 +146,9 @@ class Vehicle extends Controller
         $vehicleId = $params['vehicleId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Vehicle/update/{vehicleId:' . $vehicleId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
+            header('Location:' . URLROOT . 'vehicle/update/{vehicleId:' . $vehicleId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
         } else {
-            header('Location:' . URLROOT . 'Vehicle/update/{vehicleId:' . $vehicleId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
+            header('Location:' . URLROOT . 'vehicle/update/{vehicleId:' . $vehicleId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
     }
 
@@ -159,9 +159,9 @@ class Vehicle extends Controller
             $result = $this->vehicleModel->delete($vehicleId);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+customer+was+successful}/');
+                header('Location:' . URLROOT . 'customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+customer+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+customer+has+failed}/');
+                header('Location:' . URLROOT . 'customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+customer+has+failed}/');
             }
         } else {
 

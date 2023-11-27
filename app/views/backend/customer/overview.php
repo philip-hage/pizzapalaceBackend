@@ -9,7 +9,7 @@
 <div class="margin-bottom-md">
     <div class="flex flex-wrap gap-sm items-center justify-between">
         <!-- <button class="btn btn--primary">+ New User</button> -->
-        <a class="btn btn--primary" href="<?= URLROOT ?>Customer/create">+ New User</a>
+        <a class="btn btn--primary" href="<?= URLROOT ?>customer/create">+ New User</a>
     </div>
 </div>
 
@@ -241,8 +241,8 @@
                             <td class="int-table__cell"><?= date('d/m/Y', $customer->customerCreateDate) ?></td>
                             <td class="int-table__cell"><?= $customer->customerCity ?></td>
                             <td class="int-table__cell"><?= $customer->customerType ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Customer/update/{customerId:<?= $customer->customerId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>Customer/delete/{customerId:<?= $customer->customerId ?>}/">Delete</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>customer/update/{customerId:<?= $customer->customerId ?>}/">Edit</a></td>
+                            <td class="int-table__cell"><a href="<?= URLROOT ?>customer/delete/{customerId:<?= $customer->customerId ?>}/">Delete</a></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
@@ -258,7 +258,7 @@
                 <li>
                     <?php
                     $prevPage = max(1, $data['currentPage'] - 1);
-                    $prevPageLink = URLROOT . "Customer/overview/?page=$prevPage";
+                    $prevPageLink = URLROOT . "customer/overview/?page=$prevPage";
                     $prevDisabled = ($data['currentPage'] == 1) ? 'disabled' : '';
                     // Helper::dump($prevDisabled);exit;
                     ?>
@@ -281,7 +281,7 @@
                 <li>
                     <?php
                     $nextPage = min($data['totalPages'], $data['currentPage'] + 1);
-                    $nextPageLink = URLROOT . "Customer/overview/?page=$nextPage";
+                    $nextPageLink = URLROOT . "customer/overview/?page=$nextPage";
                     $nextDisabled = ($data['currentPage'] == $data['totalPages']) ? 'disabled' : '';
                     ?>
                     <a href="<?= $nextPageLink; ?>/" class="pagination__item <?= $nextDisabled; ?>">

@@ -70,11 +70,11 @@ class Customer extends Controller
                 empty($customerzipcode) || empty($customerphone) ||
                 !filter_var($customeremail, FILTER_VALIDATE_EMAIL)
             ) {
-                header('Location:' . URLROOT . 'Customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+customer+has+failed}/');
+                header('Location:' . URLROOT . 'customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+customer+has+failed}/');
             } else {
                 // Form data is valid; proceed with creating the customer
                 $this->customerModel->create($post);
-                header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+customer+was+successful}/');
+                header('Location:' . URLROOT . 'customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+create+of+the+customer+was+successful}/');
             }
         } else {
             $data = [
@@ -93,12 +93,12 @@ class Customer extends Controller
             $result = $this->customerModel->update($post);
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+customer+was+successful}/');
+                header('Location:' . URLROOT . 'customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+update+of+the+customer+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+customer+has+failed}/');
+                header('Location:' . URLROOT . 'customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+update+of+the+customer+has+failed}/');
             }
         } else {
-            $row = $this->customerModel->getSingleCustomer($customerId);
+            $customers = $this->customerModel->getSingleCustomer($customerId);
             // echo $customerId;
             $image = $this->screenModel->getScreenDataById($customerId, 'customer', 'main');
             if ($image !== false) {
@@ -117,7 +117,7 @@ class Customer extends Controller
 
             $data = [
                 'title' => '<h3>Update customer</h3>',
-                'row' => $row,
+                'customers' => $customers,
                 'imageSrc' => $imageSrc,
                 'image' => $image
             ];
@@ -135,15 +135,15 @@ class Customer extends Controller
             if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
                 $entity = 'customer';
                 $this->screenModel->insertScreenImages($screenId, $customerId, $entity, 'main');
-                header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+                header('Location:' . URLROOT . 'customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
             } else {
                 Helper::log('error', $imageUploaderResult);
-                header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+                header('Location:' . URLROOT . 'customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
             }
         } else {
             // Handle the case where $imageUploaderResult is not an array
             Helper::log('error', 'Invalid response from imageUploader function');
-            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Error;toastmessage:Image+upload+failed+no+image+added}');
+            header('Location:' . URLROOT . 'customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Error;toastmessage:Image+upload+failed+no+image+added}');
         }
     }
 
@@ -153,9 +153,9 @@ class Customer extends Controller
         $customerId = $params['customerId'];
         // Call the deleteScreen method from the model
         if (!$this->screenModel->deleteScreen($screenId)) {
-            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
+            header('Location:' . URLROOT . 'customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Success;toastmessage:Image+deleted+of+successfully}/');
         } else {
-            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
+            header('Location:' . URLROOT . 'customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
     }
 
@@ -167,9 +167,9 @@ class Customer extends Controller
 
 
             if (!$result) {
-                header('Location:' . URLROOT . 'Customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+customer+was+successful}/');
+                header('Location:' . URLROOT . 'customer/overview/{toast:true;toasttitle:Success;toastmessage:Your+delete+of+the+customer+was+successful}/');
             } else {
-                header('Location:' . URLROOT . 'Customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+customer+has+failed}/');
+                header('Location:' . URLROOT . 'customer/overview/{toast:false;toasttitle:Failed;toastmessage:Your+delete+of+the+customer+has+failed}/');
             }
         } else {
 

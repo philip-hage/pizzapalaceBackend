@@ -6,7 +6,7 @@
     <nav class="breadcrumbs text-sm" aria-label="Breadcrumbs">
         <ol class="flex flex-wrap gap-xxs">
             <li class="breadcrumbs__item">
-                <a href="<?= URLROOT ?>Order/ordersOverview" class="color-inherit">All Orders</a>
+                <a href="<?= URLROOT ?>order/ordersOverview" class="color-inherit">All Orders</a>
                 <span class="color-contrast-low margin-left-xxs" aria-hidden="true"></span>
             </li>
             <li class="breadcrumbs__item"></li>
@@ -14,7 +14,7 @@
     </nav>
 </div>
 <div class="bg radius-md shadow-xs">
-    <form action="<?= URLROOT; ?>Order/update" method="post">
+    <form action="<?= URLROOT; ?>order/update" method="post">
         <div class="padding-md">
             <!-- basic form controls -->
             <fieldset class="margin-bottom-xl">
@@ -23,7 +23,7 @@
                 <div class="margin-bottom-sm">
                     <div class="grid gap-xxs">
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['row']->orderId; ?>">
+                            <input class="form-control width-100%" type="hidden" name="id" id="id" value="<?= $data['orders']->orderId; ?>">
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                             <div class="select">
                                 <select class="form-control width-100%" name="orderStoreId" id="orderStoreId" required>
                                     <?php foreach ($data['store'] as $store) : ?>
-                                        <option <?= ($data['row']->orderStoreId == $store->storeId) ? "selected" : "" ?> value="<?= $store->storeId ?>"><?= $store->storeName ?></option>
+                                        <option <?= ($data['orders']->orderStoreId == $store->storeId) ? "selected" : "" ?> value="<?= $store->storeId ?>"><?= $store->storeName ?></option>
                                     <?php endforeach ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -56,7 +56,7 @@
                             <div class="select">
                                 <select class="form-control width-100%" name="orderCustomerId" id="orderCustomerId" required>
                                     <?php foreach ($data['customer'] as $customer) : ?>
-                                        <option <?= ($data['row']->orderCustomerId == $customer->customerId) ? "selected" : "" ?> value="<?= $customer->customerId ?>"><?= $customer->customerFirstName ?></option>
+                                        <option <?= ($data['orders']->orderCustomerId == $customer->customerId) ? "selected" : "" ?> value="<?= $customer->customerId ?>"><?= $customer->customerFirstName ?></option>
                                     <?php endforeach ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -72,7 +72,7 @@
                             <label class="inline-block text-sm padding-top-xs@lg" for="orderPrice">Price</label>
                         </div>
                         <div class="col-6@lg">
-                            <input class="form-control width-100%" type="text" name="orderPrice" id="orderPrice" value="<?= $data['row']->orderPrice; ?>">
+                            <input class="form-control width-100%" type="text" name="orderPrice" id="orderPrice" value="<?= $data['orders']->orderPrice; ?>">
                         </div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                             <div class="select">
                                 <select class="select__input form-control" name="orderState" id="orderState">
                                     <?php foreach ($data['orderState'] as $value => $name) : ?>
-                                        <option <?= ($data['row']->orderState == $value) ? "selected" : "" ?> value="<?= $value ?>"><?= $name ?></option>
+                                        <option <?= ($data['orders']->orderState == $value) ? "selected" : "" ?> value="<?= $value ?>"><?= $name ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
@@ -105,7 +105,7 @@
                             <div class="select">
                                 <select class="select__input form-control" name="orderStatus" id="orderStatus">
                                     <?php foreach ($data['orderStatus'] as $value => $name) : ?>
-                                        <option <?= ($data['row']->orderStatus == $value) ? "selected" : "" ?> value="<?= $value ?>"><?= $name ?></option>
+                                        <option <?= ($data['orders']->orderStatus == $value) ? "selected" : "" ?> value="<?= $value ?>"><?= $name ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <svg class="icon select__icon" aria-hidden="true" viewBox="0 0 16 16">
