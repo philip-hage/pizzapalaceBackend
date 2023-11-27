@@ -210,9 +210,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -229,8 +226,10 @@
                             <td class="int-table__cell"><?= $promotion->promotionName ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $promotion->promotionStartDate) ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $promotion->promotionEndDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>promotion/update/{promotionId:<?= $promotion->promotionId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>promotion/delete/{promotionId:<?= $promotion->promotionId ?>}/">Delete</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT ?>promotion/update/{promotionId:<?= $promotion->promotionId ?>}/">Edit</a><br>
+                                <a href="<?= URLROOT ?>promotion/delete/{promotionId:<?= $promotion->promotionId ?>}/">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

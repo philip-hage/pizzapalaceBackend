@@ -242,9 +242,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -264,8 +261,10 @@
                             <td class="int-table__cell text-truncate max-width-xxxxs"><?= $employee->employeePhone ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $employee->employeeCreateDate) ?></td>
                             <td class="int-table__cell"><?= $employee->employeeCity ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>employee/update/{employeeId:<?= $employee->employeeId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>employee/delete/{employeeId:<?= $employee->employeeId ?>}/">Delete</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT ?>employee/update/{employeeId:<?= $employee->employeeId ?>}/">Edit</a><br>
+                                <a href="<?= URLROOT ?>employee/delete/{employeeId:<?= $employee->employeeId ?>}/">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

@@ -185,9 +185,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -204,8 +201,10 @@
                             <td class="int-table__cell"><?= $ingredient->ingredientName ?></td>
                             <td class="int-table__cell text-truncate max-width-xxxxs">$<?= $ingredient->ingredientPrice ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $ingredient->ingredientCreateDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>ingredient/update/{ingredientId:<?= $ingredient->ingredientId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>ingredient/delete/{ingredientId:<?= $ingredient->ingredientId ?>}/">Delete</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT ?>ingredient/update/{ingredientId:<?= $ingredient->ingredientId ?>}/">Edit</a><br>
+                                <a href="<?= URLROOT ?>ingredient/delete/{ingredientId:<?= $ingredient->ingredientId ?>}/">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

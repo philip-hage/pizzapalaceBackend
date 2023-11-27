@@ -238,9 +238,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -259,8 +256,10 @@
                             <td class="int-table__cell text-truncate max-width-xxxxs"><?= $product->productType ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $product->productCreatedate) ?></td>
                             <td class="int-table__cell"><?= $product->productPrice ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>product/update/{productId:<?= $product->productId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>product/delete/{productId:<?= $product->productId ?>}/">Delete</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT ?>product/update/{productId:<?= $product->productId ?>}/">Edit</a><br>
+                                <a href="<?= URLROOT ?>product/delete/{productId:<?= $product->productId ?>}/">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

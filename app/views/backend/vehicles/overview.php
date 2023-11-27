@@ -218,9 +218,6 @@
                             Action
                         </th>
 
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -239,8 +236,10 @@
                             <td class="int-table__cell text-truncate max-width-xxxxs"><?= $vehicle->vehicleType ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $vehicle->vehicleCreateDate) ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $vehicle->vehicleMaintenanceDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>vehicle/update/{vehicleId:<?= $vehicle->vehicleId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>vehicle/delete/{vehicleId:<?= $vehicle->vehicleId ?>}/">Delete</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT ?>vehicle/update/{vehicleId:<?= $vehicle->vehicleId ?>}/">Edit</a><br>
+                                <a href="<?= URLROOT ?>vehicle/delete/{vehicleId:<?= $vehicle->vehicleId ?>}/">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

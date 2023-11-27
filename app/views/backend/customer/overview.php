@@ -219,9 +219,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -241,8 +238,10 @@
                             <td class="int-table__cell"><?= date('d/m/Y', $customer->customerCreateDate) ?></td>
                             <td class="int-table__cell"><?= $customer->customerCity ?></td>
                             <td class="int-table__cell"><?= $customer->customerType ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>customer/update/{customerId:<?= $customer->customerId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>customer/delete/{customerId:<?= $customer->customerId ?>}/">Delete</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT ?>customer/update/{customerId:<?= $customer->customerId ?>}/">Edit</a><br>
+                                <a href="<?= URLROOT ?>customer/delete/{customerId:<?= $customer->customerId ?>}/">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

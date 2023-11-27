@@ -197,9 +197,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -224,8 +221,10 @@
                                     <?= $review->reviewDescription ?>
                                 </details>
                             </td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>review/update/{reviewId:<?= $review->reviewId ?>}/">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>review/delete/{reviewId:<?= $review->reviewId ?>}/">Delete</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT ?>review/update/{reviewId:<?= $review->reviewId ?>}/">Edit</a><br>
+                                <a href="<?= URLROOT ?>review/delete/{reviewId:<?= $review->reviewId ?>}/">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

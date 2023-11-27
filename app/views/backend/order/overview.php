@@ -270,9 +270,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -292,8 +289,10 @@
                             <td class="int-table__cell"><?= $order->orderStatus ?></td>
                             <td class="int-table__cell text-truncate max-width-xxxxs">$<?= $order->orderPrice ?></td>
                             <td class="int-table__cell"><?= date('d/m/Y', $order->orderCreateDate) ?></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT; ?>order/orderHasProducts/{orderId:<?= $order->orderId ?>}/">Read</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>order/update/{orderId:<?= $order->orderId ?>}/">Edit</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT; ?>order/orderHasProducts/{orderId:<?= $order->orderId ?>}/">Read</a><br>
+                                <a href="<?= URLROOT ?>order/update/{orderId:<?= $order->orderId ?>}/">Edit</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

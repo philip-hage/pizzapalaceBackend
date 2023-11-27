@@ -222,9 +222,6 @@
                         <th class="int-table__cell int-table__cell--th text-left">
                             Action
                         </th>
-                        <th class="int-table__cell int-table__cell--th text-left">
-                            Action
-                        </th>
                     </tr>
                 </thead>
 
@@ -247,8 +244,10 @@
                             <td class="int-table__cell"><?= date('d/m/Y', $store->storeCreateDate) ?></td>
                             <td class="int-table__cell"><a href="<?= URLROOT; ?>store/storeHasEmployees/{storeId:<?= $store->storeId ?>}/">Employees</a></td>
                             <td class="int-table__cell"><a href="<?= URLROOT; ?>store/storeHasVehicles/{storeId:<?= $store->storeId ?>}/">Vehicles</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>store/update/{storeId:<?= $store->storeId ?>}">Edit</a></td>
-                            <td class="int-table__cell"><a href="<?= URLROOT ?>store/delete/{storeId:<?= $store->storeId ?>}">Delete</a></td>
+                            <td class="int-table__cell">
+                                <a href="<?= URLROOT ?>store/update/{storeId:<?= $store->storeId ?>}">Edit</a><br>
+                                <a href="<?= URLROOT ?>store/delete/{storeId:<?= $store->storeId ?>}">Delete</a>
+                            </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

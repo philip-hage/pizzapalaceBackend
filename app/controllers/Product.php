@@ -28,7 +28,7 @@ class Product extends Controller
         $pageNumber = isset($params['page']) ? intval($params['page']) : 1;
 
         // Define records per page and calculate offset
-        $recordsPerPage = 2; // You can adjust this based on your needs
+        $recordsPerPage = 4; // You can adjust this based on your needs
         $offset = ($pageNumber - 1) * $recordsPerPage;
 
         // Get customers for the current page
