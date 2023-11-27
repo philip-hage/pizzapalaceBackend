@@ -260,6 +260,7 @@
                     $prevPage = max(1, $data['currentPage'] - 1);
                     $prevPageLink = URLROOT . "Customer/overview/?page=$prevPage";
                     $prevDisabled = ($data['currentPage'] == 1) ? 'disabled' : '';
+                    // Helper::dump($prevDisabled);exit;
                     ?>
                     <a href="<?= $prevPageLink; ?>/" class="pagination__item <?= $prevDisabled; ?>">
                         <svg class="icon" viewBox="0 0 16 16">

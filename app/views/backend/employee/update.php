@@ -153,7 +153,7 @@
                                 <?php endif; ?>
                                 <!-- Add delete button conditionally -->
                                 <?php if ($data['imageSrc'] && $data['imageSrc'] !== URLROOT . 'public/default-image.jpg') : ?>
-                                    <a href="<?= URLROOT; ?>Employee/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'employeeId:' . $data['row']->employeeId ?>}" class="btn btn--danger">Delete Image</a>
+                                    <a href="#" aria-controls="dialog-delete-user-confirmation" class="btn btn--danger">Delete Image</a>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -167,6 +167,23 @@
         </div>
     </form>
 </div>
-
+<!-- dialog -->
+<div class="dialog dialog--sticky js-dialog" id="dialog-delete-user-confirmation" data-animation="on">
+    <div class="dialog__content max-width-xxs" role="alertdialog" aria-labelledby="dialog-title-1"
+        aria-describedby="dialog-description">
+        <div class="text-component">
+            <br>
+            <br>
+            <h4 id="dialog-title-1">Are you sure you want to delete this image?</h4>
+            <p id="dialog-description">This action cannot be undone.</p>
+        </div>
+        <footer class="margin-top-md">
+            <div class="flex justify-end gap-xs flex-wrap">
+                <button class="btn btn--subtle js-dialog__close">Cancel</button>
+                <a class="btn btn--accent" href="<?= URLROOT; ?>Employee/deleteImage/{screenId:<?= $data['image']->screenId . ';' . 'employeeId:' . $data['row']->employeeId ?>}">Delete</a>
+            </div>
+        </footer>
+    </div>
+</div>
 
 <?php require APPROOT . '/views/includes/footer.php'; ?>

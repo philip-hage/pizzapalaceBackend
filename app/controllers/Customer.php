@@ -131,13 +131,19 @@ class Customer extends Controller
         $screenId = $var['rand'];
         $imageUploaderResult = $this->imageUploader($screenId);
 
-        if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
-            $entity = 'customer';
-            $this->screenModel->insertScreenImages($screenId, $customerId, $entity, 'main');
-            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+        if (is_array($imageUploaderResult) && isset($imageUploaderResult['status'])) {
+            if ($imageUploaderResult['status'] === 200 && strpos($imageUploaderResult['message'], 'Image uploaded successfully') !== false) {
+                $entity = 'customer';
+                $this->screenModel->insertScreenImages($screenId, $customerId, $entity, 'main');
+                header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Success;toastmessage:Your+create+of+the+image+was+successful}/');
+            } else {
+                Helper::log('error', $imageUploaderResult);
+                header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+            }
         } else {
-            Helper::log('error', $imageUploaderResult);
-            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Your+create+of+the+image+has+failed}/');
+            // Handle the case where $imageUploaderResult is not an array
+            Helper::log('error', 'Invalid response from imageUploader function');
+            header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:true;toasttitle:Error;toastmessage:Image+upload+failed+no+image+added}');
         }
     }
 
@@ -151,9 +157,6 @@ class Customer extends Controller
         } else {
             header('Location:' . URLROOT . 'Customer/update/{customerId:' . $customerId . ';' . 'toast:false;toasttitle:Failed;toastmessage:Image+deleted+of+Failed}/');
         }
-
-        // Redirect to the overview page
-
     }
 
     public function delete($params)

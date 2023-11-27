@@ -107,7 +107,7 @@
                                     </div>
                                     <img class="text-xxl font-semibold color-contrast-higher" src="<?= $image->imagePath ?>" height="200px" width="100%">
                                     <?php if ($image && $image !== URLROOT . 'public/default-image.jpg') : ?>
-                                        <a href="<?= URLROOT; ?>Review/deleteImage/{screenId:<?= $image->screenId . ';' . 'reviewId:' . $data['row']->reviewId ?>}" class="btn btn--danger">Delete Image</a>
+                                        <a href="#" aria-controls="dialog-delete-user-confirmation-<?= $image->screenId ?>" class="btn btn--danger">Delete Image</a>
                                     <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
@@ -124,4 +124,23 @@
         </div>
     </form>
 </div>
+<!-- dialog -->
+<?php foreach ($data['images'] as $image) : ?>
+    <div class="dialog dialog--sticky js-dialog" id="dialog-delete-user-confirmation-<?= $image->screenId ?>" data-animation="on">
+        <div class="dialog__content max-width-xxs" role="alertdialog" aria-labelledby="dialog-title-1" aria-describedby="dialog-description">
+            <div class="text-component">
+                <br>
+                <br>
+                <h4 id="dialog-title-1">Are you sure you want to delete this image?</h4>
+                <p id="dialog-description">This action cannot be undone.</p>
+            </div>
+            <footer class="margin-top-md">
+                <div class="flex justify-end gap-xs flex-wrap">
+                    <button class="btn btn--subtle js-dialog__close">Cancel</button>
+                    <a class="btn btn--accent" href="<?= URLROOT; ?>Review/deleteImage/{screenId:<?= $image->screenId . ';' . 'reviewId:' . $data['row']->reviewId ?>}">Delete</a>
+                </div>
+            </footer>
+        </div>
+    </div>
+<?php endforeach; ?>
 <?php require APPROOT . '/views/includes/footer.php'; ?>

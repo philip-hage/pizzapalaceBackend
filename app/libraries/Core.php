@@ -64,9 +64,6 @@ class Core
             }
         }
 
-        // Helper::dump($array);
-        // exit;
-
         call_user_func_array([$this->currentController, $this->currentMethod], [$array]);
     }
 
@@ -110,6 +107,7 @@ class Core
 
                 // Create the new URL format
                 $newUrl = $urlParts['path'] . "{";
+                    
                 // Iterate through each key-value pair
                 foreach ($params as $key => $value) {
                     // Append key and value to the URL format
@@ -125,18 +123,14 @@ class Core
 
                 // Output or use the associative array as needed
                 Helper::dump($transformedParams);
-                // exit;
-
-                // Your logic to handle the parameters...
 
                 // Example: Extract 'page' parameter
                 $pageNumber = isset($transformedParams['page']) ? (int)$transformedParams['page'] : 1;
                 Helper::dump($pageNumber);
-                // exit;
 
                 // Output or use the associative array as needed
                 Helper::dump($this->params);
-                // exit;
+
                 header("Location:" . URLROOT . $newUrl);
                 exit();
             }

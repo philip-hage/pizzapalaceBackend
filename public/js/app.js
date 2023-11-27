@@ -95,3 +95,28 @@ document.getElementById("reviewEntity").addEventListener("change", function () {
     storeDropdown.style.display = "block";
   }
 });
+
+// Get elements
+const deleteImageBtn = document.getElementById("deleteImageBtn");
+const confirmDeleteImageBtn = document.getElementById("confirmDeleteImage");
+const deleteImageDialog = document.getElementById(
+  "dialog-delete-image-confirmation"
+);
+
+// Add event listener to open dialog when delete button is clicked
+deleteImageBtn.addEventListener("click", () => {
+  deleteImageDialog.style.display = "flex";
+});
+
+// Add event listener to cancel button in the dialog
+deleteImageDialog
+  .querySelector(".js-dialog__close")
+  .addEventListener("click", () => {
+    deleteImageDialog.style.display = "none";
+  });
+
+// Add event listener to confirm delete button in the dialog
+confirmDeleteImageBtn.addEventListener("click", () => {
+  // Perform the actual deletion by submitting the form
+  document.querySelector('form[action*="deleteImage"]').submit();
+});

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 13 nov 2023 om 17:26
+-- Gegenereerd op: 24 nov 2023 om 10:51
 -- Serverversie: 10.4.28-MariaDB
 -- PHP-versie: 8.2.4
 
@@ -46,14 +46,18 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customerId`, `customerFirstName`, `customerLastName`, `customerStreetName`, `customerZipCode`, `customerCity`, `customerEmail`, `customerPhone`, `customerType`, `customerIsActive`, `customerCreateDate`) VALUES
-('2HkM', 'Tests', 'Hage', 'kakoestraat 2', 'ddfs23', 'test', 'test@gmail.com', '23523523', 'member', 0, 1699539937),
-('3VxJ', 'fdsdf', 'dfsds', 'dfsdfs', '523', 'dfsdfs', 'dsdsfdss@gmail.com', '2535532', 'member', 1, 1699540213),
+('2HkM', 'Testss', 'Hage', 'kakoestraat 2', 'ddfs23', 'test', 'test@gmail.com', '23523523', 'member', 1, 1699539937),
+('3JcL', 'sol', 'jds', 'fdswjif', 'fdisf', 'dfisf', 'gdji@gmail.com', '3925823', 'member', 1, 1700474326),
+('3VxJ', 'fdsdf', 'dfsds', 'dfsdfs', '523', 'dfsdfs', 'dsdsfdss@gmail.com', '2535532', 'member', 0, 1699540213),
 ('4K66', 'Test', 'test', 'kakoestraat 2', 'test', 'test', 'dfsdfs@gmail.com', '2545322', 'member', 1, 1699362536),
 ('5423', 'Peter', 'Van de Vaart', 'joehoestraat 2', '3991KH', 'Woerden', 'peter@vandervaart.nlj', '06817274', 'member', 1, 1698832105),
 ('542s', 'Adminsss', 'Admin', 'Admin', 'Admin', 'Admin', 'Admin@gmail.com', '068178423', 'admin', 1, 1698917731),
 ('5623', 'Je vader', 'Je moeder', 'Kalebakkerstraat 5', '9912UH', 'Maastricht', 'flip@gmail.com', '068172323', 'member', 0, 1698832105),
 ('5kEw', 'lui', 'lui', 'lui', 'liului67', 'luil', 'philip@hage.cc', '867', 'member', 0, 1699626197),
-('BZOv', 'Philip', 'Hage', 'kakoestraat 2', '3992BD', 'utrecht', 'philip@jf.nl', '068323235', 'member', 0, 1698923795);
+('BZOv', 'Philip', 'Hage', 'kakoestraat 2', '3992BD', 'utrecht', 'philip@jf.nl', '068323235', 'member', 0, 1698923795),
+('NM29', 'kol', 'kol', 'kol', 'kol', 'kol', 'kol@GMAIL.COM', '935925321', 'member', 1, 1700474117),
+('OT0u', 'sol', 'sol', 'osl', 'sol', 'sol', 'sol@gmail.com', '52353', 'member', 1, 1700474227),
+('YSz3', 'jahoo', 'hjfs', 'dsgji', 'dgshjug', 'gfdswf', 's@gmail.com', '52823', 'member', 1, 1700581684);
 
 -- --------------------------------------------------------
 
@@ -81,7 +85,7 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`employeeId`, `employeeFirstName`, `employeeRole`, `employeeIsActive`, `employeeCreateDate`, `employeeDescritption`, `employeeLastName`, `employeeStreetName`, `employeeZipCode`, `employeeCity`, `employeePhone`, `employeeEmail`) VALUES
-('3541', 'Hendrik', 'deliverer', 1, 1698841196, NULL, 'de Boer', 'koekoekstraat 5', '2910JO', 'Inslatum', '0681734', 'hendrikdeboer@gmail.com'),
+('3541', 'Hendriks', 'deliverer', 0, 1698841196, NULL, 'de Boer', 'koekoekstraat 5', '2910JO', 'Inslatum', '0681734', 'hendrikdeboer@gmail.com'),
 ('c4Lv', 'jatoch', '', 0, 1698928132, NULL, 'papa', 'papastraat 2', '3929fd', 'Houten', '9289523', 'jatoch@gmail.com'),
 ('dfs2', 'Flippp', 'manager', 1, 1698841196, NULL, 'hahah', 'koeokeka', '532ds', 'flipflop', '235232r', 'flip@dat.nl'),
 ('fKnJ', 'henks', 'manager', 1, 1698940054, NULL, 'test', 'jatoch', '934JG', 'Houten', '5235325', 'philiop@gmail.com'),
@@ -155,7 +159,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`orderId`, `orderStoreId`, `orderCustomerId`, `orderState`, `orderStatus`, `orderPrice`, `orderCreateDate`, `orderDescription`) VALUES
-('0kmq', '253s', '4K66', 'canceled', 'success', 13.50, 1699264675, NULL),
+('0kmq', '253s', '4K66', 'canceled', 'success', 14.50, 1699264675, NULL),
 ('489s', '253s', '542s', 'progress', 'success', 3.50, 1699262327, NULL),
 ('8CG9', 'I2cC', 'BZOv', 'delivered', 'pending', 3.50, 1699264656, NULL),
 ('bD7S', '253s', '4K66', 'progress', 'success', 5.50, 1699527696, NULL),
@@ -191,7 +195,6 @@ CREATE TABLE `products` (
   `productName` varchar(255) NOT NULL,
   `productPrice` decimal(6,2) NOT NULL,
   `productType` enum('pizza','drink','coupon','snack','custompizza') NOT NULL,
-  `productPath` varchar(255) NOT NULL,
   `productIsActive` tinyint(1) NOT NULL DEFAULT 1,
   `productCreateDate` int(10) NOT NULL,
   `productDescription` text DEFAULT NULL
@@ -201,19 +204,22 @@ CREATE TABLE `products` (
 -- Gegevens worden geëxporteerd voor tabel `products`
 --
 
-INSERT INTO `products` (`productId`, `productOwner`, `productName`, `productPrice`, `productType`, `productPath`, `productIsActive`, `productCreateDate`, `productDescription`) VALUES
-('2332', 'BZOv', 'Cola', 3.20, 'custompizza', 'public/img/coca_cola-8085.png', 1, 532352, NULL),
-('3812', '542s', 'Pizza Zwarte Truffel', 6.20, 'pizza', 'public/img/Zwarte_Truffel-9551.jpg', 1, 523352335, NULL),
-('4242', '542s', 'Pizza 4 Cheese', 8.20, 'pizza', 'public/img/4_cheese-8013.png', 1, 523253, NULL),
-('5253', '542s', 'Pizza BBQ', 8.20, 'pizza', 'public/img/BBQ-9473.jpg', 1, 5232352, NULL),
-('532s', '542s', 'Loaded Nachos Chicken', 8.99, 'snack', 'public/img/Loaded_Nachos_Grilled_Chicken-9368.jpg', 1, 423523, NULL),
-('5435', '542s', 'Cola Zero', 5.20, 'drink', 'public/img/zero-8081.png', 1, 52552, NULL),
-('9H7H', '542s', 'joehoe', 3.50, 'pizza', '', 1, 1699006288, NULL),
-('fds2', '542s', 'Pizza Margheritta', 10.20, 'pizza', 'public/img/Margherita-7711.jpg', 1, 3523521, NULL),
-('ff23', '542s', 'Crispy Chicken Tenders', 12.20, 'pizza', 'public/img/Chicken_tenders-9385.jpg', 1, 5325323, NULL),
-('FgST', '542s', '', 0.00, 'custompizza', '', 0, 1699010380, NULL),
-('FIRJ', '542s', 'Custom pizza', 3.50, 'custompizza', '', 0, 1699021506, NULL),
-('V1co', 'BZOv', 'kaas pizza', 10.50, 'snack', '', 0, 1699006303, NULL);
+INSERT INTO `products` (`productId`, `productOwner`, `productName`, `productPrice`, `productType`, `productIsActive`, `productCreateDate`, `productDescription`) VALUES
+('2332', '2HkM', 'Cola', 3.20, 'custompizza', 1, 532352, NULL),
+('3812', '542s', 'Pizza Zwarte Truffel', 6.20, 'pizza', 1, 523352335, NULL),
+('4242', '542s', 'Pizza 4 Cheese', 8.20, 'pizza', 1, 523253, NULL),
+('5253', '542s', 'Pizza BBQ', 8.20, 'pizza', 1, 5232352, NULL),
+('532s', '542s', 'Loaded Nachos Chicken', 8.99, 'snack', 1, 423523, NULL),
+('5435', '542s', 'Cola Zero', 5.20, 'drink', 1, 52552, NULL),
+('9H7H', '542s', 'joehoe', 3.50, 'pizza', 0, 1699006288, NULL),
+('BzxT', '4K66', 'cola', 2.50, 'drink', 1, 1700229129, NULL),
+('fds2', '542s', 'Pizza Margheritta', 10.20, 'pizza', 1, 3523521, NULL),
+('ff23', '542s', 'Crispy Chicken Tenders', 12.20, 'snack', 1, 5325323, NULL),
+('FgST', '542s', '', 0.00, 'custompizza', 0, 1699010380, NULL),
+('FIRJ', '542s', 'Custom pizza', 3.50, 'custompizza', 0, 1699021506, NULL),
+('pIQ8', '4K66', 'fanta', 5.50, 'drink', 1, 1700229237, NULL),
+('UhhC', '542s', 'fanta', 3.50, 'drink', 0, 1700229096, NULL),
+('V1co', 'BZOv', 'kaas pizza', 10.50, 'snack', 0, 1699006303, NULL);
 
 -- --------------------------------------------------------
 
@@ -252,7 +258,7 @@ INSERT INTO `promotions` (`promotionId`, `promotionName`, `promotionStartDate`, 
 CREATE TABLE `reviews` (
   `reviewId` varchar(4) NOT NULL,
   `reviewCustomerId` varchar(4) NOT NULL,
-  `reviewEntityId` varchar(4) DEFAULT NULL,
+  `reviewEntityId` varchar(4) NOT NULL,
   `reviewEntity` varchar(15) NOT NULL,
   `reviewRating` int(3) NOT NULL,
   `reviewIsActive` tinyint(1) NOT NULL DEFAULT 1,
@@ -265,11 +271,11 @@ CREATE TABLE `reviews` (
 --
 
 INSERT INTO `reviews` (`reviewId`, `reviewCustomerId`, `reviewEntityId`, `reviewEntity`, `reviewRating`, `reviewIsActive`, `reviewCreateDate`, `reviewDescription`) VALUES
-('4RGz', 'BZOv', NULL, '', 5, 1, 1699260412, NULL),
+('4RGz', 'BZOv', '', '', 5, 1, 1699260412, NULL),
 ('6346', '5423', '4321', '', 2, 1, 523523, NULL),
 ('7noh', '5423', '253s', 'order', 4, 1, 1699870886, NULL),
 ('fsd2', '5623', '4321', '', 4, 0, 523532, NULL),
-('X4HC', '3VxJ', '253s', 'product', 4, 1, 1699871843, 'joehoe'),
+('X4HC', '4K66', '253s', 'product', 4, 1, 1699871843, 'joehoe'),
 ('xOTa', '5kEw', '253s', 'product', 2, 0, 1699871691, 'JOEHOEEEEs');
 
 -- --------------------------------------------------------
@@ -281,6 +287,8 @@ INSERT INTO `reviews` (`reviewId`, `reviewCustomerId`, `reviewEntityId`, `review
 CREATE TABLE `screens` (
   `screenId` varchar(4) NOT NULL,
   `screenEntityId` varchar(4) NOT NULL,
+  `screenEntity` varchar(15) NOT NULL,
+  `screenScope` varchar(15) NOT NULL DEFAULT 'main',
   `screenCreateDate` int(10) NOT NULL,
   `screenIsActive` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
